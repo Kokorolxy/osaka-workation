@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0b0b0d;
+  color: #ece6dc;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-orangeHover focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white/40 hover:bg-white/10;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange;
+  }
+  .card {
+    @apply rounded-2xl border border-ink-border bg-ink-700 transition-colors;
+  }
+  .link-muted {
+    @apply text-white/60 transition-colors hover:text-white;
+  }
+}
+
+/* subtle grain-free section divider */
+.hero-overlay {
+  background: linear-gradient(
+      180deg,
+      rgba(11, 11, 13, 0.55) 0%,
+      rgba(11, 11, 13, 0.4) 35%,
+      rgba(11, 11, 13, 0.85) 100%
+    ),
+    radial-gradient(
+      120% 80% at 80% 0%,
+      rgba(234, 85, 4, 0.28) 0%,
+      rgba(234, 85, 4, 0) 55%
+    );
+}
