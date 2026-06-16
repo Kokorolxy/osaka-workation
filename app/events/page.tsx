@@ -148,8 +148,8 @@ export default function EventsPage() {
       <section id="pricing" className="container-page scroll-mt-24 py-16 sm:py-20">
         <SectionHeading
           eyebrow="Pricing"
-          title="One ticket, everything included"
-          body="Pick the plan that fits, then join the waitlist to lock it in. Every plan covers your stay, coworking, experiences, and dinners — no hidden extras."
+          title="Plans for every kind of stay"
+          body="Pick the plan that fits, then join the waitlist to lock it in. Programme, coworking, and experiences are included — accommodation is a simple add-on from ¥4,500/night."
         />
         <div className="mt-12">
           <Pricing />

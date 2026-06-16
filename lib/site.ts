@@ -157,8 +157,8 @@ export const WORKATION = {
   includes: [
     {
       icon: "stay",
-      title: "Accommodation",
-      body: "Curated stay in a central Osaka neighborhood, work-ready from day one.",
+      title: "Accommodation help",
+      body: "Curated work-ready stays in central Osaka from ¥4,500/night, booked alongside your ticket.",
     },
     {
       icon: "cowork",
@@ -270,51 +270,60 @@ export const FAQS = [
   },
 ];
 
-// NOTE: indicative pricing — swap in your confirmed numbers here.
 export const PRICING = [
   {
-    key: "earlybird",
-    name: "Early Bird",
-    price: "¥198,000",
-    note: "First 20 spots only",
+    key: "short",
+    name: "Short Stay",
+    tagline: "Networking Meetup",
+    price: "¥30,000",
+    period: "7 days",
+    note: "A shorter taste of Osaka",
+    popular: false,
+    features: [
+      "Opening party",
+      "Coworking access",
+      "Japanese class",
+      "Cultural workshops",
+      "Community meetups",
+    ],
+  },
+  {
+    key: "full",
+    name: "Full Program",
+    tagline: "The complete 14 days",
+    price: "¥50,000",
+    earlyBird: "¥42,000",
+    period: "14 days",
+    note: "Early bird ¥42,000 · first 10 · until Sep 30, 2026",
     popular: true,
     features: [
-      "14 nights curated stay",
-      "Daytime coworking access",
-      "All cultural experiences",
-      "Kyoto & Nara day trips",
+      "Everything in Short Stay",
+      "Full two-week programme",
       "Opening & closing dinners",
+      "Kyoto & Nara day trips",
+      "Priority on all activities",
     ],
   },
   {
-    key: "standard",
-    name: "Standard",
-    price: "¥248,000",
-    note: "Full programme",
+    key: "community",
+    name: "Community Pass",
+    tagline: "No accommodation",
+    price: "¥35,000",
+    period: "14 days",
+    note: "Programme & coworking only",
     popular: false,
     features: [
-      "14 nights curated stay",
-      "Daytime coworking access",
-      "All cultural experiences",
-      "Kyoto & Nara day trips",
-      "Opening & closing dinners",
-    ],
-  },
-  {
-    key: "team",
-    name: "Team & Sponsor",
-    price: "Custom",
-    note: "For companies & partners",
-    popular: false,
-    features: [
-      "Group rates for 3+",
-      "Private team sessions",
-      "Brand visibility options",
-      "Custom programme add-ons",
-      "Dedicated coordinator",
+      "14-day coworking access",
+      "All community events",
+      "Cultural workshops",
+      "Japanese class",
+      "Accommodation not included",
     ],
   },
 ];
+
+export const PRICING_NOTE =
+  "Accommodation from ¥4,500/night, booked separately. Full Program + stay + main add-ons ≈ ¥132,800 (~$880 USD). Prices subject to change.";
 
 export const FOOD = [
   { image: "/img/food-ramen.jpg", label: "Ramen counters" },
