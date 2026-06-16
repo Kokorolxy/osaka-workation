@@ -18,9 +18,28 @@ export function ContactForm() {
     setForm((f) => ({ ...f, [k]: v }));
   }
 
-  function submit(e: React.FormEvent) {
+  const [busy, setBusy] = useState(false);
+
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
-    // Wire to your provider (Google Form / Notion / email) later.
+    if (busy) return;
+    setBusy(true);
+    try {
+      await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email,
+          name: form.name,
+          topic: form.topic,
+          message: form.message,
+          source: `Contact · ${form.topic}`,
+        }),
+      });
+    } catch {
+      // ignore — still thank the user
+    }
+    setBusy(false);
     setSent(true);
   }
 
@@ -93,8 +112,12 @@ export function ContactForm() {
         />
       </Field>
 
-      <button type="submit" className="btn-primary mt-6 w-full">
-        Send message
+      <button
+        type="submit"
+        disabled={busy}
+        className="btn-primary mt-6 w-full disabled:opacity-70"
+      >
+        {busy ? "Sending…" : "Send message"}
       </button>
     </form>
   );

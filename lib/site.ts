@@ -132,18 +132,27 @@ export const MEETUPS = [
     title: "Weekly Nomad Coffee Meetup",
     cadence: "Every Thursday · rotating cafes",
     body: "Casual morning meetup to swap projects, tips, and find your Osaka crew.",
+    image: "/img/meetup-coffee.jpg",
+    detail:
+      "We rotate between Osaka's best indie cafes. Bring your laptop or just yourself — it's the easiest way to meet the crew. Always free to join.",
   },
   {
     icon: "cooking",
     title: "Japanese Cooking Class",
     cadence: "Bi-weekly Saturday · Tennoji Kitchen",
     body: "Learn to make Osaka home cooking with a local chef — then eat together.",
+    image: "/img/meetup-cooking.jpg",
+    detail:
+      "Hands-on Japanese home cooking with a local chef in Tennoji — takoyaki, okonomiyaki, and seasonal dishes. Then we sit down and eat together.",
   },
   {
     icon: "camera",
     title: "Osaka Photo Walk",
     cadence: "Monthly · starts at Dotonbori",
     body: "Golden-hour walk through the city's most photogenic streets and canals.",
+    image: "/img/meetup-photo.jpg",
+    detail:
+      "A golden-hour walk from Dotonbori through the neon canals and back alleys. All levels welcome — phone cameras totally fine.",
   },
 ];
 
@@ -159,57 +168,74 @@ export const WORKATION = {
       icon: "stay",
       title: "Accommodation help",
       body: "Curated work-ready stays in central Osaka from ¥4,500/night, booked alongside your ticket.",
+      detail:
+        "We hold a block of vetted, work-ready apartments and guesthouses across Namba, Umeda, and Tennoji. Pick your room when you book — from ¥4,500/night.",
     },
     {
       icon: "cowork",
       title: "Coworking access",
       body: "Daytime desk at a partner coworking space with fast, reliable Wi-Fi.",
+      detail:
+        "A dedicated daytime desk at a partner coworking space — 100+ Mbps Wi-Fi, meeting rooms, phone booths, and unlimited coffee.",
     },
     {
       icon: "culture",
       title: "Cultural experiences",
       body: "Miso-making, calligraphy, nabe hot-pot nights, and local craft sessions.",
+      detail:
+        "Hands-on sessions led by locals: miso-making, calligraphy (書道), nabe hot-pot nights, board-game evenings, plus dance and yoga.",
     },
     {
       icon: "daytrip",
       title: "Kansai day trips",
       body: "Guided weekend trips to Kyoto and Nara with the group.",
+      detail:
+        "Two guided weekend trips — Kyoto's temples and Nara's deer park — with group transport and a local guide who knows the quiet spots.",
     },
     {
       icon: "dinner",
       title: "Opening & closing dinners",
       body: "Welcome and farewell dinners to kick off and celebrate the two weeks.",
+      detail:
+        "An opening welcome party on day one and a farewell dinner on the final night — the bookends that turn a group into a community.",
     },
     {
       icon: "community",
       title: "Built-in community",
       body: "A vetted crew of 50–100 nomads — engineers, designers, founders, creators.",
+      detail:
+        "A vetted crew of 50–100 remote workers from around the world. Private Discord, daily meetups, and friendships that outlast the trip.",
     },
   ],
   schedule: [
     {
       phase: "Days 1–2",
       title: "Arrival & welcome",
-      body: "Check in, settle into your stay, opening dinner, and city orientation walk.",
+      time: "Day 1 · 16:00 check-in · 19:00 welcome party",
+      body: "Check in, settle into your stay, opening dinner, and a city orientation walk to get your bearings.",
     },
     {
       phase: "Week 1",
       title: "Work & local life",
+      time: "Mon–Fri · 09:00–13:00 cowork · evenings free",
       body: "Mornings at the coworking space, evenings of miso-making, calligraphy, and nabe nights.",
     },
     {
       phase: "Weekend",
       title: "Kyoto & Nara",
+      time: "Sat–Sun · full-day guided trips",
       body: "Guided Kansai day trips with the group — temples, deer park, and slow travel.",
     },
     {
       phase: "Week 2",
       title: "Deeper roots",
+      time: "Mon–Fri · cowork + neighborhood meetups",
       body: "More coworking, neighborhood meetups, and time to live like an Osaka local.",
     },
     {
       phase: "Final day",
       title: "Closing dinner",
+      time: "Final night · 19:00 farewell dinner",
       body: "Celebrate two weeks together and trade plans for the next stop.",
     },
   ],
@@ -326,7 +352,37 @@ export const PRICING_NOTE =
   "Accommodation from ¥4,500/night, booked separately. Full Program + stay + main add-ons ≈ ¥132,800 (~$880 USD). Prices subject to change.";
 
 export const FOOD = [
-  { image: "/img/food-ramen.jpg", label: "Ramen counters" },
-  { image: "/img/food-takoyaki.jpg", label: "Street takoyaki" },
-  { image: "/img/food-octopus.jpg", label: "Dotonbori icons" },
+  {
+    image: "/img/food-ramen.jpg",
+    label: "Ramen counters",
+    blurb: "Community favourites",
+    shops: [
+      { name: "Kamukura", area: "Dotonbori" },
+      { name: "Jinrui Mina Men", area: "Fukushima" },
+      { name: "Kinguemon", area: "Namba" },
+      { name: "Ramen Yashichi", area: "Esaka" },
+    ],
+  },
+  {
+    image: "/img/food-takoyaki.jpg",
+    label: "Street takoyaki",
+    blurb: "Community favourites",
+    shops: [
+      { name: "Takoyaki Wanaka", area: "Namba" },
+      { name: "Kukuru", area: "Dotonbori" },
+      { name: "Acchichi Honpo", area: "Umeda" },
+      { name: "Takoyaki Juhachiban", area: "Shinsaibashi" },
+    ],
+  },
+  {
+    image: "/img/food-octopus.jpg",
+    label: "Dotonbori icons",
+    blurb: "Community favourites",
+    shops: [
+      { name: "Ichiran Ramen", area: "Dotonbori" },
+      { name: "Daruma Kushikatsu", area: "Shinsekai" },
+      { name: "551 Horai", area: "Namba" },
+      { name: "Zauo fishing izakaya", area: "Fukushima" },
+    ],
+  },
 ];

@@ -1,18 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, MapPin, Wifi } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Wifi } from "lucide-react";
 import { Marquee, SectionHeading } from "@/components/ui";
 import { FeatureIcon } from "@/components/feature-icon";
 import { Countdown } from "@/components/countdown";
 import { Newsletter } from "@/components/newsletter";
-import {
-  DISTRICTS,
-  FOOD,
-  SITE,
-  STATS,
-  WHY_OSAKA,
-  WORKATION,
-} from "@/lib/site";
+import { HeroHighlights } from "@/components/hero-highlights";
+import { FoodCard } from "@/components/food-card";
+import { DISTRICTS, FOOD, SITE, WHY_OSAKA, WORKATION } from "@/lib/site";
 
 export default function HomePage() {
   return (
@@ -60,22 +55,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* stats card */}
-          <div className="animate-fade-up rounded-3xl border border-paper-line bg-white/85 p-6 shadow-[0_24px_60px_-30px_rgba(15,15,15,0.4)] backdrop-blur-md sm:p-8">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-7">
-              {STATS.map((s) => (
-                <div key={s.label}>
-                  <div className="text-3xl font-extrabold text-brand-orange sm:text-4xl">
-                    {s.value}
-                  </div>
-                  <div className="mt-1 text-sm text-muted">{s.label}</div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-7 flex items-center gap-3 border-t border-paper-line pt-5 text-sm text-muted">
-              <MapPin className="h-4 w-4 text-brand-orange" />
-              Based in Osaka · Dotonbori &amp; Tsutenkaku
-            </div>
+          {/* interactive highlights */}
+          <div className="animate-fade-up">
+            <HeroHighlights />
           </div>
         </div>
       </section>
@@ -207,26 +189,11 @@ export default function HomePage() {
           <SectionHeading
             eyebrow="Live like a local"
             title="Your lunch break, upgraded"
-            body="Takoyaki on the corner, ramen at midnight, a new favourite spot every week. This is the city that eats best."
+            body="Takoyaki on the corner, ramen at midnight, a new favourite spot every week. Hover (or tap) each one for the community's top picks."
           />
           <div className="mt-12 grid gap-5 sm:grid-cols-3">
             {FOOD.map((f) => (
-              <div
-                key={f.label}
-                className="group relative aspect-[5/4] overflow-hidden rounded-3xl border border-paper-line"
-              >
-                <Image
-                  src={f.image}
-                  alt={f.label}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/70 to-transparent" />
-                <span className="absolute bottom-4 left-5 text-lg font-bold text-white">
-                  {f.label}
-                </span>
-              </div>
+              <FoodCard key={f.label} food={f} />
             ))}
           </div>
         </div>
@@ -279,19 +246,17 @@ export default function HomePage() {
               "/img/home-meetup.jpg",
               "/img/home-laptop.jpg",
               "/img/home-cafe.jpg",
-            ].map((img, i) => (
+            ].map((img) => (
               <div
                 key={img}
-                className={`relative overflow-hidden rounded-2xl border border-paper-line ${
-                  i % 3 === 0 ? "aspect-[4/5]" : "aspect-square"
-                }`}
+                className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-paper-line"
               >
                 <Image
                   src={img}
                   alt="Osaka nomad community moment"
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             ))}

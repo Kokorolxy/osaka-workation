@@ -6,11 +6,22 @@ import { Check } from "lucide-react";
 export function Newsletter({ compact = false }: { compact?: boolean }) {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
+  const [busy, setBusy] = useState(false);
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) return;
-    // Wire this to your provider (Mailchimp / Notion / Google Form) later.
+    if (!email || busy) return;
+    setBusy(true);
+    try {
+      await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "Newsletter waitlist" }),
+      });
+    } catch {
+      // ignore — still thank the user
+    }
+    setBusy(false);
     setDone(true);
   }
 
@@ -40,8 +51,12 @@ export function Newsletter({ compact = false }: { compact?: boolean }) {
         placeholder="you@email.com"
         className="w-full flex-1 rounded-full border border-paper-line bg-white px-5 py-3 text-sm text-brand-ink placeholder:text-muted-soft focus:border-brand-orange focus:outline-none"
       />
-      <button type="submit" className="btn-primary whitespace-nowrap">
-        Join the waitlist
+      <button
+        type="submit"
+        disabled={busy}
+        className="btn-primary whitespace-nowrap disabled:opacity-70"
+      >
+        {busy ? "Joining…" : "Join the waitlist"}
       </button>
     </form>
   );

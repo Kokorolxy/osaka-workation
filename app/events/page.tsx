@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Calendar, Users, Clock } from "lucide-react";
+import { ArrowRight, Calendar, Users, Clock, Globe2 } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/ui";
-import { FeatureIcon } from "@/components/feature-icon";
 import { Countdown } from "@/components/countdown";
 import { Newsletter } from "@/components/newsletter";
 import { Pricing } from "@/components/pricing";
+import { IncludesGrid } from "@/components/includes-grid";
+import { WorkationTimeline } from "@/components/workation-timeline";
+import { MeetupCard } from "@/components/meetup-card";
+import { PhotoWall } from "@/components/photo-wall";
 import { MEETUPS, WORKATION } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -77,25 +80,27 @@ export default function EventsPage() {
         </div>
       </section>
 
+      {/* GLOBAL PHOTO WALL */}
+      <section className="container-page pb-4">
+        <div className="mb-8 flex items-center gap-3">
+          <Globe2 className="h-5 w-5 text-brand-orange" />
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted">
+            A global crew, one city
+          </p>
+          <span className="h-px flex-1 bg-paper-line" />
+        </div>
+        <PhotoWall />
+      </section>
+
       {/* WHAT'S INCLUDED */}
       <section className="container-page py-12 sm:py-16">
         <SectionHeading
           eyebrow="One ticket, everything in"
           title="What's included"
-          body="No piecing together a trip. The Workation bundles your stay, your desk, and a full programme of Osaka life into a single package."
+          body="No piecing together a trip. Tap any card to see exactly what's covered."
         />
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {WORKATION.includes.map((i) => (
-            <div key={i.title} className="card card-hover p-6">
-              <FeatureIcon name={i.icon} />
-              <h3 className="mt-4 text-lg font-bold text-brand-ink">
-                {i.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {i.body}
-              </p>
-            </div>
-          ))}
+        <div className="mt-12">
+          <IncludesGrid />
         </div>
       </section>
 
@@ -105,32 +110,10 @@ export default function EventsPage() {
           <SectionHeading
             eyebrow="The 14 days"
             title="How the Workation flows"
-            body="Work your mornings, live Osaka your evenings. Here's the shape of the two weeks."
+            body="Tap a phase to see the schedule and times. Work your mornings, live Osaka your evenings."
           />
-          <div className="mt-12 space-y-4">
-            {WORKATION.schedule.map((step, i) => (
-              <div
-                key={step.title}
-                className="grid items-start gap-4 rounded-2xl border border-paper-line bg-paper-cream p-6 sm:grid-cols-[150px_1fr]"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-orange/15 text-sm font-bold text-brand-orange">
-                    {i + 1}
-                  </span>
-                  <span className="text-sm font-semibold uppercase tracking-wide text-brand-orange">
-                    {step.phase}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-brand-ink">
-                    {step.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted">
-                    {step.body}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="mt-12">
+            <WorkationTimeline />
           </div>
 
           <div className="mt-10 flex flex-wrap gap-3">
@@ -161,22 +144,11 @@ export default function EventsPage() {
         <SectionHeading
           eyebrow="All year round"
           title="Weekly meetups & experiences"
-          body="Can't make November? The community runs year-round. Drop into any of these — first one's always on us."
+          body="Can't make November? The community runs year-round. Hover (or tap) a card for the details — first one's always on us."
         />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {MEETUPS.map((m) => (
-            <div key={m.title} className="card card-hover p-6">
-              <FeatureIcon name={m.icon} />
-              <h3 className="mt-4 text-lg font-bold text-brand-ink">
-                {m.title}
-              </h3>
-              <p className="mt-1 text-sm font-medium text-brand-orange">
-                {m.cadence}
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {m.body}
-              </p>
-            </div>
+            <MeetupCard key={m.title} meetup={m} />
           ))}
         </div>
       </section>

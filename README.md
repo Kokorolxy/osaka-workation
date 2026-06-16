@@ -46,6 +46,18 @@ Light, warm theme — cream `#f7ede0` / white `#ffffff` backgrounds, near-black 
 - `public/stays/` — real guesthouse (民宿) interiors for the Stays page.
 - `public/events/` — 6 real community event photos used on the Community page.
 
+## Email capture → Notion (setup)
+
+Newsletter and contact forms POST to `/api/subscribe`, which writes a row into a Notion database. Until you set the two env vars below, forms still work (users see a thank-you) but nothing is stored. To turn capture on:
+
+1. Create a Notion **internal integration** at notion.so/my-integrations → copy the secret (`ntn_…`).
+2. Create a Notion **database** with these properties (names are case-sensitive): `Name` (Title), `Email` (Email), `Source` (Text), `Message` (Text). Copy its **database ID** (the 32-char string in the database URL).
+3. In the database, click `•••` → **Connections** → add your integration so it can write.
+4. In **Vercel → Project → Settings → Environment Variables**, add:
+   - `NOTION_TOKEN` = your integration secret
+   - `NOTION_DB_ID` = your database ID
+5. Redeploy. New signups now appear as rows in your Notion database.
+
 ## Things to wire up later
 
 These are stubbed and clearly marked in the code:
