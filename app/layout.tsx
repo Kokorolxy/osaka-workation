@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://osaka-workation.vercel.app"),
+  metadataBase: new URL("https://osakaworkation.com"),
   title: {
     default: "OSAKA Digital Nomads Workation",
     template: "%s · OSAKA Workation",
