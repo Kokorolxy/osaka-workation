@@ -20,6 +20,101 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: "esim-guide-japan-osaka",
+    title: "The eSIM Guide for Working Remotely in Osaka",
+    excerpt:
+      "Which eSIM to buy for Japan, how to set it up before you land, and how much data a remote-work trip actually needs — with real 2026 prices and provider picks.",
+    cover: "/blog/esim-cover.jpg",
+    date: "2026-07-06",
+    dateLabel: "July 6, 2026",
+    readingTime: "6 min read",
+    tags: ["Osaka", "Connectivity", "Remote work"],
+    body: [
+      {
+        type: "p",
+        text: "When your income depends on a stable connection, sorting your data is the first thing to do — ideally before you even land in Japan. An eSIM is the easiest answer: no plastic SIM to swap, no airport queue, and you're online the moment you touch down at Kansai. Here's how to choose one, set it up, and size your plan for a remote-work stay.",
+      },
+      {
+        type: "callout",
+        text: "eSIM plans and prices change fast (Japan pricing shifted noticeably in early 2026). Check your phone actually supports eSIM, and confirm current prices on the provider's site before buying.",
+      },
+      {
+        type: "h2",
+        text: "eSIM vs pocket Wi-Fi vs physical SIM",
+      },
+      {
+        type: "list",
+        items: [
+          "eSIM — best for most people: instant, no hardware, install before you fly. Needs an eSIM-compatible phone.",
+          "Pocket Wi-Fi — worth it if you travel as a group or need to connect a laptop directly; it's one more device to charge and return.",
+          "Physical SIM — fine, but you'll queue at the airport and swap out your home SIM. Rarely the best option now.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "The main providers (2026)",
+      },
+      {
+        type: "cafe",
+        n: 1,
+        name: "Ubigi",
+        area: "Best all-rounder · DOCOMO network",
+        text: "Runs on NTT DOCOMO, which has the widest coverage — noticeably better on Kansai day trips to Kyoto, Nara, and rural spots. Simple 1GB / 3GB / 10GB / 50GB plans valid 30 days, plus recurring and annual options, which makes it the smart pick for longer stays.",
+      },
+      {
+        type: "cafe",
+        n: 2,
+        name: "Airalo",
+        area: "City speed · SoftBank network",
+        text: "Uses SoftBank and tends to be fast in the big cities. Straightforward one-off plans (7/15/30 days, 1–20GB). Note: Japan prices rose sharply in early 2026, so it's no longer the automatic bargain — compare before buying.",
+      },
+      {
+        type: "cafe",
+        n: 3,
+        name: "Holafly",
+        area: "Unlimited data",
+        text: "The pick if you hotspot a lot or stream heavily. 'Unlimited' with a fair-use policy of roughly 2–3GB/day of full-speed data. Pricier — think around $27 for 7 days and about $75 for 30 days.",
+      },
+      {
+        type: "img",
+        src: "/blog/esim-inline.jpg",
+        alt: "Taking the train across Kansai in Japan",
+        caption: "Coverage matters most on the day trips — DOCOMO-based plans shine here.",
+      },
+      {
+        type: "h2",
+        text: "Which one for a 2-week Workation?",
+      },
+      {
+        type: "list",
+        items: [
+          "Mostly working from stays and coworking (Wi-Fi everywhere): a 10GB Ubigi or a mid-size Airalo plan is plenty.",
+          "Heavy hotspotting or streaming on the go: go unlimited with Holafly.",
+          "Lots of Kansai travel or rural side-trips: choose a DOCOMO-based plan (Ubigi) for coverage.",
+          "Staying a month or more: Ubigi's 50GB or recurring plan usually wins on value.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "How to set it up (before you fly)",
+      },
+      {
+        type: "list",
+        items: [
+          "Check compatibility: most iPhones (XS and newer) and recent Android flagships support eSIM.",
+          "Buy and install the eSIM at home, on Wi-Fi — you'll scan a QR code or add it in-app.",
+          "Keep your home SIM active for calls and 2FA codes; set the Japan eSIM as your data line.",
+          "Turn on data roaming for the eSIM line once you land (this is normal for eSIMs).",
+          "Screenshot the install QR/details in case you need to reinstall.",
+        ],
+      },
+      {
+        type: "callout",
+        text: "On the November Workation you'll have fast Wi-Fi at your stay and the coworking space, so a mid-size data plan is usually all you need — we send every participant a simple setup checklist before arrival.",
+      },
+    ],
+  },
+  {
     slug: "coworking-spaces-osaka-guide",
     title: "Coworking Spaces in Osaka: A Digital Nomad's Guide",
     excerpt:
