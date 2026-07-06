@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading, CTAStrip } from "@/components/ui";
+import { buildMetadata } from "@/lib/seo";
 import { SITE, TESTIMONIALS } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Community",
+export const metadata = buildMetadata({
+  title: "Community — 100+ Digital Nomads",
   description:
     "100+ digital nomads from around the world, building Osaka's first real remote-work scene. Meet the people and join the Discord.",
-};
+  path: "/community",
+  og: "community",
+});
 
 const GALLERY = [
   "/img/community-1.jpg",

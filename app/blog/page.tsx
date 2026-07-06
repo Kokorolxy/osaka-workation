@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
+import { buildMetadata } from "@/lib/seo";
 import { POSTS } from "@/lib/blog";
 
-export const metadata: Metadata = {
-  title: "Blog",
+export const metadata = buildMetadata({
+  title: "Osaka Guides & Blog",
   description:
     "Guides to living and working remotely in Osaka — cafés, coworking, neighborhoods, cost of living, and the local know-how from our digital nomad community.",
-};
+  path: "/blog",
+  og: "blog",
+});
 
 export default function BlogPage() {
   const [featured, ...rest] = POSTS;

@@ -18,16 +18,25 @@ export function generateMetadata({
 }): Metadata {
   const post = getPost(params.slug);
   if (!post) return {};
+  const ogImage = `/og/blog-${post.slug}.png`;
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
-      images: [post.cover],
+      url: `https://osakaworkation.com/blog/${post.slug}`,
+      siteName: "OSAKA Workation",
+      images: [{ url: ogImage, width: 1200, height: 630 }],
     },
-    alternates: { canonical: `/blog/${post.slug}` },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [ogImage],
+    },
   };
 }
 

@@ -1,18 +1,20 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/ui";
 import { CountUp } from "@/components/count-up";
 import { AboutTabs } from "@/components/about-tabs";
 import { SITE } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata = buildMetadata({
+  title: "About OSAKA Workation",
   description:
     "Osaka Workation connects remote workers from around the world with the real Osaka — its people, neighborhoods, and creative culture.",
-};
+  path: "/about",
+  og: "about",
+});
 
 const AUDIENCE = [
   {

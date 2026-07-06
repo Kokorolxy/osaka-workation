@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Calendar, Users, Clock, Globe2 } from "lucide-react";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/ui";
 import { Countdown } from "@/components/countdown";
@@ -14,11 +14,13 @@ import { PhotoWall } from "@/components/photo-wall";
 import { JsonLd } from "@/components/json-ld";
 import { MEETUPS, WORKATION } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Events",
+export const metadata = buildMetadata({
+  title: "November Workation 2026 & Events",
   description:
     "The 14-day November 2026 Workation plus weekly meetups, cooking classes, and photo walks — Osaka's full digital nomad calendar.",
-};
+  path: "/events",
+  og: "events",
+});
 
 export default function EventsPage() {
   return (

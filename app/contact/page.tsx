@@ -1,16 +1,18 @@
-import type { Metadata } from "next";
 import { Instagram, MessageCircle, Mail, ChevronDown, Link2 } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/ui";
 import { ContactForm } from "@/components/contact-form";
 import { JsonLd } from "@/components/json-ld";
+import { buildMetadata } from "@/lib/seo";
 import { FAQS, SITE } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Contact",
   description:
     "Get in touch about the November Workation, stays, or partnerships — or just say hi. Osaka Workation replies within a couple of days.",
-};
+  path: "/contact",
+  og: "contact",
+});
 
 export default function ContactPage() {
   return (

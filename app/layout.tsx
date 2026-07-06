@@ -20,6 +20,16 @@ export const metadata: Metadata = {
     description:
       "Work from Osaka. Connect with the world. Join the November 2026 Workation and Osaka's friendliest nomad community.",
     type: "website",
+    siteName: "OSAKA Workation",
+    url: "https://osakaworkation.com",
+    images: [{ url: "/og/home.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OSAKA Digital Nomads Workation",
+    description:
+      "Work from Osaka. Connect with the world. Join the November 2026 Workation.",
+    images: ["/og/home.png"],
   },
 };
 

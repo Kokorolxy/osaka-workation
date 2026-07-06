@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { Star, Wifi, Check, BedDouble } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { CTAStrip, SectionHeading } from "@/components/ui";
+import { buildMetadata } from "@/lib/seo";
 import { STAYS } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Stays",
+export const metadata = buildMetadata({
+  title: "Curated Stays in Osaka",
   description:
     "Handpicked Osaka apartments and guesthouses with fast Wi-Fi and dedicated workspaces — ready for remote work from day one.",
-};
+  path: "/stays",
+  og: "stays",
+});
 
 export default function StaysPage() {
   return (
