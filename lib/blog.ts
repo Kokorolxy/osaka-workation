@@ -20,6 +20,125 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: "coworking-spaces-osaka-guide",
+    title: "Coworking Spaces in Osaka: A Digital Nomad's Guide",
+    excerpt:
+      "Day passes, monthly plans, and call booths — the Osaka coworking spaces worth your yen, grouped by how you actually work. With rough 2026 prices to plan around.",
+    cover: "/blog/coworking-cover.jpg",
+    date: "2026-07-06",
+    dateLabel: "July 6, 2026",
+    readingTime: "7 min read",
+    tags: ["Osaka", "Coworking", "Remote work"],
+    body: [
+      {
+        type: "p",
+        text: "Cafés are great for a couple of hours, but when you have back-to-back calls, a deadline, or you just want a real chair and guaranteed Wi-Fi, a coworking space earns its keep. Osaka's scene is smaller than Tokyo's but genuinely good — most spots are near a station, many sell single-day passes, and prices are noticeably kinder than the capital. Here's where our community actually works, grouped by what you need.",
+      },
+      {
+        type: "callout",
+        text: "Prices, hours, and plans change, and some spaces need a quick sign-up or reservation for a first visit. Treat the numbers below as ballpark 2026 figures and confirm on the space's own site before you go.",
+      },
+      {
+        type: "h2",
+        text: "Best for community & events",
+      },
+      {
+        type: "cafe",
+        n: 1,
+        name: "The DECK",
+        area: "Sakaisuji-Hommachi",
+        text: "In the heart of the business district, directly off Sakaisuji-Hommachi Station. Day passes run around ¥2,500, but the real draw is the community — regular networking events, workshops, and seminars make it the easiest place to actually meet other people working in Osaka.",
+      },
+      {
+        type: "cafe",
+        n: 2,
+        name: "Osakan Space",
+        area: "Hommachi",
+        text: "A minute from Hommachi Station, community-driven, with soundproof 'Bocchi Box' booths that are perfect for video calls. Its Digital Nomad Plan stretches access from 7:00 to 24:00, Monday to Saturday — one of the most flexible drop-in options in the city.",
+      },
+      {
+        type: "img",
+        src: "/blog/coworking-inline.jpg",
+        alt: "Coworking desks with monitors and a city view in Osaka",
+        caption: "A real desk and guaranteed uptime — worth it on a heavy-call day.",
+      },
+      {
+        type: "h2",
+        text: "Best around Umeda station",
+      },
+      {
+        type: "cafe",
+        n: 3,
+        name: "FUTRWORKS",
+        area: "Umeda",
+        text: "A modern, international space about three minutes from Umeda Station, built with global remote workers in mind. Roughly 1,400 m² of open desks, focus rooms, meeting rooms, and a chill room — English-friendly and easy to land in on day one.",
+      },
+      {
+        type: "cafe",
+        n: 4,
+        name: "Common Room",
+        area: "Umeda & Nakatsu",
+        text: "Two handy branches: a few minutes from Osaka Umeda (day use around ¥2,200) and one by Nakatsu Station (around ¥1,600) — a genuinely cheap, no-fuss option for a focused day.",
+      },
+      {
+        type: "cafe",
+        n: 5,
+        name: "Knowledge Capital",
+        area: "Grand Front Osaka, Umeda",
+        text: "Inside the Grand Front Osaka complex right by Umeda Station. Polished, professional, and stimulating — a good pick when you want an impressive, high-spec environment and maximum convenience.",
+      },
+      {
+        type: "h2",
+        text: "Budget & pay-as-you-go",
+      },
+      {
+        type: "cafe",
+        n: 6,
+        name: "Bizcomfort",
+        area: "Across Osaka",
+        text: "A widespread chain with reliable, no-frills coworking and flexible plans. If you're moving between neighborhoods, there's usually a branch nearby.",
+      },
+      {
+        type: "cafe",
+        n: 7,
+        name: "Coinspace",
+        area: "Marui, Namba",
+        text: "Inside the Marui department store in Namba, with a simple pay-per-minute model. Ideal for short bursts of work between errands, no membership required.",
+      },
+      {
+        type: "h2",
+        text: "Day pass or monthly?",
+      },
+      {
+        type: "list",
+        items: [
+          "Here for a week or two: buy day passes (roughly ¥500–2,500) and try a few spaces before you commit.",
+          "Staying a month or more: a monthly membership almost always beats stacking day passes, and often unlocks longer hours and 24/7 access.",
+          "Mostly calls: prioritize spaces with soundproof booths (like Osakan Space's Bocchi Boxes).",
+          "Want to meet people: pick a community-led space that runs events, such as The DECK.",
+        ],
+      },
+      {
+        type: "h2",
+        text: "What to check before you commit",
+      },
+      {
+        type: "list",
+        items: [
+          "Opening hours — some close in the evening; digital-nomad or 24/7 plans exist if you work late.",
+          "English support and an easy first-visit sign-up.",
+          "Meeting rooms and call booths if your work is call-heavy.",
+          "Distance from your stay — 'near the station' matters most on rainy days.",
+          "Whether a reservation is needed for your first drop-in.",
+        ],
+      },
+      {
+        type: "callout",
+        text: "Skip the research entirely: the November Workation includes a daytime coworking pass at a partner space, so you get a desk, fast Wi-Fi, and a built-in community from the moment you land.",
+      },
+    ],
+  },
+  {
     slug: "best-laptop-cafes-osaka",
     title: "The Best Laptop-Friendly Cafés in Osaka for Remote Work",
     excerpt:
