@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight } from "lucide-react";
-import { NAV, SITE } from "@/lib/site";
+import { SITE } from "@/lib/site";
+import { useI18n } from "@/components/i18n-provider";
+import { L } from "@/components/locale-link";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 export function SiteHeader() {
+  const { locale, dict } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -23,6 +26,21 @@ export function SiteHeader() {
     setOpen(false);
   }, [pathname]);
 
+  const nav = [
+    { href: "/", label: dict.nav.home },
+    { href: "/stays", label: dict.nav.stays },
+    { href: "/events", label: dict.nav.events },
+    { href: "/community", label: dict.nav.community },
+    { href: "/blog", label: dict.nav.blog },
+    { href: "/about", label: dict.nav.about },
+    { href: "/contact", label: dict.nav.contact },
+  ];
+
+  const isActive = (href: string) => {
+    const full = `/${locale}${href === "/" ? "" : href}`;
+    return href === "/" ? pathname === full : pathname.startsWith(full);
+  };
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
@@ -31,8 +49,8 @@ export function SiteHeader() {
           : "border-b border-transparent bg-paper-cream/30 backdrop-blur-sm"
       }`}
     >
-      <div className="container-page flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5" aria-label={SITE.name}>
+      <div className="container-page flex h-16 items-center justify-between gap-4">
+        <L href="/" className="flex items-center gap-2.5" aria-label={SITE.name}>
           <Image
             src="/logo/logo-mark-orange.png"
             alt=""
@@ -49,62 +67,60 @@ export function SiteHeader() {
               Digital Nomads Workation
             </span>
           </span>
-        </Link>
+        </L>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {NAV.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                  active
-                    ? "text-brand-orange"
-                    : "text-brand-ink/70 hover:text-brand-ink"
-                }`}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+        <nav className="hidden items-center gap-0.5 lg:flex">
+          {nav.map((item) => (
+            <L
+              key={item.href}
+              href={item.href}
+              className={`rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+                isActive(item.href)
+                  ? "text-brand-orange"
+                  : "text-brand-ink/70 hover:text-brand-ink"
+              }`}
+            >
+              {item.label}
+            </L>
+          ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-2 lg:flex">
+          <LanguageSwitcher />
           <a
             href={SITE.discord}
             target="_blank"
             rel="noreferrer"
             className="btn-primary !px-5 !py-2.5"
           >
-            Join Discord <ArrowUpRight className="h-4 w-4" />
+            {dict.actions.joinDiscord} <ArrowUpRight className="h-4 w-4" />
           </a>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-ink/15 text-brand-ink md:hidden"
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <LanguageSwitcher />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-ink/15 text-brand-ink"
+            aria-label={dict.actions.menu}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (
-        <div className="border-t border-paper-line bg-paper-cream md:hidden">
+        <div className="border-t border-paper-line bg-paper-cream lg:hidden">
           <nav className="container-page flex flex-col py-4">
-            {NAV.map((item) => (
-              <Link
+            {nav.map((item) => (
+              <L
                 key={item.href}
                 href={item.href}
                 className="rounded-xl px-3 py-3 text-base font-medium text-brand-ink/80 hover:bg-brand-ink/5 hover:text-brand-ink"
               >
                 {item.label}
-              </Link>
+              </L>
             ))}
             <a
               href={SITE.discord}
@@ -112,7 +128,7 @@ export function SiteHeader() {
               rel="noreferrer"
               className="btn-primary mt-3"
             >
-              Join Discord <ArrowUpRight className="h-4 w-4" />
+              {dict.actions.joinDiscord} <ArrowUpRight className="h-4 w-4" />
             </a>
           </nav>
         </div>
