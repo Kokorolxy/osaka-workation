@@ -2,7 +2,7 @@ export const en = {
   meta: {
     defaultTitle: "OSAKA Digital Nomads Workation",
     defaultDescription:
-      "Osaka's first international digital nomad community — real stays, monthly meetups, and the 14-day November Workation 2026. Work from Osaka. Connect with the world.",
+      "Work your mornings, explore Osaka by night. Join Japan's friendliest digital nomad community — curated stays, fast Wi-Fi, weekly meetups, and the 14-day November 2026 Workation.",
   },
   nav: {
     home: "Home",
