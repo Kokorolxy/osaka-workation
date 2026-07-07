@@ -35,6 +35,9 @@ export function generateMetadata({
       template: "%s · OSAKA Workation",
     },
     description: dict.meta.defaultDescription,
+    verification: {
+      google: "URipA8jB2dUsBd-ndeZuRP2VXNbfWAxIRgrHJ_XyUW8",
+    },
     alternates: {
       canonical: `/${locale}`,
       languages: { en: "/en", ja: "/ja", "x-default": "/en" },
