@@ -73,60 +73,122 @@ export const DISTRICTS = [
   },
 ];
 
-export const STAYS = [
-  {
-    name: "Namba Modern Flat",
-    area: "Namba, Osaka",
-    rating: "4.9",
-    price: "¥8,500",
-    badge: "Most popular",
-    image: "/stays/stay-1.jpg",
-    perks: ["Wi-Fi 200Mbps", "Standing desk", "Weekly clean", "Coffee bar"],
-  },
-  {
-    name: "Umeda Sky Loft",
-    area: "Umeda, Osaka",
-    rating: "4.8",
-    price: "¥12,000",
-    badge: "Skyline view",
-    image: "/stays/stay-2.jpg",
-    perks: ["Wi-Fi 300Mbps", "Dual monitor", "Gym access", "City view"],
-  },
+// Stay types & occupancy used for the Stays filters.
+export const STAY_TYPES = ["Airbnb", "Hotel", "Monthly rent", "Share house"] as const;
+export type StayType = (typeof STAY_TYPES)[number];
+
+export const OCCUPANCY = ["Solo", "Group"] as const;
+export type Occupancy = (typeof OCCUPANCY)[number];
+
+export type Stay = {
+  name: string;
+  area: string;
+  type: StayType;
+  occupancy: Occupancy[];
+  price: string;
+  unit: "night" | "month";
+  image: string;
+  perks: string[];
+  // Partner booking page (Airbnb / hotel site / etc.). We only recommend & showcase.
+  url: string;
+  badge?: string;
+};
+
+// PLACEHOLDER listings — swap in your real partner stays (name / area / price / image / url).
+export const STAYS: Stay[] = [
   {
     name: "Tennoji Tatami Studio",
     area: "Tennoji, Osaka",
-    rating: "4.7",
+    type: "Airbnb",
+    occupancy: ["Solo"],
     price: "¥6,800",
-    badge: "Best value",
+    unit: "night",
     image: "/stays/stay-3.jpg",
-    perks: ["Wi-Fi 150Mbps", "Desk + chair", "Quiet street", "Kitchenette"],
+    perks: ["Wi-Fi 150Mbps", "Desk + chair", "Quiet street"],
+    url: "#",
+    badge: "Best value",
   },
   {
-    name: "Shinsaibashi Designer Room",
-    area: "Shinsaibashi, Osaka",
-    rating: "4.9",
-    price: "¥10,500",
-    badge: "Central",
-    image: "/stays/stay-4.jpg",
-    perks: ["Wi-Fi 250Mbps", "Ergo chair", "Balcony", "Steps to metro"],
+    name: "Namba Tea-Room House",
+    area: "Namba, Osaka",
+    type: "Airbnb",
+    occupancy: ["Solo", "Group"],
+    price: "¥7,400",
+    unit: "night",
+    image: "/stays/stay-6.jpg",
+    perks: ["Wi-Fi 180Mbps", "Workspace", "Garden"],
+    url: "#",
   },
   {
     name: "Nakazakicho Triple Room",
     area: "Nakazakicho, Osaka",
-    rating: "4.8",
+    type: "Airbnb",
+    occupancy: ["Group"],
     price: "¥9,200",
-    badge: "Group friendly",
+    unit: "night",
     image: "/stays/stay-5.jpg",
-    perks: ["Wi-Fi 200Mbps", "Big desk", "Cafe district", "Sleeps 3"],
+    perks: ["Wi-Fi 200Mbps", "Big desk", "Sleeps 3"],
+    url: "#",
+    badge: "Group friendly",
   },
   {
-    name: "Tennoji Tea-Room House",
+    name: "Umeda Sky Hotel Room",
+    area: "Umeda, Osaka",
+    type: "Hotel",
+    occupancy: ["Solo"],
+    price: "¥12,000",
+    unit: "night",
+    image: "/stays/stay-2.jpg",
+    perks: ["Wi-Fi 300Mbps", "Daily clean", "City view"],
+    url: "#",
+    badge: "Skyline view",
+  },
+  {
+    name: "Shinsaibashi Designer Hotel",
+    area: "Shinsaibashi, Osaka",
+    type: "Hotel",
+    occupancy: ["Solo", "Group"],
+    price: "¥10,500",
+    unit: "night",
+    image: "/stays/stay-4.jpg",
+    perks: ["Wi-Fi 250Mbps", "Front desk", "Steps to metro"],
+    url: "#",
+    badge: "Central",
+  },
+  {
+    name: "Namba Monthly Apartment",
+    area: "Namba, Osaka",
+    type: "Monthly rent",
+    occupancy: ["Solo"],
+    price: "¥95,000",
+    unit: "month",
+    image: "/stays/stay-1.jpg",
+    perks: ["Wi-Fi 200Mbps", "Standing desk", "Washer"],
+    url: "#",
+    badge: "Long-stay",
+  },
+  {
+    name: "Tennoji Monthly Flat",
     area: "Tennoji, Osaka",
-    rating: "4.7",
-    price: "¥7,400",
-    badge: "Long-stay friendly",
-    image: "/stays/stay-6.jpg",
-    perks: ["Wi-Fi 180Mbps", "Workspace", "Washer", "Garden"],
+    type: "Monthly rent",
+    occupancy: ["Solo", "Group"],
+    price: "¥120,000",
+    unit: "month",
+    image: "/stays/stay-kitchen.jpg",
+    perks: ["Wi-Fi 180Mbps", "Full kitchen", "Sleeps 2"],
+    url: "#",
+  },
+  {
+    name: "Osaka Nomad Share House",
+    area: "Nakazakicho, Osaka",
+    type: "Share house",
+    occupancy: ["Group"],
+    price: "¥65,000",
+    unit: "month",
+    image: "/stays/stay-hero.jpg",
+    perks: ["Wi-Fi 200Mbps", "Shared lounge", "Community"],
+    url: "#",
+    badge: "Meet people",
   },
 ];
 
@@ -308,6 +370,8 @@ export const PRICING = [
     price: "¥30,000",
     period: "7 days",
     note: "A shorter taste of Osaka",
+    // Paste your Stripe Payment Link / Peatix / Gumroad URL here to enable "Buy ticket".
+    checkoutUrl: "",
     popular: false,
     features: [
       "Opening party",
@@ -325,6 +389,7 @@ export const PRICING = [
     earlyBird: "¥42,000",
     period: "14 days",
     note: "Early bird ¥42,000 · first 10 · until Sep 30, 2026",
+    checkoutUrl: "",
     popular: true,
     features: [
       "Everything in Short Stay",
@@ -341,6 +406,7 @@ export const PRICING = [
     price: "¥35,000",
     period: "14 days",
     note: "Programme & coworking only",
+    checkoutUrl: "",
     popular: false,
     features: [
       "14-day coworking access",

@@ -89,11 +89,25 @@ export function Pricing() {
         <p className="text-sm text-muted">
           You picked <b className="text-brand-ink">{active.name}</b> —{" "}
           <span className="text-brand-ink">{activePrice}</span> for{" "}
-          {active.period}. Join the waitlist to lock in your spot.
+          {active.period}.{" "}
+          {active.checkoutUrl
+            ? "Secure your spot now."
+            : "Join the waitlist to lock in your spot."}
         </p>
-        <Link href="/#newsletter" className="btn-primary whitespace-nowrap">
-          Reserve this plan <ArrowRight className="h-4 w-4" />
-        </Link>
+        {active.checkoutUrl ? (
+          <a
+            href={active.checkoutUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-primary whitespace-nowrap"
+          >
+            Buy ticket <ArrowRight className="h-4 w-4" />
+          </a>
+        ) : (
+          <Link href="/#newsletter" className="btn-primary whitespace-nowrap">
+            Reserve this plan <ArrowRight className="h-4 w-4" />
+          </Link>
+        )}
       </div>
 
       <p className="mx-auto mt-4 max-w-2xl text-center text-xs text-muted-soft">
