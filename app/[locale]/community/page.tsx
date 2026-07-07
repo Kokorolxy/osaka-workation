@@ -49,6 +49,7 @@ export default function CommunityPage({
         title={t.heroTitle}
         body={t.heroBody}
         image="/img/community-hero.jpg"
+        alt="Osaka digital nomad community meetup event in Japan"
       />
 
       {/* DISCORD STAT BLOCK */}
@@ -114,7 +115,7 @@ export default function CommunityPage({
               >
                 <Image
                   src={img}
-                  alt=""
+                  alt="Osaka digital nomad community event moment"
                   fill
                   sizes="(max-width: 768px) 50vw, 33vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"

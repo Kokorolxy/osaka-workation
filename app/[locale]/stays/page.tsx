@@ -44,6 +44,7 @@ export default function StaysPage({
         title={t.heroTitle}
         body={t.heroBody}
         image="/stays/stay-hero.jpg"
+        alt="Curated stays and accommodation in Osaka, Japan for digital nomads"
       />
 
       <section className="container-page py-16 sm:py-20">

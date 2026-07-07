@@ -5,17 +5,19 @@ export function PageHero({
   title,
   body,
   image,
+  alt = "",
 }: {
   eyebrow: string;
   title: string;
   body: string;
   image: string;
+  alt?: string;
 }) {
   return (
     <section className="relative isolate flex min-h-[54vh] items-end overflow-hidden">
       <Image
         src={image}
-        alt=""
+        alt={alt}
         fill
         priority
         sizes="100vw"

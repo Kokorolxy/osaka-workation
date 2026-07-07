@@ -62,6 +62,8 @@ export default function BlogPostPage({
   const post = getPost(locale, params.slug);
   if (!post) notFound();
 
+  const base = `https://osakaworkation.com/${locale}`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -72,7 +74,17 @@ export default function BlogPostPage({
     inLanguage: locale,
     author: { "@type": "Organization", name: SITE.shortName },
     publisher: { "@type": "Organization", name: SITE.shortName },
-    mainEntityOfPage: `https://osakaworkation.com/${locale}/blog/${post.slug}`,
+    mainEntityOfPage: `${base}/blog/${post.slug}`,
+  };
+
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: dict.nav.home, item: base },
+      { "@type": "ListItem", position: 2, name: dict.nav.blog, item: `${base}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `${base}/blog/${post.slug}` },
+    ],
   };
 
   return (
@@ -80,6 +92,10 @@ export default function BlogPostPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
 
       <article className="pb-20">

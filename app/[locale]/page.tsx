@@ -24,7 +24,7 @@ export default function HomePage({ params }: { params: { locale: string } }) {
       <section className="relative isolate flex min-h-[94vh] items-center overflow-hidden">
         <Image
           src="/img/hero-osaka.jpg"
-          alt="Dotonbori canal in central Osaka"
+          alt="Dotonbori canal, Osaka, Japan — OSAKA digital nomad Workation"
           fill
           priority
           sizes="100vw"
@@ -94,7 +94,7 @@ export default function HomePage({ params }: { params: { locale: string } }) {
           <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-paper-line">
             <Image
               src="/img/workation-feature.jpg"
-              alt=""
+              alt="November Workation event — Osaka digital nomad community in Japan"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
@@ -250,7 +250,7 @@ export default function HomePage({ params }: { params: { locale: string } }) {
               >
                 <Image
                   src={img}
-                  alt=""
+                  alt="Osaka digital nomad community — coworking and meetups"
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"

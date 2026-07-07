@@ -83,6 +83,7 @@ export default function EventsPage({
         title={t.heroTitle}
         body={t.heroBody}
         image="/img/events-hero.jpg"
+        alt="Digital nomad events, meetups and the Workation in Osaka, Japan"
       />
 
       {/* WORKATION HERO BLOCK */}
@@ -124,7 +125,7 @@ export default function EventsPage({
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-paper-line">
               <Image
                 src="/img/workation-daytrip.jpg"
-                alt=""
+                alt="Kyoto and Nara day trip — an Osaka Workation event in Japan"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"

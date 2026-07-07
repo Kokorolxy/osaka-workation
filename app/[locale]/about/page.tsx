@@ -47,6 +47,7 @@ export default function AboutPage({
         title={t.heroTitle}
         body={t.heroBody}
         image="/img/about-hero.jpg"
+        alt="About OSAKA Workation — remote work and community in Osaka, Japan"
       />
 
       {/* BRAND LOCKUP */}
@@ -88,7 +89,7 @@ export default function AboutPage({
           <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-paper-line">
             <Image
               src="/img/about-cafe.jpg"
-              alt=""
+              alt="Working remotely from a cosy cafe in Osaka, Japan"
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
               className="object-cover"

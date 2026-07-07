@@ -41,6 +41,7 @@ export default function BlogPage({
         title={t.heroTitle}
         body={t.heroBody}
         image="/blog/cafes-cover.jpg"
+        alt="Guides to living and working remotely in Osaka, Japan"
       />
 
       <section className="container-page py-16 sm:py-20">

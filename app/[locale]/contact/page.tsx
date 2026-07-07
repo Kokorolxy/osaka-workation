@@ -52,6 +52,7 @@ export default function ContactPage({
         title={t.heroTitle}
         body={t.heroBody}
         image="/img/contact-hero.jpg"
+        alt="Contact OSAKA Workation — digital nomad community in Osaka, Japan"
       />
 
       <section className="container-page py-16 sm:py-20">
