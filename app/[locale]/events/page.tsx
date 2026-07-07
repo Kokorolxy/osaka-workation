@@ -11,6 +11,7 @@ import { IncludesGrid } from "@/components/includes-grid";
 import { WorkationTimeline } from "@/components/workation-timeline";
 import { MeetupCard } from "@/components/meetup-card";
 import { PhotoWall } from "@/components/photo-wall";
+import { EventsCalendar } from "@/components/events-calendar";
 import { JsonLd } from "@/components/json-ld";
 import { L } from "@/components/locale-link";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
@@ -145,6 +146,18 @@ export default function EventsPage({
           <span className="h-px flex-1 bg-paper-line" />
         </div>
         <PhotoWall />
+      </section>
+
+      {/* CALENDAR */}
+      <section className="container-page py-16 sm:py-20">
+        <SectionHeading
+          eyebrow={t.calEyebrow}
+          title={t.calTitle}
+          body={t.calBody}
+        />
+        <div className="mt-12">
+          <EventsCalendar />
+        </div>
       </section>
 
       {/* WHAT'S INCLUDED */}
