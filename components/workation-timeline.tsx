@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Clock } from "lucide-react";
-import { WORKATION } from "@/lib/site";
+import { useI18n } from "@/components/i18n-provider";
 
 export function WorkationTimeline() {
+  const { dict } = useI18n();
+  const schedule = dict.data.workation.schedule;
   const [active, setActive] = useState(0);
-  const step = WORKATION.schedule[active];
+  const step = schedule[active];
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-paper-line">
@@ -23,7 +25,7 @@ export function WorkationTimeline() {
       <div className="relative grid gap-8 p-8 sm:p-12 lg:grid-cols-[0.9fr_1.1fr]">
         {/* clickable phases */}
         <div className="flex flex-wrap gap-2 lg:flex-col">
-          {WORKATION.schedule.map((s, i) => {
+          {schedule.map((s, i) => {
             const on = i === active;
             return (
               <button

@@ -1,65 +1,53 @@
 "use client";
 
 import { useState } from "react";
-import { Instagram, Users, CalendarDays, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Instagram, Users, CalendarDays, ArrowRight, type LucideIcon } from "lucide-react";
+import { L } from "@/components/locale-link";
+import { useI18n } from "@/components/i18n-provider";
+import { SITE } from "@/lib/site";
 
-const TABS = [
-  {
-    key: "social",
-    label: "Social media",
-    icon: Instagram,
-    headline: "We document the real Osaka",
-    body: "Short-form video and photo storytelling that shows remote workers what daily life in Osaka actually looks like — the cafes, the neighborhoods, the food, the people.",
-    points: ["Instagram & TikTok", "Local creator network", "100K+ views and climbing"],
-    cta: { label: "Follow @osaka_workation", href: "https://www.instagram.com/osaka_workation", external: true },
-  },
-  {
-    key: "meetups",
-    label: "Monthly meetups",
-    icon: Users,
-    headline: "Strangers in, community out",
-    body: "Coffee mornings, cooking classes, and photo walks that run all year. Low-key, welcoming, and the easiest way to land a ready-made crew in a new city.",
-    points: ["Weekly Thursday coffee", "Cooking & culture nights", "Monthly photo walks"],
-    cta: { label: "See the meetups", href: "/events#meetups", external: false },
-  },
-  {
-    key: "workation",
-    label: "Annual Workation",
-    icon: CalendarDays,
-    headline: "Two weeks, the full Osaka life",
-    body: "Our November flagship bundles a stay, coworking, cultural experiences, and Kansai day trips into one package — work your mornings, live the city your evenings.",
-    points: ["14 days · 50–100 people", "Stay + coworking + culture", "Kyoto & Nara day trips"],
-    cta: { label: "Explore the Workation", href: "/events#workation", external: false },
-  },
-];
+const META: Record<
+  string,
+  { icon: LucideIcon; href: string; external: boolean }
+> = {
+  social: { icon: Instagram, href: SITE.instagram, external: true },
+  meetups: { icon: Users, href: "/events#meetups", external: false },
+  workation: { icon: CalendarDays, href: "/events#workation", external: false },
+};
 
 export function AboutTabs() {
+  const { dict } = useI18n();
+  const tabs = dict.pages.about.tabs;
   const [active, setActive] = useState(0);
-  const tab = TABS[active];
-  const Icon = tab.icon;
+  const tab = tabs[active];
+  const meta = META[tab.key] ?? META.social;
+  const Icon = meta.icon;
 
   return (
     <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
       <div className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
-        {TABS.map((t, i) => (
-          <button
-            key={t.key}
-            type="button"
-            onClick={() => setActive(i)}
-            className={`flex shrink-0 items-center gap-3 rounded-2xl border px-5 py-4 text-left text-sm font-semibold transition-all lg:shrink ${
-              i === active
-                ? "border-brand-orange bg-brand-orange/10 text-brand-ink"
-                : "border-paper-line bg-white text-muted hover:border-brand-orange/40 hover:text-brand-ink"
-            }`}
-          >
-            <t.icon
-              className={`h-5 w-5 ${i === active ? "text-brand-orange" : "text-muted-soft"}`}
-              strokeWidth={1.75}
-            />
-            {t.label}
-          </button>
-        ))}
+        {tabs.map((tb, i) => {
+          const m = META[tb.key] ?? META.social;
+          const TIcon = m.icon;
+          return (
+            <button
+              key={tb.key}
+              type="button"
+              onClick={() => setActive(i)}
+              className={`flex shrink-0 items-center gap-3 rounded-2xl border px-5 py-4 text-left text-sm font-semibold transition-all lg:shrink ${
+                i === active
+                  ? "border-brand-orange bg-brand-orange/10 text-brand-ink"
+                  : "border-paper-line bg-white text-muted hover:border-brand-orange/40 hover:text-brand-ink"
+              }`}
+            >
+              <TIcon
+                className={`h-5 w-5 ${i === active ? "text-brand-orange" : "text-muted-soft"}`}
+                strokeWidth={1.75}
+              />
+              {tb.label}
+            </button>
+          );
+        })}
       </div>
 
       <div
@@ -82,22 +70,22 @@ export function AboutTabs() {
           ))}
         </ul>
         <div className="mt-7">
-          {tab.cta.external ? (
+          {meta.external ? (
             <a
-              href={tab.cta.href}
+              href={meta.href}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 text-sm font-semibold text-brand-orange hover:text-brand-orangeHover"
             >
-              {tab.cta.label} <ArrowRight className="h-4 w-4" />
+              {tab.cta} <ArrowRight className="h-4 w-4" />
             </a>
           ) : (
-            <Link
-              href={tab.cta.href}
+            <L
+              href={meta.href}
               className="inline-flex items-center gap-2 text-sm font-semibold text-brand-orange hover:text-brand-orangeHover"
             >
-              {tab.cta.label} <ArrowRight className="h-4 w-4" />
-            </Link>
+              {tab.cta} <ArrowRight className="h-4 w-4" />
+            </L>
           )}
         </div>
       </div>

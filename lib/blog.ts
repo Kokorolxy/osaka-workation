@@ -354,6 +354,15 @@ export const POSTS: Post[] = [
   },
 ];
 
-export function getPost(slug: string) {
-  return POSTS.find((p) => p.slug === slug);
+import type { Locale } from "@/lib/i18n/config";
+import { POSTS_JA } from "./blog.ja";
+
+const BY_LOCALE: Record<Locale, Post[]> = { en: POSTS, ja: POSTS_JA };
+
+export function getPosts(locale: Locale): Post[] {
+  return BY_LOCALE[locale] ?? POSTS;
+}
+
+export function getPost(locale: Locale, slug: string) {
+  return getPosts(locale).find((p) => p.slug === slug);
 }

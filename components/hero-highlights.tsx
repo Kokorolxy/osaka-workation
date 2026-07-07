@@ -3,19 +3,22 @@
 import { useEffect, useState } from "react";
 import { MapPin } from "lucide-react";
 import { FeatureIcon } from "@/components/feature-icon";
-import { WHY_OSAKA } from "@/lib/site";
+import { useI18n } from "@/components/i18n-provider";
 
 export function HeroHighlights() {
+  const { dict } = useI18n();
+  const items = dict.data.whyOsaka;
+  const home = dict.pages.home;
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => setI((v) => (v + 1) % WHY_OSAKA.length), 3600);
+    const id = setInterval(() => setI((v) => (v + 1) % items.length), 3600);
     return () => clearInterval(id);
-  }, [paused]);
+  }, [paused, items.length]);
 
-  const item = WHY_OSAKA[i];
+  const item = items[i];
 
   return (
     <div
@@ -25,10 +28,10 @@ export function HeroHighlights() {
     >
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-orange">
-          Why Osaka
+          {home.whyHighlightLabel}
         </span>
         <div className="flex gap-1.5">
-          {WHY_OSAKA.map((_, idx) => (
+          {items.map((_, idx) => (
             <button
               key={idx}
               type="button"
@@ -53,9 +56,9 @@ export function HeroHighlights() {
       <div className="mt-6 flex items-center justify-between border-t border-paper-line pt-5 text-sm">
         <span className="flex items-center gap-2 text-muted">
           <MapPin className="h-4 w-4 text-brand-orange" />
-          Osaka · Nov 2026
+          {home.heroLocation}
         </span>
-        <span className="font-semibold text-brand-ink">100+ members</span>
+        <span className="font-semibold text-brand-ink">{home.heroMembers}</span>
       </div>
     </div>
   );

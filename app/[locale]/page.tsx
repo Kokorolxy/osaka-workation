@@ -1,15 +1,23 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Wifi } from "lucide-react";
-import { Marquee, SectionHeading } from "@/components/ui";
+import { Marquee } from "@/components/marquee";
+import { SectionHeading } from "@/components/ui";
 import { FeatureIcon } from "@/components/feature-icon";
 import { Countdown } from "@/components/countdown";
 import { Newsletter } from "@/components/newsletter";
 import { HeroHighlights } from "@/components/hero-highlights";
 import { FoodCard } from "@/components/food-card";
-import { DISTRICTS, FOOD, SITE, WHY_OSAKA, WORKATION } from "@/lib/site";
+import { L } from "@/components/locale-link";
+import { SITE } from "@/lib/site";
+import { isLocale, defaultLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export default function HomePage() {
+export default function HomePage({ params }: { params: { locale: string } }) {
+  const locale = isLocale(params.locale) ? params.locale : defaultLocale;
+  const dict = getDictionary(locale);
+  const t = dict.pages.home;
+  const w = dict.data.workation;
+
   return (
     <>
       {/* ---------- HERO ---------- */}
@@ -27,35 +35,33 @@ export default function HomePage() {
         <div className="container-page relative z-10 grid gap-10 pb-16 pt-28 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div className="animate-fade-up">
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-white/80 px-4 py-1.5 text-xs font-semibold tracking-wide text-brand-orange backdrop-blur">
-              Osaka, Japan · Workation 2026
+              {t.heroBadge}
             </span>
             <h1 className="mt-6 text-5xl font-extrabold leading-[0.95] tracking-tight text-brand-ink sm:text-6xl lg:text-7xl">
-              Work.
+              {t.heroTitle[0]}
               <br />
-              Explore.
+              {t.heroTitle[1]}
               <br />
-              <span className="text-brand-orange">Connect.</span>
+              <span className="text-brand-orange">{t.heroTitle[2]}</span>
             </h1>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-brand-ink/80">
-              Osaka&apos;s first international digital nomad community — real
-              stays, real people, real Japan.
+              {t.heroSubtitle}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link href="/events#workation" className="btn-primary">
-                Join November Workation <ArrowRight className="h-4 w-4" />
-              </Link>
+              <L href="/events#workation" className="btn-primary">
+                {t.heroJoinWorkation} <ArrowRight className="h-4 w-4" />
+              </L>
               <a
                 href={SITE.discord}
                 target="_blank"
                 rel="noreferrer"
                 className="btn-light"
               >
-                Join Discord <ArrowUpRight className="h-4 w-4" />
+                {dict.actions.joinDiscord} <ArrowUpRight className="h-4 w-4" />
               </a>
             </div>
           </div>
 
-          {/* interactive highlights */}
           <div className="animate-fade-up">
             <HeroHighlights />
           </div>
@@ -66,20 +72,16 @@ export default function HomePage() {
 
       {/* ---------- WHY OSAKA ---------- */}
       <section className="container-page py-20 sm:py-24">
-        <SectionHeading
-          eyebrow="Why Osaka"
-          title="Japan's best-kept secret"
-          body="Cheaper than Tokyo, warmer than anywhere, and built for people who want to actually live in Japan — not just visit."
-        />
+        <SectionHeading eyebrow={t.whyEyebrow} title={t.whyTitle} body={t.whyBody} />
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {WHY_OSAKA.map((w) => (
-            <div key={w.title} className="card card-hover p-6">
-              <FeatureIcon name={w.icon} />
+          {dict.data.whyOsaka.map((item) => (
+            <div key={item.title} className="card card-hover p-6">
+              <FeatureIcon name={item.icon} />
               <h3 className="mt-4 text-lg font-bold text-brand-ink">
-                {w.title}
+                {item.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">
-                {w.body}
+                {item.body}
               </p>
             </div>
           ))}
@@ -92,43 +94,41 @@ export default function HomePage() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-paper-line">
             <Image
               src="/img/workation-feature.jpg"
-              alt="Sunset gathering with the Osaka nomad community"
+              alt=""
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
             <span className="absolute left-4 top-4 rounded-full bg-brand-orange px-3 py-1 text-xs font-bold text-white">
-              Now recruiting · Early bird open
+              {w.recruiting}
             </span>
           </div>
 
           <div>
-            <span className="eyebrow">The flagship event</span>
+            <span className="eyebrow">{t.flagshipEyebrow}</span>
             <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-brand-ink sm:text-5xl">
-              {WORKATION.title}
+              {w.title}
             </h2>
             <p className="mt-3 text-lg font-semibold text-brand-orange">
-              {WORKATION.duration} · {WORKATION.dates} · {WORKATION.capacity}
+              {w.duration} · {w.dates} · {w.capacity}
             </p>
-            <p className="mt-4 max-w-md leading-relaxed text-muted">
-              {WORKATION.pitch}
-            </p>
+            <p className="mt-4 max-w-md leading-relaxed text-muted">{w.pitch}</p>
 
             <div className="mt-7">
               <Countdown />
             </div>
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <Link href="/events#workation" className="btn-primary">
-                See the full programme <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link href="/#newsletter" className="btn-ghost">
-                Join the waitlist
-              </Link>
+              <L href="/events#workation" className="btn-primary">
+                {t.seeProgramme} <ArrowRight className="h-4 w-4" />
+              </L>
+              <L href="/#newsletter" className="btn-ghost">
+                {t.joinWaitlist}
+              </L>
             </div>
 
             <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-brand-ink/80">
-              {WORKATION.includes.slice(0, 6).map((i) => (
+              {w.includes.map((i) => (
                 <li key={i.title} className="flex items-center gap-2.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-orange" />
                   {i.title}
@@ -143,20 +143,20 @@ export default function HomePage() {
       <section className="container-page py-20 sm:py-24">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <SectionHeading
-            eyebrow="Explore"
-            title="Pick your neighborhood"
-            body="Three distinct bases, each with its own rhythm. Find the one that matches how you work and unwind."
+            eyebrow={t.districtsEyebrow}
+            title={t.districtsTitle}
+            body={t.districtsBody}
           />
-          <Link
+          <L
             href="/stays"
             className="hidden items-center gap-1 text-sm font-semibold text-brand-orange hover:text-brand-orangeHover sm:inline-flex"
           >
-            Browse all stays <ArrowRight className="h-4 w-4" />
-          </Link>
+            {dict.ui.common.browseAllStays} <ArrowRight className="h-4 w-4" />
+          </L>
         </div>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {DISTRICTS.map((d) => (
-            <Link
+          {dict.data.districts.map((d) => (
+            <L
               key={d.name}
               href="/stays"
               className="group relative overflow-hidden rounded-3xl border border-paper-line"
@@ -178,7 +178,7 @@ export default function HomePage() {
                 <h3 className="mt-1 text-2xl font-bold text-white">{d.name}</h3>
                 <p className="mt-2 text-sm text-white/85">{d.body}</p>
               </div>
-            </Link>
+            </L>
           ))}
         </div>
       </section>
@@ -187,12 +187,12 @@ export default function HomePage() {
       <section className="border-y border-paper-line bg-paper-sand">
         <div className="container-page py-20 sm:py-24">
           <SectionHeading
-            eyebrow="Live like a local"
-            title="Your lunch break, upgraded"
-            body="Takoyaki on the corner, ramen at midnight, a new favourite spot every week. Hover (or tap) each one for the community's top picks."
+            eyebrow={t.foodEyebrow}
+            title={t.foodTitle}
+            body={t.foodBody}
           />
           <div className="mt-12 grid gap-5 sm:grid-cols-3">
-            {FOOD.map((f) => (
+            {dict.data.food.map((f) => (
               <FoodCard key={f.label} food={f} />
             ))}
           </div>
@@ -203,14 +203,12 @@ export default function HomePage() {
       <section className="container-page py-20 sm:py-24">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <div>
-            <span className="eyebrow">Community</span>
+            <span className="eyebrow">{t.communityEyebrow}</span>
             <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-brand-ink sm:text-5xl">
-              Join 100+ digital nomads
+              {t.communityTitle}
             </h2>
             <p className="mt-4 max-w-md leading-relaxed text-muted">
-              From Thursday coffee meetups to nabe nights and photo walks, this
-              is a crew of locals and internationals building Osaka&apos;s first
-              real nomad scene.
+              {t.communityBody}
             </p>
             <div className="mt-6 flex items-center gap-3 rounded-2xl border border-paper-line bg-white p-4">
               <span className="relative flex h-3 w-3">
@@ -218,7 +216,7 @@ export default function HomePage() {
                 <span className="inline-flex h-3 w-3 rounded-full bg-brand-orange" />
               </span>
               <span className="text-sm text-muted">
-                <b className="text-brand-ink">23</b> online now on Discord
+                <b className="text-brand-ink">23</b> {t.onlineNow}
               </span>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -228,15 +226,14 @@ export default function HomePage() {
                 rel="noreferrer"
                 className="btn-primary"
               >
-                Join Discord <ArrowUpRight className="h-4 w-4" />
+                {dict.actions.joinDiscord} <ArrowUpRight className="h-4 w-4" />
               </a>
-              <Link href="/community" className="btn-ghost">
-                Meet the community
-              </Link>
+              <L href="/community" className="btn-ghost">
+                {t.meetCommunity}
+              </L>
             </div>
             <div className="mt-8 flex items-center gap-2 text-sm text-muted">
-              <Wifi className="h-4 w-4 text-brand-orange" /> Average 100+ Mbps in
-              Osaka cafes &amp; coworking
+              <Wifi className="h-4 w-4 text-brand-orange" /> {t.wifiNote}
             </div>
           </div>
 
@@ -253,7 +250,7 @@ export default function HomePage() {
               >
                 <Image
                   src={img}
-                  alt="Osaka nomad community moment"
+                  alt=""
                   fill
                   sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -268,19 +265,16 @@ export default function HomePage() {
       <section id="newsletter" className="container-page pb-24">
         <div className="relative overflow-hidden rounded-3xl bg-brand-ink px-6 py-14 text-center sm:px-14">
           <div className="absolute -left-16 -top-16 h-48 w-48 rounded-full bg-brand-orange/40 blur-3xl" />
-          <span className="eyebrow relative">Stay in the loop</span>
+          <span className="eyebrow relative">{t.newsletterEyebrow}</span>
           <h2 className="relative mt-3 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-            Get the waitlist before anyone else
+            {t.newsletterTitle}
           </h2>
           <p className="relative mx-auto mt-4 max-w-lg text-white/70">
-            New stays, upcoming events, and first access to the November
-            Workation. No spam — just Osaka.
+            {t.newsletterBody}
           </p>
           <div className="relative mx-auto mt-8 max-w-md">
             <Newsletter />
-            <p className="mt-3 text-xs text-white/45">
-              Join 200+ nomads already signed up.
-            </p>
+            <p className="mt-3 text-xs text-white/45">{t.newsletterCount}</p>
           </div>
         </div>
       </section>

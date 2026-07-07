@@ -1,27 +1,46 @@
+import type { Metadata } from "next";
 import { Instagram, MessageCircle, Mail, ChevronDown, Link2 } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/ui";
 import { ContactForm } from "@/components/contact-form";
 import { JsonLd } from "@/components/json-ld";
 import { buildMetadata } from "@/lib/seo";
-import { FAQS, SITE } from "@/lib/site";
+import { SITE } from "@/lib/site";
+import { isLocale, defaultLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata = buildMetadata({
-  title: "Contact",
-  description:
-    "Get in touch about the November Workation, stays, or partnerships — or just say hi. Osaka Workation replies within a couple of days.",
-  path: "/contact",
-  og: "contact",
-});
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = isLocale(params.locale) ? params.locale : defaultLocale;
+  const d = getDictionary(locale).pages.contact;
+  return buildMetadata({
+    locale,
+    title: d.metaTitle,
+    description: d.metaDescription,
+    path: "/contact",
+    og: "contact",
+  });
+}
 
-export default function ContactPage() {
+export default function ContactPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  const locale = isLocale(params.locale) ? params.locale : defaultLocale;
+  const dict = getDictionary(locale);
+  const t = dict.pages.contact;
+
   return (
     <>
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@type": "FAQPage",
-          mainEntity: FAQS.map((f) => ({
+          mainEntity: dict.data.faqs.map((f) => ({
             "@type": "Question",
             name: f.q,
             acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -29,22 +48,21 @@ export default function ContactPage() {
         }}
       />
       <PageHero
-        eyebrow="Contact"
-        title="Let's talk"
-        body="Questions about the Workation, a stay, or a partnership? Drop us a line — we read everything and reply within a couple of days."
+        eyebrow={t.heroEyebrow}
+        title={t.heroTitle}
+        body={t.heroBody}
         image="/img/contact-hero.jpg"
       />
 
       <section className="container-page py-16 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.1fr]">
-          {/* contact methods */}
           <div>
-            <SectionHeading eyebrow="Reach us" title="The fastest ways in" />
+            <SectionHeading eyebrow={t.reachEyebrow} title={t.reachTitle} />
             <div className="mt-8 space-y-4">
               <ContactRow
                 icon={<MessageCircle className="h-5 w-5 text-brand-orange" />}
                 title="Discord"
-                value="Chat with the community in real time"
+                value={t.discordValue}
                 href={SITE.discord}
               />
               <ContactRow
@@ -55,13 +73,13 @@ export default function ContactPage() {
               />
               <ContactRow
                 icon={<Mail className="h-5 w-5 text-brand-orange" />}
-                title="Email"
+                title={t.emailTitle}
                 value={SITE.email}
                 href={`mailto:${SITE.email}`}
               />
               <ContactRow
                 icon={<Link2 className="h-5 w-5 text-brand-orange" />}
-                title="All our links"
+                title={t.linksTitle}
                 value="linktr.ee/osakaworkation"
                 href={SITE.linktree}
               />
@@ -72,18 +90,14 @@ export default function ContactPage() {
               className="mt-8 scroll-mt-24 rounded-3xl border border-brand-orange/30 bg-brand-orange/10 p-7"
             >
               <h3 className="text-lg font-bold text-brand-ink">
-                Partner or sponsor
+                {t.partnerTitle}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">
-                Coworking spaces, stays, brands, and municipalities — reach a
-                global remote-work audience and help build the case study for
-                international 関係人口 in Osaka. Pick &ldquo;Partnership&rdquo; in
-                the form and we&apos;ll send the deck.
+                {t.partnerBody}
               </p>
             </div>
           </div>
 
-          {/* form */}
           <ContactForm />
         </div>
       </section>
@@ -94,13 +108,9 @@ export default function ContactPage() {
         className="scroll-mt-24 border-t border-paper-line bg-white"
       >
         <div className="container-page py-16 sm:py-20">
-          <SectionHeading
-            align="center"
-            eyebrow="FAQ"
-            title="Questions, answered"
-          />
+          <SectionHeading align="center" eyebrow={t.faqEyebrow} title={t.faqTitle} />
           <div className="mx-auto mt-12 max-w-3xl space-y-3">
-            {FAQS.map((f) => (
+            {dict.data.faqs.map((f) => (
               <details
                 key={f.q}
                 className="group rounded-2xl border border-paper-line bg-paper-cream p-5"
@@ -109,9 +119,7 @@ export default function ContactPage() {
                   {f.q}
                   <ChevronDown className="h-5 w-5 shrink-0 text-brand-orange transition-transform group-open:rotate-180" />
                 </summary>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
-                  {f.a}
-                </p>
+                <p className="mt-3 text-sm leading-relaxed text-muted">{f.a}</p>
               </details>
             ))}
           </div>

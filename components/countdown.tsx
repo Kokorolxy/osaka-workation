@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useI18n } from "@/components/i18n-provider";
 
 // First day of November 2026 (Osaka time, approx).
 const TARGET = new Date("2026-11-02T09:00:00+09:00").getTime();
@@ -17,6 +18,7 @@ function diff() {
 }
 
 export function Countdown() {
+  const { dict } = useI18n();
   const [t, setT] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
 
   useEffect(() => {
@@ -26,10 +28,10 @@ export function Countdown() {
   }, []);
 
   const cells = [
-    { v: t.days, l: "Days" },
-    { v: t.hours, l: "Hours" },
-    { v: t.mins, l: "Min" },
-    { v: t.secs, l: "Sec" },
+    { v: t.days, l: dict.ui.countdown.days },
+    { v: t.hours, l: dict.ui.countdown.hours },
+    { v: t.mins, l: dict.ui.countdown.mins },
+    { v: t.secs, l: dict.ui.countdown.secs },
   ];
 
   return (

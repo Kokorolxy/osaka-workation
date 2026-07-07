@@ -1,38 +1,58 @@
-import { Star, Wifi, Check, BedDouble } from "lucide-react";
+import type { Metadata } from "next";
+import { Star, Wifi, BedDouble } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { CTAStrip, SectionHeading } from "@/components/ui";
 import { StaysExplorer } from "@/components/stays-explorer";
 import { buildMetadata } from "@/lib/seo";
+import { isLocale, defaultLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata = buildMetadata({
-  title: "Curated Stays in Osaka",
-  description:
-    "Handpicked Osaka apartments and guesthouses with fast Wi-Fi and dedicated workspaces — ready for remote work from day one.",
-  path: "/stays",
-  og: "stays",
-});
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = isLocale(params.locale) ? params.locale : defaultLocale;
+  const d = getDictionary(locale).pages.stays;
+  return buildMetadata({
+    locale,
+    title: d.metaTitle,
+    description: d.metaDescription,
+    path: "/stays",
+    og: "stays",
+  });
+}
 
-export default function StaysPage() {
+export default function StaysPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  const locale = isLocale(params.locale) ? params.locale : defaultLocale;
+  const t = getDictionary(locale).pages.stays;
+
+  const includeIcons = [
+    <Wifi key="w" className="h-5 w-5 text-brand-orange" />,
+    <BedDouble key="b" className="h-5 w-5 text-brand-orange" />,
+    <Star key="s" className="h-5 w-5 text-brand-orange" />,
+  ];
+
   return (
     <>
       <PageHero
-        eyebrow="Curated Stays"
-        title="Find your perfect base in Osaka"
-        body="Handpicked apartments and guesthouses, each vetted for fast Wi-Fi, a real desk, and a neighborhood you'll love coming home to."
+        eyebrow={t.heroEyebrow}
+        title={t.heroTitle}
+        body={t.heroBody}
         image="/stays/stay-hero.jpg"
       />
 
       <section className="container-page py-16 sm:py-20">
         <div className="mb-8 max-w-2xl">
-          <span className="eyebrow">Handpicked partners</span>
+          <span className="eyebrow">{t.introEyebrow}</span>
           <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-brand-ink sm:text-3xl">
-            Filter by type &amp; who&apos;s coming
+            {t.introTitle}
           </h2>
-          <p className="mt-3 text-muted">
-            We only recommend vetted partner stays we&apos;d book ourselves —
-            from a solo Airbnb to a group share house. Browsing is on us;
-            booking happens on the partner&apos;s own page.
-          </p>
+          <p className="mt-3 text-muted">{t.introBody}</p>
         </div>
 
         <StaysExplorer />
@@ -42,33 +62,17 @@ export default function StaysPage() {
         <div className="container-page py-16 sm:py-20">
           <SectionHeading
             align="center"
-            eyebrow="What every stay includes"
-            title="Work-ready, the moment you land"
+            eyebrow={t.includesEyebrow}
+            title={t.includesTitle}
           />
           <div className="mx-auto mt-12 grid max-w-4xl gap-5 sm:grid-cols-3">
-            {[
-              {
-                icon: <Wifi className="h-5 w-5 text-brand-orange" />,
-                title: "Fast, tested Wi-Fi",
-                body: "Every listing is speed-checked. 150 Mbps minimum, video-call ready.",
-              },
-              {
-                icon: <BedDouble className="h-5 w-5 text-brand-orange" />,
-                title: "A real workspace",
-                body: "A proper desk and chair — not a kitchen table. Built for full work days.",
-              },
-              {
-                icon: <Star className="h-5 w-5 text-brand-orange" />,
-                title: "Vetted by us",
-                body: "Visited and approved by the local team. No surprises on arrival.",
-              },
-            ].map((f) => (
+            {t.includes.map((f, i) => (
               <div
                 key={f.title}
                 className="rounded-2xl border border-paper-line bg-paper-cream p-6 text-center"
               >
                 <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-brand-orange/10">
-                  {f.icon}
+                  {includeIcons[i]}
                 </div>
                 <h3 className="mt-4 font-bold text-brand-ink">{f.title}</h3>
                 <p className="mt-2 text-sm text-muted">{f.body}</p>
@@ -79,12 +83,12 @@ export default function StaysPage() {
       </section>
 
       <CTAStrip
-        title="Staying for the November Workation?"
-        body="Workation tickets bundle your stay, coworking, and community programme into one package — no separate booking needed."
+        title={t.ctaTitle}
+        body={t.ctaBody}
         primaryHref="/events#workation"
-        primaryLabel="See the Workation"
+        primaryLabel={t.ctaPrimary}
         secondaryHref="/contact"
-        secondaryLabel="Ask about stays"
+        secondaryLabel={t.ctaSecondary}
       />
     </>
   );

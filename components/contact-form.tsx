@@ -2,23 +2,25 @@
 
 import { useState } from "react";
 import { Check } from "lucide-react";
-
-const TOPICS = ["Join the Workation", "Stays", "Partnership", "Press", "Other"];
+import { useI18n } from "@/components/i18n-provider";
 
 export function ContactForm() {
+  const { dict } = useI18n();
+  const f = dict.pages.contact.form;
+  const topics = f.topics;
+
   const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
-    topic: TOPICS[0],
+    topic: topics[0],
     message: "",
   });
 
   function set<K extends keyof typeof form>(k: K, v: string) {
-    setForm((f) => ({ ...f, [k]: v }));
+    setForm((prev) => ({ ...prev, [k]: v }));
   }
-
-  const [busy, setBusy] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,12 +52,10 @@ export function ContactForm() {
           <Check className="h-6 w-6 text-brand-orange" />
         </div>
         <h3 className="mt-4 text-xl font-bold text-brand-ink">
-          Thanks, {form.name || "friend"}!
+          {f.thanksTitle}
+          {form.name ? `, ${form.name}` : ""}!
         </h3>
-        <p className="mt-2 text-sm text-muted">
-          We&apos;ve got your message and will reply within a couple of days.
-          See you in Osaka soon.
-        </p>
+        <p className="mt-2 text-sm text-muted">{f.thanksBody}</p>
       </div>
     );
   }
@@ -66,16 +66,16 @@ export function ContactForm() {
       className="rounded-3xl border border-paper-line bg-white p-6 sm:p-8"
     >
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Name">
+        <Field label={f.name}>
           <input
             required
             value={form.name}
             onChange={(e) => set("name", e.target.value)}
             className={inputCls}
-            placeholder="Your name"
+            placeholder={f.namePlaceholder}
           />
         </Field>
-        <Field label="Email">
+        <Field label={f.email}>
           <input
             required
             type="email"
@@ -87,13 +87,13 @@ export function ContactForm() {
         </Field>
       </div>
 
-      <Field label="What's this about?" className="mt-4">
+      <Field label={f.topic} className="mt-4">
         <select
           value={form.topic}
           onChange={(e) => set("topic", e.target.value)}
           className={inputCls}
         >
-          {TOPICS.map((t) => (
+          {topics.map((t) => (
             <option key={t} value={t} className="bg-white">
               {t}
             </option>
@@ -101,14 +101,14 @@ export function ContactForm() {
         </select>
       </Field>
 
-      <Field label="Message" className="mt-4">
+      <Field label={f.message} className="mt-4">
         <textarea
           required
           rows={5}
           value={form.message}
           onChange={(e) => set("message", e.target.value)}
           className={`${inputCls} resize-none`}
-          placeholder="Tell us a little about you and what you're after…"
+          placeholder={f.messagePlaceholder}
         />
       </Field>
 
@@ -117,7 +117,7 @@ export function ContactForm() {
         disabled={busy}
         className="btn-primary mt-6 w-full disabled:opacity-70"
       >
-        {busy ? "Sending…" : "Send message"}
+        {busy ? f.sending : f.send}
       </button>
     </form>
   );

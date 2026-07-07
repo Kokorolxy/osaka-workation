@@ -3,14 +3,15 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { FeatureIcon } from "@/components/feature-icon";
-import { WORKATION } from "@/lib/site";
+import { useI18n } from "@/components/i18n-provider";
 
 export function IncludesGrid() {
+  const { dict } = useI18n();
   const [open, setOpen] = useState<number | null>(0);
 
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {WORKATION.includes.map((item, i) => {
+      {dict.data.workation.includes.map((item, i) => {
         const isOpen = open === i;
         return (
           <button

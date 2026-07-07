@@ -1,17 +1,28 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading, CTAStrip } from "@/components/ui";
 import { buildMetadata } from "@/lib/seo";
-import { SITE, TESTIMONIALS } from "@/lib/site";
+import { SITE } from "@/lib/site";
+import { isLocale, defaultLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata = buildMetadata({
-  title: "Community — 100+ Digital Nomads",
-  description:
-    "100+ digital nomads from around the world, building Osaka's first real remote-work scene. Meet the people and join the Discord.",
-  path: "/community",
-  og: "community",
-});
+export function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Metadata {
+  const locale = isLocale(params.locale) ? params.locale : defaultLocale;
+  const d = getDictionary(locale).pages.community;
+  return buildMetadata({
+    locale,
+    title: d.metaTitle,
+    description: d.metaDescription,
+    path: "/community",
+    og: "community",
+  });
+}
 
 const GALLERY = [
   "/img/community-1.jpg",
@@ -22,13 +33,21 @@ const GALLERY = [
   "/img/community-6.jpg",
 ];
 
-export default function CommunityPage() {
+export default function CommunityPage({
+  params,
+}: {
+  params: { locale: string };
+}) {
+  const locale = isLocale(params.locale) ? params.locale : defaultLocale;
+  const dict = getDictionary(locale);
+  const t = dict.pages.community;
+
   return (
     <>
       <PageHero
-        eyebrow="Community"
-        title="The people make the place"
-        body="Locals and internationals, engineers and artists, first-timers and Japan veterans — all building Osaka's friendliest nomad community together."
+        eyebrow={t.heroEyebrow}
+        title={t.heroTitle}
+        body={t.heroBody}
         image="/img/community-hero.jpg"
       />
 
@@ -42,9 +61,9 @@ export default function CommunityPage() {
               </span>
               <div>
                 <h3 className="text-lg font-bold text-brand-ink">
-                  Osaka Nomads
+                  {t.discordName}
                 </h3>
-                <p className="text-sm text-muted">Discord server</p>
+                <p className="text-sm text-muted">{t.discordServer}</p>
               </div>
             </div>
             <div className="mt-7 grid grid-cols-2 gap-4">
@@ -52,13 +71,13 @@ export default function CommunityPage() {
                 <div className="text-3xl font-extrabold text-brand-orange">
                   127
                 </div>
-                <div className="mt-1 text-sm text-muted">Members</div>
+                <div className="mt-1 text-sm text-muted">{t.members}</div>
               </div>
               <div className="rounded-2xl border border-paper-line bg-paper-cream p-5 text-center">
                 <div className="text-3xl font-extrabold text-brand-orange">
                   23
                 </div>
-                <div className="mt-1 text-sm text-muted">Online now</div>
+                <div className="mt-1 text-sm text-muted">{t.onlineNow}</div>
               </div>
             </div>
             <a
@@ -67,14 +86,14 @@ export default function CommunityPage() {
               rel="noreferrer"
               className="btn-primary mt-6 w-full"
             >
-              Join the server <ArrowUpRight className="h-4 w-4" />
+              {t.joinServer} <ArrowUpRight className="h-4 w-4" />
             </a>
           </div>
 
           <SectionHeading
-            eyebrow="Why people stay"
-            title="Find your tribe in Osaka"
-            body="It started with a handful of remote workers and a coffee meetup. Now it's a city-wide crew that swaps client leads, shares apartments, explores Kansai on weekends, and actually shows up for each other. No gatekeeping — just good people who chose Osaka."
+            eyebrow={t.whyEyebrow}
+            title={t.whyTitle}
+            body={t.whyBody}
           />
         </div>
       </section>
@@ -84,8 +103,8 @@ export default function CommunityPage() {
         <div className="container-page py-16 sm:py-20">
           <SectionHeading
             align="center"
-            eyebrow="Real events, real photos"
-            title="Moments from the community"
+            eyebrow={t.galleryEyebrow}
+            title={t.galleryTitle}
           />
           <div className="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-3">
             {GALLERY.map((img) => (
@@ -95,7 +114,7 @@ export default function CommunityPage() {
               >
                 <Image
                   src={img}
-                  alt="Osaka nomad community moment"
+                  alt=""
                   fill
                   sizes="(max-width: 768px) 50vw, 33vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -108,22 +127,25 @@ export default function CommunityPage() {
 
       {/* TESTIMONIALS */}
       <section className="container-page py-16 sm:py-20">
-        <SectionHeading eyebrow="In their words" title="What members say" />
+        <SectionHeading
+          eyebrow={t.testimonialsEyebrow}
+          title={t.testimonialsTitle}
+        />
         <div className="mt-12 grid gap-5 sm:grid-cols-2">
-          {TESTIMONIALS.map((t) => (
-            <figure key={t.name} className="card p-7">
+          {dict.data.testimonials.map((item) => (
+            <figure key={item.name} className="card p-7">
               <blockquote className="text-lg leading-relaxed text-brand-ink">
-                &ldquo;{t.quote}&rdquo;
+                &ldquo;{item.quote}&rdquo;
               </blockquote>
               <figcaption className="mt-5 flex items-center gap-3">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-orange/15 text-sm font-bold text-brand-orange">
-                  {t.initials}
+                  {item.initials}
                 </span>
                 <span>
                   <span className="block font-semibold text-brand-ink">
-                    {t.name} <span className="ml-1">{t.flag}</span>
+                    {item.name} <span className="ml-1">{item.flag}</span>
                   </span>
-                  <span className="block text-sm text-muted">{t.role}</span>
+                  <span className="block text-sm text-muted">{item.role}</span>
                 </span>
               </figcaption>
             </figure>
@@ -132,12 +154,12 @@ export default function CommunityPage() {
       </section>
 
       <CTAStrip
-        title="Come as a guest, leave with a crew"
-        body="Follow along on Instagram, jump into Discord, or come straight to a Thursday meetup. The first coffee's on us."
+        title={t.ctaTitle}
+        body={t.ctaBody}
         primaryHref={SITE.discord}
-        primaryLabel="Join Discord"
+        primaryLabel={dict.actions.joinDiscord}
         secondaryHref="/events#meetups"
-        secondaryLabel="See meetups"
+        secondaryLabel={dict.ui.common.seeMeetups}
       />
     </>
   );

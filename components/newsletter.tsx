@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
 
 export function Newsletter({ compact = false }: { compact?: boolean }) {
+  const { dict } = useI18n();
+  const n = dict.ui.newsletter;
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -33,7 +36,7 @@ export function Newsletter({ compact = false }: { compact?: boolean }) {
         }`}
       >
         <Check className="h-4 w-4 text-brand-orange" />
-        You&apos;re on the list — we&apos;ll be in touch soon.
+        {n.thanks}
       </div>
     );
   }
@@ -48,7 +51,7 @@ export function Newsletter({ compact = false }: { compact?: boolean }) {
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@email.com"
+        placeholder={n.placeholder}
         className="w-full flex-1 rounded-full border border-paper-line bg-white px-5 py-3 text-sm text-brand-ink placeholder:text-muted-soft focus:border-brand-orange focus:outline-none"
       />
       <button
@@ -56,7 +59,7 @@ export function Newsletter({ compact = false }: { compact?: boolean }) {
         disabled={busy}
         className="btn-primary whitespace-nowrap disabled:opacity-70"
       >
-        {busy ? "Joining…" : "Join the waitlist"}
+        {busy ? n.joining : n.join}
       </button>
     </form>
   );
