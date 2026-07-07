@@ -49,7 +49,7 @@ export function SiteHeader() {
           : "border-b border-transparent bg-paper-cream/30 backdrop-blur-sm"
       }`}
     >
-      <div className="container-page flex h-16 items-center justify-between gap-4">
+      <div className="container-page flex h-16 items-center justify-between gap-3">
         <L href="/" className="flex items-center gap-2.5" aria-label={SITE.name}>
           <Image
             src="/logo/logo-mark-orange.png"
@@ -69,12 +69,12 @@ export function SiteHeader() {
           </span>
         </L>
 
-        <nav className="hidden items-center gap-0.5 lg:flex">
+        <nav className="hidden items-center gap-0 lg:flex">
           {nav.map((item) => (
             <L
               key={item.href}
               href={item.href}
-              className={`rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+              className={`whitespace-nowrap rounded-full px-2.5 py-2 text-[13px] font-medium transition-colors ${
                 isActive(item.href)
                   ? "text-brand-orange"
                   : "text-brand-ink/70 hover:text-brand-ink"
@@ -85,13 +85,13 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
           <LanguageSwitcher />
           <a
             href={SITE.discord}
             target="_blank"
             rel="noreferrer"
-            className="btn-primary !px-5 !py-2.5"
+            className="btn-primary whitespace-nowrap !px-4 !py-2.5"
           >
             {dict.actions.joinDiscord} <ArrowUpRight className="h-4 w-4" />
           </a>
