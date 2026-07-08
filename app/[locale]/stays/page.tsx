@@ -50,15 +50,23 @@ export default function StaysPage({
 
       {/* OSAKA MAP */}
       <section className="container-page py-16 sm:py-20">
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <div>
-            <span className="eyebrow">{t.mapEyebrow}</span>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-ink sm:text-4xl">
-              {t.mapTitle}
-            </h2>
-            <p className="mt-4 text-muted">{t.mapBody}</p>
-          </div>
-          <OsakaMap />
+        <div className="mb-8 max-w-2xl">
+          <span className="eyebrow">{t.mapEyebrow}</span>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-brand-ink sm:text-4xl">
+            {t.mapTitle}
+          </h2>
+          <p className="mt-4 text-muted">{t.mapBody}</p>
+        </div>
+        <OsakaMap />
+        <div className="mt-5 flex flex-wrap items-center gap-6 text-sm text-muted">
+          <span className="inline-flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full border-2 border-white bg-brand-orange shadow" />
+            {t.mapLegendStays}
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full border-2 border-white bg-brand-ink shadow" />
+            {t.mapLegendSpots}
+          </span>
         </div>
       </section>
 

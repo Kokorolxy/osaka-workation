@@ -1,122 +1,92 @@
 "use client";
 
-import { useState } from "react";
-import { STAYS } from "@/lib/site";
+import { useEffect, useRef } from "react";
+import "leaflet/dist/leaflet.css";
 import { useI18n } from "@/components/i18n-provider";
 
-const DISTRICTS = [
-  { key: "Umeda", en: "Umeda", ja: "梅田", x: 250, y: 92 },
-  { key: "Nakazakicho", en: "Nakazakicho", ja: "中崎町", x: 322, y: 128 },
-  { key: "Shinsaibashi", en: "Shinsaibashi", ja: "心斎橋", x: 236, y: 196 },
-  { key: "Namba", en: "Namba", ja: "難波", x: 224, y: 244 },
-  { key: "Tennoji", en: "Tennoji", ja: "天王寺", x: 268, y: 306 },
+type Spot = {
+  en: string;
+  ja: string;
+  lat: number;
+  lng: number;
+  kind: "stay" | "spot";
+  dir: "left" | "right";
+};
+
+const SPOTS: Spot[] = [
+  { en: "Umeda", ja: "梅田", lat: 34.7025, lng: 135.4959, kind: "stay", dir: "right" },
+  { en: "Nakazakicho", ja: "中崎町", lat: 34.706, lng: 135.5016, kind: "stay", dir: "right" },
+  { en: "Osaka Castle", ja: "大阪城", lat: 34.6873, lng: 135.5262, kind: "spot", dir: "right" },
+  { en: "Shinsaibashi", ja: "心斎橋", lat: 34.6723, lng: 135.5006, kind: "stay", dir: "left" },
+  { en: "Dotonbori", ja: "道頓堀", lat: 34.6686, lng: 135.5028, kind: "spot", dir: "right" },
+  { en: "Namba", ja: "難波", lat: 34.6635, lng: 135.5010, kind: "stay", dir: "left" },
+  { en: "Tennoji", ja: "天王寺", lat: 34.6465, lng: 135.5133, kind: "stay", dir: "right" },
 ];
 
 export function OsakaMap() {
-  const { locale, dict } = useI18n();
-  const [hover, setHover] = useState<string | null>(null);
+  const { locale } = useI18n();
+  const ref = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<import("leaflet").Map | null>(null);
 
-  const counts = Object.fromEntries(
-    DISTRICTS.map((d) => [d.key, STAYS.filter((s) => s.area.includes(d.key)).length]),
-  );
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const L = (await import("leaflet")).default;
+      const el = ref.current;
+      if (!el || cancelled) return;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((el as any)._leaflet_id) return;
+
+      const map = L.map(el, {
+        scrollWheelZoom: false,
+        zoomControl: true,
+        attributionControl: true,
+      }).setView([34.6795, 135.51], 12);
+      mapRef.current = map;
+
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        {
+          maxZoom: 19,
+          attribution:
+            '&copy; OpenStreetMap &copy; CARTO',
+        },
+      ).addTo(map);
+
+      SPOTS.forEach((s) => {
+        const name = locale === "ja" ? s.ja : s.en;
+        const icon = L.divIcon({
+          className: "",
+          html: `<div class="ow-pin ${s.kind === "spot" ? "ow-pin--spot" : ""}"></div>`,
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+        });
+        L.marker([s.lat, s.lng], { icon })
+          .addTo(map)
+          .bindTooltip(name, {
+            permanent: true,
+            direction: s.dir,
+            className: "ow-tip",
+            offset: s.dir === "right" ? [10, 0] : [-10, 0],
+          });
+      });
+
+      setTimeout(() => map.invalidateSize(), 200);
+    })();
+
+    return () => {
+      cancelled = true;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [locale]);
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-paper-line bg-white">
-      <svg
-        viewBox="0 0 480 360"
-        className="h-auto w-full"
-        role="img"
-        aria-label="Map of stays across Osaka districts"
-      >
-        {/* base */}
-        <rect x="0" y="0" width="480" height="360" fill="#f7ede0" />
-        {/* greenery blobs */}
-        <circle cx="90" cy="300" r="70" fill="#eADFcB" opacity="0.6" />
-        <circle cx="410" cy="70" r="60" fill="#eADFcB" opacity="0.6" />
-        {/* river (Yodogawa) */}
-        <path
-          d="M -20 70 C 120 40, 200 110, 320 80 S 520 110, 520 90 L 520 30 L -20 30 Z"
-          fill="#cfe3ea"
-          opacity="0.8"
-        />
-        {/* canal (Dotonbori) */}
-        <path
-          d="M 150 210 C 210 200, 260 220, 340 205"
-          fill="none"
-          stroke="#cfe3ea"
-          strokeWidth="7"
-          strokeLinecap="round"
-          opacity="0.9"
-        />
-        {/* loop line vibe */}
-        <ellipse
-          cx="250"
-          cy="200"
-          rx="150"
-          ry="120"
-          fill="none"
-          stroke="#e2c9a6"
-          strokeWidth="2"
-          strokeDasharray="4 7"
-          opacity="0.7"
-        />
-
-        {DISTRICTS.map((d) => {
-          const on = hover === d.key;
-          const label = locale === "ja" ? d.ja : d.en;
-          const n = counts[d.key] ?? 0;
-          const labelLeft = d.x > 260;
-          return (
-            <g
-              key={d.key}
-              onMouseEnter={() => setHover(d.key)}
-              onMouseLeave={() => setHover(null)}
-              style={{ cursor: "pointer" }}
-            >
-              {/* halo */}
-              <circle
-                cx={d.x}
-                cy={d.y}
-                r={on ? 20 : 0}
-                fill="#ea5504"
-                opacity="0.14"
-                style={{ transition: "r 0.2s ease" }}
-              />
-              {/* pin */}
-              <circle
-                cx={d.x}
-                cy={d.y}
-                r={on ? 10 : 7}
-                fill="#ea5504"
-                stroke="#ffffff"
-                strokeWidth="3"
-                style={{ transition: "r 0.2s ease" }}
-              />
-              {/* label */}
-              <text
-                x={labelLeft ? d.x - 16 : d.x + 16}
-                y={d.y - 2}
-                textAnchor={labelLeft ? "end" : "start"}
-                className="fill-brand-ink"
-                fontSize="16"
-                fontWeight="700"
-              >
-                {label}
-              </text>
-              <text
-                x={labelLeft ? d.x - 16 : d.x + 16}
-                y={d.y + 15}
-                textAnchor={labelLeft ? "end" : "start"}
-                className="fill-brand-orange"
-                fontSize="12"
-                fontWeight="600"
-              >
-                {n} {dict.pages.stays.mapStaysLabel}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-    </div>
+    <div
+      ref={ref}
+      className="relative z-0 h-[440px] w-full overflow-hidden rounded-3xl border border-paper-line"
+    />
   );
 }
