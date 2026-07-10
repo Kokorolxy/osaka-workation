@@ -30,14 +30,7 @@ const TYPE_IMAGES = [
   "/stays/accom-guesthouse.jpg",
 ];
 const TYPE_ICONS = [Hotel, Users, Home];
-const GALLERY = [
-  "/stays/gallery-1.jpg",
-  "/stays/gallery-2.jpg",
-  "/stays/gallery-3.jpg",
-  "/stays/gallery-4.jpg",
-  "/stays/gallery-5.jpg",
-  "/stays/gallery-6.jpg",
-];
+const GALLERY = ["/stays/comfort-1.jpg", "/stays/comfort-2.jpg"];
 
 export default function StaysPage({
   params,
@@ -78,8 +71,8 @@ export default function StaysPage({
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-paper-line">
             <Image
-              src="/stays/gallery-2.jpg"
-              alt="Bright, work-ready room in an Osaka stay"
+              src="/stays/stays-how.jpg"
+              alt="Arriving at a comfortable stay in Osaka, Japan"
               fill
               sizes="(max-width: 1024px) 100vw, 45vw"
               className="object-cover"
@@ -142,17 +135,17 @@ export default function StaysPage({
           title={t.galleryTitle}
           body={t.galleryBody}
         />
-        <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3">
+        <div className="mt-12 grid gap-5 sm:grid-cols-2">
           {GALLERY.map((img) => (
             <div
               key={img}
-              className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-paper-line"
+              className="group relative aspect-[3/2] overflow-hidden rounded-3xl border border-paper-line"
             >
               <Image
                 src={img}
-                alt="A comfortable guesthouse space in Osaka"
+                alt="A comfortable, restful stay in Osaka"
                 fill
-                sizes="(max-width: 768px) 50vw, 33vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </div>
