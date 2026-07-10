@@ -1,66 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import { Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { SITE } from "@/lib/site";
 import { useI18n } from "@/components/i18n-provider";
 
-export function Newsletter({ compact = false }: { compact?: boolean }) {
+export function Newsletter() {
   const { dict } = useI18n();
-  const n = dict.ui.newsletter;
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
-  const [busy, setBusy] = useState(false);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email || busy) return;
-    setBusy(true);
-    try {
-      await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "Newsletter waitlist" }),
+  function open() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any;
+    if (w.Tally?.openPopup) {
+      w.Tally.openPopup(SITE.tallyId, {
+        layout: "modal",
+        width: 640,
+        overlay: true,
       });
-    } catch {
-      // ignore — still thank the user
+    } else {
+      window.open(SITE.tallyUrl, "_blank", "noopener");
     }
-    setBusy(false);
-    setDone(true);
-  }
-
-  if (done) {
-    return (
-      <div
-        className={`flex items-center gap-3 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-5 py-3 text-sm font-medium text-brand-ink ${
-          compact ? "" : "justify-center"
-        }`}
-      >
-        <Check className="h-4 w-4 text-brand-orange" />
-        {n.thanks}
-      </div>
-    );
   }
 
   return (
-    <form
-      onSubmit={submit}
-      className="flex w-full flex-col gap-3 sm:flex-row"
+    <button
+      type="button"
+      onClick={open}
+      data-tally-open={SITE.tallyId}
+      data-tally-layout="modal"
+      data-tally-width="640"
+      data-tally-overlay="1"
+      className="btn-primary w-full sm:w-auto"
     >
-      <input
-        type="email"
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder={n.placeholder}
-        className="w-full flex-1 rounded-full border border-paper-line bg-white px-5 py-3 text-sm text-brand-ink placeholder:text-muted-soft focus:border-brand-orange focus:outline-none"
-      />
-      <button
-        type="submit"
-        disabled={busy}
-        className="btn-primary whitespace-nowrap disabled:opacity-70"
-      >
-        {busy ? n.joining : n.join}
-      </button>
-    </form>
+      {dict.ui.newsletter.join} <ArrowRight className="h-4 w-4" />
+    </button>
   );
 }
