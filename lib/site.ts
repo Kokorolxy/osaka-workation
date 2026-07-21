@@ -5,7 +5,7 @@ export const SITE = {
   taglineJa: "大阪から世界へ。ローカルとつながる国際ノマドコミュニティ",
   instagram: "https://www.instagram.com/osaka_workation",
   instagramHandle: "@osaka_workation",
-  discord: "https://discord.gg",
+  discord: "https://discord.gg/Zy2y8gUvfc",
   email: "osakaworkation@gmail.com",
   linktree: "https://linktr.ee/osakaworkation",
   tallyId: "eqPAMQ",
