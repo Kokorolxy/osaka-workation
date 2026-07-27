@@ -24,6 +24,7 @@ export type Database = {
           email: string | null;
           display_name: string | null;
           role: UserRole;
+          referral_code: string;
           created_at: string;
           updated_at: string;
         };
@@ -32,6 +33,7 @@ export type Database = {
           email?: string | null;
           display_name?: string | null;
           role?: UserRole;
+          referral_code?: string;
           created_at?: string;
           updated_at?: string;
         };
@@ -40,6 +42,7 @@ export type Database = {
           email?: string | null;
           display_name?: string | null;
           role?: UserRole;
+          referral_code?: string;
           created_at?: string;
           updated_at?: string;
         };
@@ -125,6 +128,8 @@ export type Database = {
           stripe_checkout_session_id: string | null;
           stripe_payment_intent_id: string | null;
           paid_at: string | null;
+          referrer_id: string | null;
+          referral_code_used: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -141,6 +146,8 @@ export type Database = {
           stripe_checkout_session_id?: string | null;
           stripe_payment_intent_id?: string | null;
           paid_at?: string | null;
+          referrer_id?: string | null;
+          referral_code_used?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -157,6 +164,8 @@ export type Database = {
           stripe_checkout_session_id?: string | null;
           stripe_payment_intent_id?: string | null;
           paid_at?: string | null;
+          referrer_id?: string | null;
+          referral_code_used?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -168,6 +177,10 @@ export type Database = {
       is_admin: {
         Args: Record<string, never>;
         Returns: boolean;
+      };
+      find_referrer_by_code: {
+        Args: { code: string };
+        Returns: string;
       };
     };
     Enums: {

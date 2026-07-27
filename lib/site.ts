@@ -1,5 +1,7 @@
 import {
-  WORKATION_PACKAGES,
+  WORKATION_DURATIONS,
+  TICKET_INCLUDES,
+  TICKET_EXCLUDES,
   formatPackagePriceJpy,
 } from "@/lib/workation-packages";
 
@@ -282,78 +284,72 @@ export const WORKATION = {
     "One ticket, the full Osaka life. Work your mornings, live the city your evenings — for two weeks, with a ready-made international community.",
   includes: [
     {
-      icon: "stay",
-      title: "Accommodation help",
-      body: "Curated work-ready stays in central Osaka from ¥4,500/night, booked alongside your ticket.",
-      detail:
-        "We hold a block of vetted, work-ready apartments and guesthouses across Namba, Umeda, and Tennoji. Pick your room when you book — from ¥4,500/night.",
-    },
-    {
       icon: "cowork",
       title: "Coworking access",
-      body: "Daytime desk at a partner coworking space with fast, reliable Wi-Fi.",
+      body: "Desk space with solid Wi-Fi so your mornings stay productive.",
       detail:
-        "A dedicated daytime desk at a partner coworking space — 100+ Mbps Wi-Fi, meeting rooms, phone booths, and unlimited coffee.",
+        "Daytime access to a quiet, well-connected coworking space. Bring your laptop and settle into a real Osaka work rhythm.",
     },
     {
       icon: "culture",
-      title: "Cultural experiences",
-      body: "Miso-making, calligraphy, nabe hot-pot nights, and local craft sessions.",
+      title: "Culture & community",
+      body: "Cultural experiences, community access, and a crew of fellow remote workers.",
       detail:
-        "Hands-on sessions led by locals: miso-making, calligraphy (書道), nabe hot-pot nights, board-game evenings, plus dance and yoga.",
+        "Hands-on cultural experiences plus daily community events — with two guides to help you explore.",
     },
     {
       icon: "daytrip",
-      title: "Kansai day trips",
-      body: "Guided weekend trips to Kyoto and Nara with the group.",
+      title: "Weekend city tours",
+      body: "Guided day-tour plans to nearby cities on weekends (transport not included).",
       detail:
-        "Two guided weekend trips — Kyoto's temples and Nara's deer park — with group transport and a local guide who knows the quiet spots.",
+        "Weekend day tours with a guide plan. Transportation and other expenses are not included in the ticket.",
     },
     {
       icon: "dinner",
-      title: "Opening & closing dinners",
-      body: "Welcome and farewell dinners to kick off and celebrate the two weeks.",
+      title: "Welcome & farewell parties",
+      body: "Welcome and farewell parties with meals to kick off and celebrate the workation.",
       detail:
-        "An opening welcome party on day one and a farewell dinner on the final night — the bookends that turn a group into a community.",
+        "A welcome party with meals on day one and a farewell party with meals on the final night — the bookends that turn a group into a community.",
+    },
+    {
+      icon: "locals",
+      title: "Two tour guides",
+      body: "Guides who recommend, accompany you, and help with travel expenses & cultural experiences.",
+      detail:
+        "Two tour guides support your journey with recommendations, company, travel-expense help, and cultural experiences.",
     },
     {
       icon: "community",
-      title: "Built-in community",
-      body: "A vetted crew of 50–100 nomads — engineers, designers, founders, creators.",
+      title: "Daily events included",
+      body: "1 daytime + 1 nighttime community event per day (random pop-ups not included).",
       detail:
-        "A vetted crew of 50–100 remote workers from around the world. Private Discord, daily meetups, and friendships that outlast the trip.",
+        "Every day includes one daytime and one nighttime community event. Random pop-up events around the city are not included in the ticket price.",
     },
   ],
   schedule: [
     {
       phase: "Days 1–2",
       title: "Arrival & welcome",
-      time: "Day 1 · 16:00 check-in · 19:00 welcome party",
-      body: "Check in, settle into your stay, opening dinner, and a city orientation walk to get your bearings.",
+      time: "Day 1 · welcome party with meals",
+      body: "Check in, settle in, welcome party with meals, and a city orientation walk to get your bearings.",
     },
     {
-      phase: "Week 1",
-      title: "Work & local life",
-      time: "Mon–Fri · 09:00–13:00 cowork · evenings free",
-      body: "Mornings at the coworking space, evenings of miso-making, calligraphy, and nabe nights.",
+      phase: "Weekdays",
+      title: "Work & evening events",
+      time: "Daytime coworking · evening community",
+      body: "Coworking by day, then one included nighttime community event — plus optional pop-ups around the city.",
     },
     {
-      phase: "Weekend",
-      title: "Kyoto & Nara",
-      time: "Sat–Sun · full-day guided trips",
-      body: "Guided Kansai day trips with the group — temples, deer park, and slow travel.",
-    },
-    {
-      phase: "Week 2",
-      title: "Deeper roots",
-      time: "Mon–Fri · cowork + neighborhood meetups",
-      body: "More coworking, neighborhood meetups, and time to live like an Osaka local.",
+      phase: "Weekends",
+      title: "City day tours",
+      time: "Sat–Sun · guided plans",
+      body: "Day tours to other cities with a guide plan. Transportation and extras are not included in the ticket.",
     },
     {
       phase: "Final day",
-      title: "Closing dinner",
-      time: "Final night · 19:00 farewell dinner",
-      body: "Celebrate two weeks together and trade plans for the next stop.",
+      title: "Farewell party",
+      time: "Final night · farewell party with meals",
+      body: "Celebrate together at the farewell party with meals and trade plans for the next stop.",
     },
   ],
 };
@@ -397,7 +393,7 @@ export const FAQS = [
   },
   {
     q: "What does the ticket include?",
-    a: "Accommodation, daytime coworking access, community and cultural experiences (miso-making, calligraphy, nabe nights), Kansai day trips, and the opening and closing dinners. Flights and personal expenses are not included.",
+    a: "Coworking space, a workation t-shirt, community access, welcome and farewell parties with meals, two tour guides for recommendations and cultural experiences, and one daytime plus one nighttime community event each day. Weekend city day tours are guided (plan only); transportation and other tour expenses are not included. Random pop-up events are not included. Housing and flights are not included.",
   },
   {
     q: "When exactly is the November 2026 Workation?",
@@ -413,24 +409,25 @@ export const FAQS = [
   },
 ];
 
-export const PRICING = WORKATION_PACKAGES.map((pkg) => ({
-  key: pkg.key,
-  name: pkg.name,
-  tagline: pkg.tagline,
-  price: formatPackagePriceJpy(pkg.priceJpy),
-  period: "Workation",
-  note: pkg.tagline,
+export const PRICING = WORKATION_DURATIONS.map((d, i) => ({
+  key: d.key,
+  name: d.name,
+  tagline: "Full Workation ticket",
+  price: formatPackagePriceJpy(d.generalPriceJpy),
+  earlyBird: formatPackagePriceJpy(d.discountedPriceJpy),
+  period: d.name,
+  note: `Early bird / referral ${formatPackagePriceJpy(d.discountedPriceJpy)}`,
   checkoutUrl: "",
-  popular: Boolean(pkg.popular),
-  features: pkg.features,
+  popular: i === 0,
+  features: [...TICKET_INCLUDES, ...TICKET_EXCLUDES],
 }));
 
 export const PRICING_NOTE =
-  "Edit package prices in lib/workation-packages.ts (WORKATION_PACKAGE_PRICES). Sync DB event_options.price_jpy after changes.";
+  "General, Early bird (first 20), or Referral (member code, max 10 uses). Same inclusions for 1 or 2 weeks. Edit prices in lib/workation-packages.ts.";
 
 // Set to false once final prices are confirmed. When true, prices show "Coming soon"
 // and every CTA points to the waitlist.
-export const PRICING_TBD = true;
+export const PRICING_TBD = false;
 
 export const FOOD = [
   {

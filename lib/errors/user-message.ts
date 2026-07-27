@@ -3,8 +3,12 @@
  * Keep secrets and hostnames out of the UI.
  */
 
-const FALLBACK =
-  "Something went wrong. Please try again in a moment.";
+import type { Dictionary } from "@/lib/i18n/dictionaries/en";
+import { en } from "@/lib/i18n/dictionaries/en";
+
+type ErrorCopy = Dictionary["ui"]["errors"];
+
+const FALLBACK_EN = en.ui.errors.fallback;
 
 function rawMessage(error: unknown): string {
   if (!error) return "";
@@ -39,38 +43,37 @@ function looksTechnical(message: string): boolean {
   );
 }
 
-/** Known query-param / short codes from redirects. */
-const CODE_MESSAGES: Record<string, string> = {
-  auth_callback_failed:
-    "That confirmation link didn’t work or has expired. Try signing in, or sign up again.",
-  missing_code:
-    "That confirmation link is incomplete. Please request a new one.",
-};
-
 /**
  * Auth-focused friendly message (login / signup / callback).
  */
-export function friendlyAuthError(error: unknown): string {
+export function friendlyAuthError(
+  error: unknown,
+  errors: ErrorCopy = en.ui.errors,
+): string {
   const code = errorCode(error);
   const message = rawMessage(error).trim();
   const lower = message.toLowerCase();
 
-  if (CODE_MESSAGES[message]) return CODE_MESSAGES[message];
-  if (CODE_MESSAGES[lower]) return CODE_MESSAGES[lower];
+  if (message === "auth_callback_failed" || lower === "auth_callback_failed") {
+    return errors.authCallbackFailed;
+  }
+  if (message === "missing_code" || lower === "missing_code") {
+    return errors.missingCode;
+  }
 
   if (
     code === "invalid_credentials" ||
     lower.includes("invalid login credentials") ||
     lower.includes("invalid email or password")
   ) {
-    return "Email or password is incorrect. Check your details and try again.";
+    return errors.invalidCredentials;
   }
 
   if (
     code === "email_not_confirmed" ||
     lower.includes("email not confirmed")
   ) {
-    return "Please confirm your email before signing in. Check your inbox for the link.";
+    return errors.emailNotConfirmed;
   }
 
   if (
@@ -79,7 +82,7 @@ export function friendlyAuthError(error: unknown): string {
     lower.includes("user already registered") ||
     lower.includes("already been registered")
   ) {
-    return "An account with this email already exists. Try signing in instead.";
+    return errors.alreadyRegistered;
   }
 
   if (
@@ -87,7 +90,7 @@ export function friendlyAuthError(error: unknown): string {
     lower.includes("password is known to be weak") ||
     (lower.includes("password") && lower.includes("characters"))
   ) {
-    return "Please choose a stronger password (at least 6 characters).";
+    return errors.weakPassword;
   }
 
   if (
@@ -96,7 +99,7 @@ export function friendlyAuthError(error: unknown): string {
     lower.includes("too many requests") ||
     lower.includes("email rate limit")
   ) {
-    return "Too many attempts. Please wait a minute and try again.";
+    return errors.rateLimited;
   }
 
   if (
@@ -104,14 +107,14 @@ export function friendlyAuthError(error: unknown): string {
     lower.includes("invalid email") ||
     (lower.includes("email address") && lower.includes("invalid"))
   ) {
-    return "Please enter a valid email address.";
+    return errors.invalidEmail;
   }
 
   if (
     lower.includes("signup is disabled") ||
     lower.includes("signups not allowed")
   ) {
-    return "New sign-ups are temporarily closed. Please try again later.";
+    return errors.signupDisabled;
   }
 
   if (
@@ -121,35 +124,43 @@ export function friendlyAuthError(error: unknown): string {
     lower.includes("network") ||
     lower.includes("failed to fetch")
   ) {
-    return "We couldn’t reach the sign-in service. Please check your connection and try again.";
+    return errors.network;
   }
 
   if (
     lower.includes("server misconfigured") ||
     lower.includes("next_public_supabase")
   ) {
-    return "Sign-in isn’t available right now. Please try again later.";
+    return errors.misconfigured;
   }
 
   if (message && !looksTechnical(message)) {
     return message;
   }
 
-  return FALLBACK;
+  return errors.fallback;
 }
 
 /**
  * General app / database errors for members and admins.
  */
-export function friendlyAppError(error: unknown, fallback = FALLBACK): string {
+export function friendlyAppError(
+  error: unknown,
+  fallback?: string,
+  errors: ErrorCopy = en.ui.errors,
+): string {
+  const resolvedFallback = fallback ?? errors.fallback;
   const message = rawMessage(error).trim();
   const lower = message.toLowerCase();
   const code = errorCode(error);
 
-  if (!message) return fallback;
+  if (!message) return resolvedFallback;
 
-  if (CODE_MESSAGES[message] || CODE_MESSAGES[lower]) {
-    return CODE_MESSAGES[message] ?? CODE_MESSAGES[lower];
+  if (message === "auth_callback_failed" || lower === "auth_callback_failed") {
+    return errors.authCallbackFailed;
+  }
+  if (message === "missing_code" || lower === "missing_code") {
+    return errors.missingCode;
   }
 
   if (
@@ -157,7 +168,7 @@ export function friendlyAppError(error: unknown, fallback = FALLBACK): string {
     lower.includes("row-level security") ||
     lower.includes("permission denied")
   ) {
-    return "You don’t have permission to do that.";
+    return errors.permissionDenied;
   }
 
   if (
@@ -165,7 +176,7 @@ export function friendlyAppError(error: unknown, fallback = FALLBACK): string {
     lower.includes("duplicate key") ||
     lower.includes("unique constraint")
   ) {
-    return "That record already exists. Refresh the page and try again.";
+    return errors.duplicate;
   }
 
   if (
@@ -173,7 +184,7 @@ export function friendlyAppError(error: unknown, fallback = FALLBACK): string {
     (lower.includes("session") && lower.includes("expired")) ||
     lower.includes("not authenticated")
   ) {
-    return "Your session expired. Please sign in again.";
+    return errors.sessionExpired;
   }
 
   if (
@@ -181,12 +192,11 @@ export function friendlyAppError(error: unknown, fallback = FALLBACK): string {
     lower.includes("network") ||
     lower.includes("failed to fetch")
   ) {
-    return "Connection problem. Please check your network and try again.";
+    return errors.connection;
   }
 
-  // Reuse auth mapping for vendor auth strings that bubble into app actions
-  const authMapped = friendlyAuthError(error);
-  if (authMapped !== FALLBACK) {
+  const authMapped = friendlyAuthError(error, errors);
+  if (authMapped !== errors.fallback && authMapped !== FALLBACK_EN) {
     return authMapped;
   }
 
@@ -194,5 +204,5 @@ export function friendlyAppError(error: unknown, fallback = FALLBACK): string {
     return message;
   }
 
-  return fallback;
+  return resolvedFallback;
 }

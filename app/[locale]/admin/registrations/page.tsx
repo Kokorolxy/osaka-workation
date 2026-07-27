@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { HOUSING_TYPES } from "@/lib/site";
+import { getWorkationPackage } from "@/lib/workation-packages";
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { RegistrationActions } from "@/components/registration-actions";
 import { RegistrationStatusBadge } from "@/components/registration-status";
@@ -23,11 +23,9 @@ function formatDate(value: string | null | undefined) {
   }).format(new Date(value));
 }
 
-function housingLabel(key: string | null) {
-  if (!key) return "None";
-  if (key === "singular") return "Private";
-  if (key === "shared") return "Shared";
-  return HOUSING_TYPES.find((h) => h.key === key)?.name ?? key;
+function ticketLabel(packageKey: string, fallbackName?: string) {
+  const catalog = getWorkationPackage(packageKey);
+  return catalog?.name ?? fallbackName ?? packageKey;
 }
 
 export default async function AdminRegistrationsPage({
@@ -49,10 +47,10 @@ export default async function AdminRegistrationsPage({
     supabase
       .from("event_registrations")
       .select(
-        "id, user_id, event_id, package_key, stay_key, phone, notes, status, created_at, updated_at",
+        "id, user_id, event_id, package_key, phone, notes, status, referral_code_used, referrer_id, created_at, updated_at",
       )
       .order("updated_at", { ascending: false }),
-    supabase.from("profiles").select("id, email, display_name"),
+    supabase.from("profiles").select("id, email, display_name, referral_code"),
     supabase.from("events").select("id, slug, title"),
     supabase
       .from("event_options")
@@ -62,11 +60,11 @@ export default async function AdminRegistrationsPage({
 
   const profileById = new Map((profiles ?? []).map((p) => [p.id, p]));
   const eventById = new Map((events ?? []).map((e) => [e.id, e]));
-  const packageLabel = (eventId: string, packageKey: string) => {
+  const packageDbName = (eventId: string, packageKey: string) => {
     const match = (options ?? []).find(
       (o) => o.event_id === eventId && o.key === packageKey,
     );
-    return match?.name ?? packageKey;
+    return match?.name;
   };
 
   const rows = registrations ?? [];
@@ -140,6 +138,9 @@ export default async function AdminRegistrationsPage({
             const profile = profileById.get(row.user_id);
             const event = eventById.get(row.event_id);
             const highlight = row.status === "pending_approval";
+            const referrer = row.referrer_id
+              ? profileById.get(row.referrer_id)
+              : null;
 
             return (
               <li
@@ -179,18 +180,27 @@ export default async function AdminRegistrationsPage({
                       </div>
                       <div>
                         <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted">
-                          Package
+                          Ticket
                         </dt>
                         <dd className="mt-1 font-medium text-brand-ink">
-                          {packageLabel(row.event_id, row.package_key)}
+                          {ticketLabel(
+                            row.package_key,
+                            packageDbName(row.event_id, row.package_key),
+                          )}
                         </dd>
                       </div>
                       <div>
                         <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted">
-                          Housing
+                          Referral
                         </dt>
                         <dd className="mt-1 font-medium text-brand-ink">
-                          {housingLabel(row.stay_key)}
+                          {row.referral_code_used
+                            ? `${row.referral_code_used}${
+                                referrer?.display_name
+                                  ? ` · ${referrer.display_name}`
+                                  : ""
+                              }`
+                            : "—"}
                         </dd>
                       </div>
                       <div>

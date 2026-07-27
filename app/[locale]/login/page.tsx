@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { signIn } from "@/lib/auth/actions";
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { friendlyAuthError } from "@/lib/errors/user-message";
 import { FeedbackBanner } from "@/components/feedback-banner";
 
@@ -20,8 +21,10 @@ export default function LoginPage({
   const locale: Locale = isLocale(params.locale)
     ? params.locale
     : defaultLocale;
+  const auth = getDictionary(locale).pages.auth;
+  const errors = getDictionary(locale).ui.errors;
   const errorMessage = searchParams.error
-    ? friendlyAuthError(searchParams.error)
+    ? friendlyAuthError(searchParams.error, errors)
     : null;
 
   return (
@@ -32,13 +35,11 @@ export default function LoginPage({
       />
       <div className="container-page relative flex min-h-[70vh] items-center justify-center py-24">
         <div className="w-full max-w-md rounded-3xl border border-paper-line bg-white p-8 shadow-[0_24px_50px_-36px_rgba(15,15,15,0.35)]">
-          <p className="eyebrow">Account</p>
+          <p className="eyebrow">{auth.eyebrow}</p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-brand-ink">
-            Sign in
+            {auth.signInTitle}
           </h1>
-          <p className="mt-2 text-sm text-muted">
-            Access your Osaka Workation account.
-          </p>
+          <p className="mt-2 text-sm text-muted">{auth.signInBody}</p>
 
           <form action={signIn} className="mt-8 space-y-4">
             <input type="hidden" name="locale" value={locale} />
@@ -49,7 +50,7 @@ export default function LoginPage({
             />
 
             <label className="block text-sm font-medium text-brand-ink">
-              Email
+              {auth.email}
               <input
                 type="email"
                 name="email"
@@ -60,7 +61,7 @@ export default function LoginPage({
             </label>
 
             <label className="block text-sm font-medium text-brand-ink">
-              Password
+              {auth.password}
               <input
                 type="password"
                 name="password"
@@ -72,7 +73,7 @@ export default function LoginPage({
             </label>
 
             <button type="submit" className="btn-primary w-full">
-              Sign in
+              {auth.signIn}
             </button>
           </form>
 
@@ -91,12 +92,12 @@ export default function LoginPage({
           ) : null}
 
           <p className="mt-6 text-center text-sm text-muted">
-            No account yet?{" "}
+            {auth.noAccount}{" "}
             <Link
               href={`/${locale}/signup`}
               className="font-semibold text-brand-orange hover:underline"
             >
-              Create one
+              {auth.createOne}
             </Link>
           </p>
         </div>

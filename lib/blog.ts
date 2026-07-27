@@ -40,7 +40,7 @@ export const POSTS: Post[] = [
       { type: "cafe", n: 4, name: "Nabe Nights", area: "Seasonal · izakaya", text: "Hot-pot dinners in the colder months — the warmest way to meet people and swap travel notes over shared food." },
       { type: "img", src: "/blog/events-inline.jpg", alt: "A lively Osaka evening — digital nomad event and nightlife in Japan" },
       { type: "h2", text: "The flagship: November Workation" },
-      { type: "p", text: "Once a year, everything comes together into a single 14-day event. The November Workation bundles stays, coworking, cultural experiences, and Kansai day trips for a crew of 50–100 remote workers — opening party, farewell dinner, and two weeks of built-in community. If you can time your Osaka trip to it, do." },
+      { type: "p", text: "Once a year, everything comes together into a single 14-day event. The November Workation bundles coworking, cultural experiences, Kansai day tours, and welcome & farewell parties with meals for a crew of 50–100 remote workers — plus two weeks of built-in community. If you can time your Osaka trip to it, do." },
       { type: "h2", text: "Beyond our community: the wider Osaka & Japan scene" },
       { type: "list", items: [
         "Coworking events — spaces like The DECK (Hommachi) run regular networking nights, workshops, and seminars.",

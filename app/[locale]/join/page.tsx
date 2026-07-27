@@ -3,13 +3,15 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { getEarlyBirdRemaining } from "@/lib/events/actions";
 import { JoinEventForm } from "@/components/join-event-form";
 import { FeedbackBanner } from "@/components/feedback-banner";
 import { CheckoutRefresh } from "@/components/checkout-refresh";
 import { confirmCheckoutSession } from "@/lib/stripe/confirm";
 
 export const metadata: Metadata = {
-  title: "Join an event",
+  title: "Join the Workation",
   robots: { index: false, follow: false },
 };
 
@@ -45,6 +47,9 @@ export default async function JoinPage({
   }
 
   const supabase = createClient();
+  const dict = getDictionary(locale);
+  const j = dict.pages.join;
+
   const [{ data: events }, { data: options }, { data: registrations }] =
     await Promise.all([
       supabase
@@ -64,6 +69,15 @@ export default async function JoinPage({
 
   const alreadyPaid = (registrations ?? []).some((r) => r.status === "paid");
 
+  const earlyBirdRemainingByEvent: Record<string, number> = {};
+  await Promise.all(
+    (events ?? []).map(async (event) => {
+      earlyBirdRemainingByEvent[event.id] = await getEarlyBirdRemaining(
+        event.id,
+      );
+    }),
+  );
+
   return (
     <main className="relative overflow-hidden">
       <CheckoutRefresh
@@ -79,29 +93,27 @@ export default async function JoinPage({
       />
       <div className="container-page relative py-24">
         <div className="mx-auto max-w-3xl">
-          <p className="eyebrow">Members</p>
+          <p className="eyebrow">{j.eyebrow}</p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-brand-ink sm:text-4xl">
-            Join an event
+            {j.title}
           </h1>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-            Choose your package and housing type, then submit for approval.
-            Checkout unlocks after an admin reviews your choices.
+            {j.subtitle}
           </p>
 
           {searchParams.checkout === "success" ? (
             <div className="mt-6">
               <FeedbackBanner variant="success">
                 {checkoutMarkedPaid || alreadyPaid
-                  ? "Payment confirmed — your registration is marked Paid."
-                  : "Payment received. Refreshing your status…"}
+                  ? j.checkout.successPaid
+                  : j.checkout.successPending}
               </FeedbackBanner>
             </div>
           ) : null}
           {searchParams.checkout === "cancelled" ? (
             <div className="mt-6">
               <FeedbackBanner variant="info">
-                Checkout cancelled. You can pay anytime while your registration
-                stays approved.
+                {j.checkout.cancelled}
               </FeedbackBanner>
             </div>
           ) : null}
@@ -112,6 +124,8 @@ export default async function JoinPage({
               events={events ?? []}
               options={options ?? []}
               registrations={registrations ?? []}
+              earlyBirdRemainingByEvent={earlyBirdRemainingByEvent}
+              myReferralCode={session.profile.referral_code}
             />
           </div>
         </div>

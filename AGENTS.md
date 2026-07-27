@@ -17,7 +17,8 @@ Path alias: `@/*` → project root.
 ```
 app/[locale]/              # Public + auth + join + admin (locale-prefixed)
 components/                # UI (header, join form, admin actions, …)
-lib/site.ts                # Marketing copy, STAYS, HOUSING_TYPES, packages
+lib/site.ts                # Marketing copy, STAYS, PRICING (from tickets)
+lib/workation-packages.ts  # Ticket SKUs, prices, early-bird/referral limits
 lib/supabase/              # client / server / middleware / admin clients
 lib/auth/                  # session helpers, server actions, logging
 lib/events/                # registration save + admin status actions
@@ -42,10 +43,13 @@ Promote admins via SQL / service role only.
 
 - Nav tab **Join** only when signed in → `/[locale]/join`
 - Public `/events` stays marketing-only
-- Member picks: event → package (6 Workation packages in `lib/workation-packages.ts`) → contact
-- Packages encode housing (`none` \| `singular` \| `shared`) and transport; no separate housing-type picker
-- **Edit prices in development:** `WORKATION_PACKAGE_PRICES` in `lib/workation-packages.ts`, then sync `event_options.price_jpy` (migration / Studio)
-- Saved in `event_registrations` (`package_key`, `stay_key` = singular/shared/null, `phone`, `notes`, `status`)
+- Member picks: event → duration (1w/2w) → ticket type (general / early bird / referral) → contact
+- **Join journey UI** (`/join`): Register → Review → Pay → Confirmed, driven by `event_registrations.status` (`lib/join-journey.ts`)
+- All tickets include coworking, t-shirt, community, welcome & farewell parties with meals, 2 guides, 1 day + 1 night event/day; weekend city tours guided only (transport/extras not included); random pop-ups not included
+- **Early bird:** 10% off, first 20 tickets (`EARLY_BIRD_LIMIT`)
+- **Referral:** 10% off with another member’s `profiles.referral_code` (max 10 uses per referrer)
+- **Edit prices:** `WORKATION_TICKET_PRICES` in `lib/workation-packages.ts`, then sync `event_options.price_jpy` (migration / Studio)
+- Saved in `event_registrations` (`package_key`, `referrer_id`, `referral_code_used`, `phone`, `notes`, `status`)
 
 ### Approval workflow
 

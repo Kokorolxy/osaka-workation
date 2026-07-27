@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { LogIn, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { L } from "@/components/locale-link";
+import { useI18n } from "@/components/i18n-provider";
 
 /** Shared size/style for language, Discord, and Sign in header chips */
 export const HEADER_CHIP =
@@ -17,6 +18,7 @@ type AuthNavProps = {
 
 export function AuthNav({ className, iconClassName }: AuthNavProps) {
   const pathname = usePathname();
+  const { dict } = useI18n();
   const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export function AuthNav({ className, iconClassName }: AuthNavProps) {
       <L
         href="/account"
         className={iconClassName ?? HEADER_CHIP}
-        aria-label="Account"
+        aria-label={dict.pages.auth.accountAria}
       >
         <User className="h-3.5 w-3.5" />
       </L>
@@ -64,7 +66,7 @@ export function AuthNav({ className, iconClassName }: AuthNavProps) {
   return (
     <L href="/login" className={className ?? HEADER_CHIP}>
       <LogIn className="h-3.5 w-3.5" />
-      Sign in
+      {dict.pages.auth.signIn}
     </L>
   );
 }

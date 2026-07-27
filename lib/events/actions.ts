@@ -4,8 +4,12 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import {
+  EARLY_BIRD_LIMIT,
+  REFERRAL_LIMIT_PER_PERSON,
   getWorkationPackage,
-  stayKeyForPackage,
+  resolvePackageKey,
+  type PricingTier,
+  type TicketDuration,
 } from "@/lib/workation-packages";
 import type { RegistrationStatus } from "@/lib/database.types";
 import { friendlyAppError } from "@/lib/errors/user-message";
@@ -17,30 +21,60 @@ function localeFromForm(formData: FormData): string {
 
 export type SaveRegistrationResult =
   | { ok: true }
-  | { ok: false; error: string };
+  | { ok: false; error: string; code?: string };
+
+const COUNTABLE_STATUSES = ["pending_approval", "approved", "paid"] as const;
+
+function fail(code: string, error: string): SaveRegistrationResult {
+  return { ok: false, code, error };
+}
+
+export async function getEarlyBirdRemaining(eventId: string): Promise<number> {
+  const supabase = createClient();
+  const { count } = await supabase
+    .from("event_registrations")
+    .select("id", { count: "exact", head: true })
+    .eq("event_id", eventId)
+    .in("package_key", ["week1_early_bird", "week2_early_bird"])
+    .in("status", [...COUNTABLE_STATUSES]);
+
+  return Math.max(0, EARLY_BIRD_LIMIT - (count ?? 0));
+}
 
 export async function saveEventRegistration(
   formData: FormData,
 ): Promise<SaveRegistrationResult> {
   const locale = localeFromForm(formData);
   const eventId = String(formData.get("event_id") ?? "").trim();
-  const packageKey = String(formData.get("package_key") ?? "").trim();
+  const duration = String(formData.get("duration") ?? "").trim() as TicketDuration;
+  const pricingTier = String(
+    formData.get("pricing_tier") ?? "",
+  ).trim() as PricingTier;
+  const referralCode = String(formData.get("referral_code") ?? "")
+    .trim()
+    .toUpperCase();
   const phone = String(formData.get("phone") ?? "").trim() || null;
   const notes = String(formData.get("notes") ?? "").trim() || null;
   const statusRaw = String(formData.get("status") ?? "draft");
   const status: RegistrationStatus =
     statusRaw === "pending_approval" ? "pending_approval" : "draft";
 
-  if (!eventId || !packageKey) {
-    return { ok: false, error: "Please choose an event and a package." };
+  if (!eventId || (duration !== "week1" && duration !== "week2")) {
+    return { ok: false, error: "Please choose an event and duration." };
+  }
+  if (
+    pricingTier !== "general" &&
+    pricingTier !== "early_bird" &&
+    pricingTier !== "referral"
+  ) {
+    return { ok: false, error: "Please choose a ticket type." };
   }
 
+  const packageKey = resolvePackageKey(duration, pricingTier);
   const catalog = getWorkationPackage(packageKey);
   if (!catalog) {
-    return { ok: false, error: "Invalid package selection." };
+    return { ok: false, error: "Invalid ticket selection." };
   }
-
-  const stayKey = stayKeyForPackage(packageKey);
 
   const supabase = createClient();
   const {
@@ -49,6 +83,84 @@ export async function saveEventRegistration(
 
   if (!user) {
     return { ok: false, error: "You must be signed in." };
+  }
+
+  let referrerId: string | null = null;
+  let referralCodeUsed: string | null = null;
+
+  if (pricingTier === "early_bird") {
+    const remaining = await getEarlyBirdRemaining(eventId);
+    // Allow keeping early bird if this user already has an early-bird registration
+    const { data: existingOwn } = await supabase
+      .from("event_registrations")
+      .select("package_key")
+      .eq("user_id", user.id)
+      .eq("event_id", eventId)
+      .maybeSingle();
+    const alreadyEarly =
+      existingOwn?.package_key === "week1_early_bird" ||
+      existingOwn?.package_key === "week2_early_bird";
+    if (remaining <= 0 && !alreadyEarly) {
+      return {
+        ok: false,
+        error: "Early bird tickets are sold out. Choose General or Referral.",
+      };
+    }
+  }
+
+  if (pricingTier === "referral") {
+    if (!referralCode) {
+      return fail(
+        "referral_required",
+        "Enter a referral code for the referral ticket.",
+      );
+    }
+
+    const { data: referrerUuid, error: refLookupError } = await supabase.rpc(
+      "find_referrer_by_code",
+      { code: referralCode },
+    );
+
+    if (refLookupError) {
+      return fail(
+        "referral_lookup_failed",
+        refLookupError.message ||
+          "We couldn’t verify that referral code. Please try again.",
+      );
+    }
+
+    const referrerIdResolved =
+      typeof referrerUuid === "string" ? referrerUuid : null;
+
+    if (!referrerIdResolved) {
+      return fail(
+        "referral_invalid",
+        "That referral code isn’t valid. Ask a friend for their code from Account.",
+      );
+    }
+
+    if (referrerIdResolved === user.id) {
+      return fail(
+        "referral_own",
+        "You can’t use your own referral code. Enter another member’s code.",
+      );
+    }
+
+    const { count: referralCount } = await supabase
+      .from("event_registrations")
+      .select("id", { count: "exact", head: true })
+      .eq("referrer_id", referrerIdResolved)
+      .in("status", [...COUNTABLE_STATUSES]);
+
+    if ((referralCount ?? 0) >= REFERRAL_LIMIT_PER_PERSON) {
+      return fail(
+        "referral_limit",
+        "This referral code has reached its limit (10 uses).",
+      );
+    }
+
+    referrerId = referrerIdResolved;
+    referralCodeUsed = referralCode;
   }
 
   const { data: option, error: optionError } = await supabase
@@ -60,7 +172,7 @@ export async function saveEventRegistration(
     .maybeSingle();
 
   if (optionError || !option) {
-    return { ok: false, error: "Invalid package selection." };
+    return { ok: false, error: "Invalid ticket selection." };
   }
 
   const { data: existing } = await supabase
@@ -87,10 +199,12 @@ export async function saveEventRegistration(
       event_id: eventId,
       package_key: packageKey,
       addon_keys: [],
-      stay_key: stayKey,
+      stay_key: null,
       phone,
       notes,
       status,
+      referrer_id: referrerId,
+      referral_code_used: referralCodeUsed,
     },
     { onConflict: "user_id,event_id" },
   );
@@ -107,6 +221,7 @@ export async function saveEventRegistration(
 
   revalidatePath(`/${locale}/join`);
   revalidatePath(`/${locale}/admin/registrations`);
+  revalidatePath(`/${locale}/account`);
   return { ok: true };
 }
 

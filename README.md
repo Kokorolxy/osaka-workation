@@ -52,11 +52,13 @@ If the webhook isn’t running, admins can use **Mark paid** on Admin → Regist
 
 Amounts come from `event_options.price_jpy` (JPY, no decimals). No Payment Link setup required for local.
 
-Apply the Stripe migration after pulling:
+Ticket catalog (1w/2w × general / early bird / referral) lives in `lib/workation-packages.ts` — sync DB via migration `20260727120000_ticket_pricing_referrals.sql`.
+
+Apply migrations after pulling:
 
 ```bash
-npm run db:reset
-# or re-run migrate so 20260725150000_stripe_checkout.sql applies
+npm run db:up
+# or wipe + remigrate: npm run db:reset
 ```
 
 ## Run locally

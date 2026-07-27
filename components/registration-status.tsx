@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import type { RegistrationStatus } from "@/lib/database.types";
 import {
@@ -7,57 +9,56 @@ import {
   Ban,
   CreditCard,
 } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
 
-const STATUS_META: Record<
+const STATUS_ICONS: Record<
   RegistrationStatus,
-  {
-    label: string;
-    hint: string;
-    className: string;
-    Icon: typeof Clock3;
-  }
+  typeof Clock3
 > = {
-  draft: {
-    label: "Draft",
-    hint: "Saved privately — not submitted yet.",
-    className: "bg-paper-sand text-brand-ink ring-1 ring-paper-line",
-    Icon: FilePenLine,
-  },
-  pending_approval: {
-    label: "Pending approval",
-    hint: "Waiting for an admin to review your choices.",
-    className: "bg-[#f3e0c8] text-[#7a4a12] ring-1 ring-[#e2c49a]",
-    Icon: Clock3,
-  },
-  approved: {
-    label: "Approved",
-    hint: "You’re in — complete checkout to confirm your spot.",
-    className: "bg-brand-orange/10 text-brand-orange ring-1 ring-brand-orange/25",
-    Icon: CheckCircle2,
-  },
-  paid: {
-    label: "Paid",
-    hint: "Payment complete. You’re confirmed for the event.",
-    className: "bg-[#e7f3ea] text-[#1f6b3a] ring-1 ring-[#b9dbc4]",
-    Icon: CreditCard,
-  },
-  cancelled: {
-    label: "Cancelled",
-    hint: "This registration was rejected or withdrawn.",
-    className: "bg-[#f8e8e6] text-[#8b3a32] ring-1 ring-[#e5c4bf]",
-    Icon: Ban,
-  },
+  draft: FilePenLine,
+  pending_approval: Clock3,
+  approved: CheckCircle2,
+  paid: CreditCard,
+  cancelled: Ban,
 };
 
+const STATUS_CLASS: Record<RegistrationStatus, string> = {
+  draft: "bg-paper-sand text-brand-ink ring-1 ring-paper-line",
+  pending_approval: "bg-[#f3e0c8] text-[#7a4a12] ring-1 ring-[#e2c49a]",
+  approved:
+    "bg-brand-orange/10 text-brand-orange ring-1 ring-brand-orange/25",
+  paid: "bg-[#e7f3ea] text-[#1f6b3a] ring-1 ring-[#b9dbc4]",
+  cancelled: "bg-[#f8e8e6] text-[#8b3a32] ring-1 ring-[#e5c4bf]",
+};
+
+function useStatusMeta(status: string) {
+  const { dict } = useI18n();
+  const key = status as RegistrationStatus;
+  const entry = dict.pages.join.status[key as keyof typeof dict.pages.join.status];
+  if (entry && typeof entry === "object" && "label" in entry) {
+    return {
+      label: entry.label,
+      hint: entry.hint,
+      className: STATUS_CLASS[key] ?? STATUS_CLASS.draft,
+      Icon: STATUS_ICONS[key] ?? Clock3,
+    };
+  }
+  return {
+    label: status.replaceAll("_", " "),
+    hint: "",
+    className: STATUS_CLASS.draft,
+    Icon: Clock3,
+  };
+}
+
 export function registrationStatusMeta(status: string) {
-  return (
-    STATUS_META[status as RegistrationStatus] ?? {
-      label: status.replaceAll("_", " "),
-      hint: "",
-      className: "bg-paper-sand text-brand-ink ring-1 ring-paper-line",
-      Icon: Clock3,
-    }
-  );
+  // Non-hook fallback for rare server callers — prefer badge components.
+  return {
+    label: status.replaceAll("_", " "),
+    hint: "",
+    className: STATUS_CLASS[(status as RegistrationStatus)] ?? STATUS_CLASS.draft,
+    Icon: STATUS_ICONS[(status as RegistrationStatus)] ?? Clock3,
+  };
 }
 
 export function RegistrationStatusBadge({
@@ -67,7 +68,7 @@ export function RegistrationStatusBadge({
   status: string;
   size?: "sm" | "md";
 }) {
-  const meta = registrationStatusMeta(status);
+  const meta = useStatusMeta(status);
   const Icon = meta.Icon;
   return (
     <span
@@ -92,7 +93,8 @@ export function RegistrationStatusBanner({
   packageLabel?: string | null;
   action?: ReactNode;
 }) {
-  const meta = registrationStatusMeta(status);
+  const { dict } = useI18n();
+  const meta = useStatusMeta(status);
   const Icon = meta.Icon;
 
   return (
@@ -105,7 +107,9 @@ export function RegistrationStatusBanner({
         </span>
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-sm font-bold text-brand-ink">Your registration</p>
+            <p className="text-sm font-bold text-brand-ink">
+              {dict.pages.join.status.yourRegistration}
+            </p>
             <RegistrationStatusBadge status={status} size="sm" />
           </div>
           <p className="mt-1 text-sm text-muted">{meta.hint}</p>

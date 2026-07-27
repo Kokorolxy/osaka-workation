@@ -22,7 +22,7 @@ export function Pricing() {
       checkoutUrl: base.checkoutUrl,
       popular: base.popular,
       features: localized?.features ?? base.features,
-      earlyBird: undefined as string | undefined,
+      earlyBird: base.earlyBird,
     };
   });
 
@@ -34,7 +34,7 @@ export function Pricing() {
 
   return (
     <div>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2">
         {tiers.map((tier, i) => {
           const isActive = i === selected;
           const early = tier.earlyBird;
