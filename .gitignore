@@ -3,6 +3,9 @@ node_modules
 out
 .DS_Store
 *.log
+.env
 .env*.local
 next-env.d.ts
 _contact_sheet.jpg
+supabase/.branches
+supabase/.temp

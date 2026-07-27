@@ -1,3 +1,8 @@
+import {
+  WORKATION_PACKAGES,
+  formatPackagePriceJpy,
+} from "@/lib/workation-packages";
+
 export const SITE = {
   name: "OSAKA Digital Nomads Workation",
   shortName: "OSAKA Workation",
@@ -16,12 +21,15 @@ export const SITE = {
 };
 
 export const NAV = [
-  { label: "Home", href: "/" },
   { label: "Stays", href: "/stays" },
   { label: "Events", href: "/events" },
   { label: "Community", href: "/community" },
   { label: "Blog", href: "/blog" },
+];
+
+export const NAV_MORE = [
   { label: "About", href: "/about" },
+  { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -84,6 +92,8 @@ export const OCCUPANCY = ["Solo", "Group"] as const;
 export type Occupancy = (typeof OCCUPANCY)[number];
 
 export type Stay = {
+  /** Stable id used in event registrations */
+  key: string;
   name: string;
   area: string;
   type: StayType;
@@ -97,9 +107,40 @@ export type Stay = {
   badge?: string;
 };
 
+/** @deprecated Prefer PACKAGES_WITH_HOUSING from workation-packages — kept for older imports */
+export { PACKAGES_WITH_HOUSING as PACKAGES_WITH_STAY } from "@/lib/workation-packages";
+
+/** Same housing styles as the Stays page “Three ways to stay” section (marketing) */
+export const HOUSING_TYPES = [
+  {
+    key: "hotel",
+    name: "Hotel",
+    tagline: "Private & hassle-free",
+    body: "Your own room, daily service, and a front desk. Ideal when you want privacy and zero setup.",
+    image: "/stays/accom-hotel.jpg",
+  },
+  {
+    key: "coliving",
+    name: "Share house · Coliving",
+    tagline: "Built-in community",
+    body: "A private room in a shared house — communal lounge and kitchen, and instant friends. The easiest way to plug into the community.",
+    image: "/stays/accom-coliving.jpg",
+  },
+  {
+    key: "guesthouse",
+    name: "Guesthouse",
+    tagline: "Local & cosy",
+    body: "Homey tatami rooms with real Osaka character — affordable, authentic, and warm.",
+    image: "/stays/accom-guesthouse.jpg",
+  },
+] as const;
+
+export type HousingTypeKey = (typeof HOUSING_TYPES)[number]["key"];
+
 // PLACEHOLDER listings — swap in your real partner stays (name / area / price / image / url).
 export const STAYS: Stay[] = [
   {
+    key: "tennoji-tatami-studio",
     name: "Tennoji Tatami Studio",
     area: "Tennoji, Osaka",
     type: "Airbnb",
@@ -112,6 +153,7 @@ export const STAYS: Stay[] = [
     badge: "Best value",
   },
   {
+    key: "namba-tea-room-house",
     name: "Namba Tea-Room House",
     area: "Namba, Osaka",
     type: "Airbnb",
@@ -123,6 +165,7 @@ export const STAYS: Stay[] = [
     url: "#",
   },
   {
+    key: "nakazakicho-triple-room",
     name: "Nakazakicho Triple Room",
     area: "Nakazakicho, Osaka",
     type: "Airbnb",
@@ -135,6 +178,7 @@ export const STAYS: Stay[] = [
     badge: "Group friendly",
   },
   {
+    key: "umeda-sky-hotel-room",
     name: "Umeda Sky Hotel Room",
     area: "Umeda, Osaka",
     type: "Hotel",
@@ -147,6 +191,7 @@ export const STAYS: Stay[] = [
     badge: "Skyline view",
   },
   {
+    key: "shinsaibashi-designer-hotel",
     name: "Shinsaibashi Designer Hotel",
     area: "Shinsaibashi, Osaka",
     type: "Hotel",
@@ -159,6 +204,7 @@ export const STAYS: Stay[] = [
     badge: "Central",
   },
   {
+    key: "namba-monthly-apartment",
     name: "Namba Monthly Apartment",
     area: "Namba, Osaka",
     type: "Monthly rent",
@@ -171,6 +217,7 @@ export const STAYS: Stay[] = [
     badge: "Long-stay",
   },
   {
+    key: "tennoji-monthly-flat",
     name: "Tennoji Monthly Flat",
     area: "Tennoji, Osaka",
     type: "Monthly rent",
@@ -182,6 +229,7 @@ export const STAYS: Stay[] = [
     url: "#",
   },
   {
+    key: "osaka-nomad-share-house",
     name: "Osaka Nomad Share House",
     area: "Nakazakicho, Osaka",
     type: "Share house",
@@ -365,64 +413,20 @@ export const FAQS = [
   },
 ];
 
-export const PRICING = [
-  {
-    key: "short",
-    name: "Short Stay",
-    tagline: "Networking Meetup",
-    price: "¥30,000",
-    period: "7 days",
-    note: "A shorter taste of Osaka",
-    // Paste your Stripe Payment Link / Peatix / Gumroad URL here to enable "Buy ticket".
-    checkoutUrl: "",
-    popular: false,
-    features: [
-      "Opening party",
-      "Coworking access",
-      "Japanese class",
-      "Cultural workshops",
-      "Community meetups",
-    ],
-  },
-  {
-    key: "full",
-    name: "Full Program",
-    tagline: "The complete 14 days",
-    price: "¥50,000",
-    earlyBird: "¥42,000",
-    period: "14 days",
-    note: "Early bird ¥42,000 · first 10 · until Sep 30, 2026",
-    checkoutUrl: "",
-    popular: true,
-    features: [
-      "Everything in Short Stay",
-      "Full two-week programme",
-      "Opening & closing dinners",
-      "Kyoto & Nara day trips",
-      "Priority on all activities",
-    ],
-  },
-  {
-    key: "community",
-    name: "Community Pass",
-    tagline: "No accommodation",
-    price: "¥35,000",
-    period: "14 days",
-    note: "Programme & coworking only",
-    checkoutUrl: "",
-    popular: false,
-    features: [
-      "14-day coworking access",
-      "All community events",
-      "Cultural workshops",
-      "Japanese class",
-      "Accommodation not included",
-    ],
-  },
-];
+export const PRICING = WORKATION_PACKAGES.map((pkg) => ({
+  key: pkg.key,
+  name: pkg.name,
+  tagline: pkg.tagline,
+  price: formatPackagePriceJpy(pkg.priceJpy),
+  period: "Workation",
+  note: pkg.tagline,
+  checkoutUrl: "",
+  popular: Boolean(pkg.popular),
+  features: pkg.features,
+}));
 
 export const PRICING_NOTE =
-  "Accommodation from ¥4,500/night, booked separately. Full Program + stay + main add-ons ≈ ¥132,800 (~$880 USD). Prices subject to change.";
+  "Edit package prices in lib/workation-packages.ts (WORKATION_PACKAGE_PRICES). Sync DB event_options.price_jpy after changes.";
 
 // Set to false once final prices are confirmed. When true, prices show "Coming soon"
 // and every CTA points to the waitlist.

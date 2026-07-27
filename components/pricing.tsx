@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ArrowRight, Clock } from "lucide-react";
+import { Check, ArrowRight, Clock, X } from "lucide-react";
 import { PRICING, PRICING_TBD } from "@/lib/site";
 import { L } from "@/components/locale-link";
 import { useI18n } from "@/components/i18n-provider";
@@ -10,21 +10,34 @@ export function Pricing() {
   const { dict } = useI18n();
   const p = dict.data.pricing;
 
-  const tiers = PRICING.map((base, i) => ({ ...base, ...p.tiers[i] }));
+  const tiers = PRICING.map((base, i) => {
+    const localized = p.tiers[i];
+    return {
+      key: base.key,
+      name: localized?.name ?? base.name,
+      tagline: localized?.tagline ?? base.tagline,
+      note: localized?.note ?? base.note,
+      price: base.price,
+      period: base.period,
+      checkoutUrl: base.checkoutUrl,
+      popular: base.popular,
+      features: localized?.features ?? base.features,
+      earlyBird: undefined as string | undefined,
+    };
+  });
 
   const [selected, setSelected] = useState(
     Math.max(0, tiers.findIndex((t) => t.popular)),
   );
   const active = tiers[selected];
-  const activePrice =
-    "earlyBird" in active && active.earlyBird ? active.earlyBird : active.price;
+  const activePrice = active.earlyBird ?? active.price;
 
   return (
     <div>
-      <div className="grid gap-5 md:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {tiers.map((tier, i) => {
           const isActive = i === selected;
-          const early = "earlyBird" in tier ? tier.earlyBird : undefined;
+          const early = tier.earlyBird;
           return (
             <button
               key={tier.key}
@@ -74,12 +87,21 @@ export function Pricing() {
               )}
 
               <ul className="mt-5 space-y-2.5 text-sm text-brand-ink/80">
-                {tier.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
-                    {f}
-                  </li>
-                ))}
+                {tier.features.map((f) => {
+                  const excluded = /not included|含みません/i.test(f);
+                  return (
+                    <li key={f} className="flex items-start gap-2">
+                      {excluded ? (
+                        <X className="mt-0.5 h-4 w-4 shrink-0 text-[#8b3a32]" />
+                      ) : (
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
+                      )}
+                      <span className={excluded ? "text-muted" : undefined}>
+                        {f}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
 
               <span

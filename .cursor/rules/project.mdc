@@ -1,0 +1,15 @@
+---
+description: Core architecture and coding standards for OSAKA Workation
+alwaysApply: true
+---
+
+# Project rules
+
+Read `AGENTS.md` first for stack, folders, auth, and env conventions.
+
+- Next.js 14 App Router, TypeScript strict, Tailwind brand tokens, `en`/`ja` locales
+- Double quotes; match neighboring file style; no drive-by refactors
+- Server Components by default; `"use client"` only when needed
+- Persistent data → Supabase migrations + RLS; use `@/lib/supabase/*` clients
+- Authorize on the server (`getUser` / `getClaims` + `profiles.role`); never trust the client for roles
+- UI: cream/ink/orange, `btn-primary` / `container-page`, lucide icons only

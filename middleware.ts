@@ -1,18 +1,21 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { locales, defaultLocale } from "@/lib/i18n/config";
+import { updateSession } from "@/lib/supabase/middleware";
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const hasLocale = locales.some(
     (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
   );
-  if (hasLocale) return NextResponse.next();
 
-  const url = req.nextUrl.clone();
-  url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
-  return NextResponse.redirect(url);
+  if (!hasLocale) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
+    return NextResponse.redirect(url);
+  }
+
+  return updateSession(req);
 }
 
 export const config = {
