@@ -621,7 +621,7 @@ export const ja: Dictionary = {
       role: "ロール",
       referralCode: "あなたの紹介コード",
       referralHint:
-        "友人に共有すると10%オフ。最大10回——自分のコードは自分では使えません。",
+        "友人に共有すると10%オフ。最大10回。",
       joinEvent: "イベントに参加",
       admin: "管理画面",
       signOut: "サインアウト",

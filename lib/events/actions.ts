@@ -42,6 +42,65 @@ export async function getEarlyBirdRemaining(eventId: string): Promise<number> {
   return Math.max(0, EARLY_BIRD_LIMIT - (count ?? 0));
 }
 
+export async function getReferralUsageCount(userId: string): Promise<number> {
+  const supabase = createAdminClient();
+  const { count } = await supabase
+    .from("event_registrations")
+    .select("id", { count: "exact", head: true })
+    .eq("referrer_id", userId)
+    .in("status", [...COUNTABLE_STATUSES]);
+
+  return count ?? 0;
+}
+
+export async function checkReferralUsage(
+  referralCode: string,
+): Promise<{
+  valid: boolean;
+  usedCount: number;
+  remainingUses: number;
+  exists: boolean;
+}> {
+  if (!referralCode.trim()) {
+    return { valid: false, usedCount: 0, remainingUses: 0, exists: false };
+  }
+
+  const supabase = createAdminClient();
+
+  // Find referrer by code
+  const { data: referrerData, error: refError } = await supabase.rpc(
+    "find_referrer_by_code",
+    { code: referralCode.toUpperCase() },
+  );
+
+  if (refError || !referrerData) {
+    return { valid: false, usedCount: 0, remainingUses: 0, exists: false };
+  }
+
+  const referrerId = typeof referrerData === "string" ? referrerData : null;
+
+  if (!referrerId) {
+    return { valid: false, usedCount: 0, remainingUses: 0, exists: false };
+  }
+
+  // Count current usage
+  const { count: usedCount } = await supabase
+    .from("event_registrations")
+    .select("id", { count: "exact", head: true })
+    .eq("referrer_id", referrerId)
+    .in("status", [...COUNTABLE_STATUSES]);
+
+  const used = usedCount ?? 0;
+  const remaining = Math.max(0, REFERRAL_LIMIT_PER_PERSON - used);
+
+  return {
+    valid: remaining > 0,
+    usedCount: used,
+    remainingUses: remaining,
+    exists: true,
+  };
+}
+
 export async function saveEventRegistration(
   formData: FormData,
 ): Promise<SaveRegistrationResult> {

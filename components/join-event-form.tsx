@@ -21,6 +21,7 @@ import {
 import {
   saveEventRegistration,
   type SaveRegistrationResult,
+  checkReferralUsage,
 } from "@/lib/events/actions";
 import type {
   EventOption,
@@ -185,6 +186,32 @@ export function JoinEventForm({
   );
   const [phone, setPhone] = useState(existing?.phone ?? "");
   const [notes, setNotes] = useState(existing?.notes ?? "");
+  const [referralValidation, setReferralValidation] = useState<{
+    usedCount: number;
+    remainingUses: number;
+    valid: boolean;
+    exists: boolean;
+  } | null>(null);
+
+  // Validate referral code when it changes
+  useEffect(() => {
+    if (pricingTier !== "referral" || !referralCode.trim()) {
+      setReferralValidation(null);
+      return;
+    }
+
+    const validateReferral = async () => {
+      const result = await checkReferralUsage(referralCode);
+      setReferralValidation({
+        usedCount: result.usedCount,
+        remainingUses: result.remainingUses,
+        valid: result.valid,
+      });
+    };
+
+    const debounceTimer = setTimeout(validateReferral, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [referralCode, pricingTier]);
 
   // Keep panel in sync when status changes (submit → pending, approve → pay, etc.)
   useEffect(() => {
@@ -234,12 +261,24 @@ export function JoinEventForm({
       setError(j.messages.referralRequired);
       return;
     }
+    if (pricingTier === "referral" && referralValidation && !referralValidation.exists) {
+      setError("This referral code is invalid.");
+      return;
+    }
     if (
       pricingTier === "referral" &&
       myReferralCode &&
       referralCode.trim().toUpperCase() === myReferralCode.toUpperCase()
     ) {
       setError(j.messages.referralOwn);
+      return;
+    }
+    if (pricingTier === "referral" && referralValidation && referralValidation.valid && referralValidation.remainingUses === 0) {
+      setError(j.messages.referralLimit);
+      return;
+    }
+    if (!phone.trim()) {
+      setError("Phone number is required.");
       return;
     }
 
@@ -551,11 +590,41 @@ export function JoinEventForm({
                     placeholder={j.fields.referralPlaceholder}
                     autoComplete="off"
                     spellCheck={false}
-                    className="mt-1.5 w-full rounded-xl border border-paper-line bg-paper-cream/50 px-4 py-3 font-mono text-sm uppercase tracking-wider text-brand-ink outline-none ring-brand-orange focus:ring-2 disabled:opacity-60"
+                    className={`mt-1.5 w-full rounded-xl border bg-paper-cream/50 px-4 py-3 font-mono text-sm uppercase tracking-wider text-brand-ink outline-none ring-brand-orange focus:ring-2 disabled:opacity-60 ${
+                      referralValidation !== null && referralCode.trim()
+                        ? referralValidation.exists
+                          ? referralValidation.valid
+                            ? "border-green-400"
+                            : "border-paper-line"
+                          : "border-red-400"
+                        : "border-paper-line"
+                    }`}
                   />
                   <span className="mt-1.5 block text-xs font-normal text-muted">
                     {j.fields.referralHint}
                   </span>
+                  {referralValidation !== null && referralCode.trim() ? (
+                    <div className="mt-2">
+                      {!referralValidation.exists ? (
+                        <p className="text-xs text-red-600">
+                          This referral code is invalid.
+                        </p>
+                      ) : referralValidation.valid ? (
+                        <>
+                          <span className="inline-flex text-xs font-medium text-green-700">
+                            {referralValidation.usedCount} of 10 uses
+                          </span>
+                          {referralValidation.remainingUses <= 2 && (
+                            <p className="mt-1 text-xs text-orange-600">
+                              Only {referralValidation.remainingUses} use
+                              {referralValidation.remainingUses === 1 ? "" : "s"}{" "}
+                              remaining.
+                            </p>
+                          )}
+                        </>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </label>
               ) : null}
 
@@ -596,11 +665,13 @@ export function JoinEventForm({
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <label className="block text-sm font-medium text-brand-ink">
                   {j.fields.phone}
+                  <span className="text-red-600">*</span>
                   <input
                     type="tel"
                     value={phone}
                     disabled={isLocked}
                     onChange={(e) => setPhone(e.target.value)}
+                    required
                     className="mt-1.5 w-full rounded-xl border border-paper-line bg-paper-cream/50 px-4 py-3 text-brand-ink outline-none ring-brand-orange focus:ring-2 disabled:opacity-60"
                   />
                 </label>
@@ -632,7 +703,7 @@ export function JoinEventForm({
                   <div className="flex flex-col gap-2 sm:flex-row">
                     <button
                       type="button"
-                      disabled={pending}
+                      disabled={pending || !!error}
                       onClick={() => submit("draft")}
                       className="btn-ghost !py-2.5 disabled:opacity-60"
                     >
@@ -645,7 +716,7 @@ export function JoinEventForm({
                     </button>
                     <button
                       type="submit"
-                      disabled={pending}
+                      disabled={pending || !!error}
                       className="btn-primary !py-2.5 disabled:opacity-60"
                     >
                       {pending ? (

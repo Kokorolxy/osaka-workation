@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/auth/actions";
+import { getReferralUsageCount } from "@/lib/events/actions";
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { t } from "@/lib/i18n/t";
@@ -60,6 +61,8 @@ export default async function AccountPage({
     .eq("user_id", user.id)
     .order("updated_at", { ascending: false });
 
+  const referralUsageCount = await getReferralUsageCount(user.id);
+
   const { data: events } = await supabase.from("events").select("id, title");
   const eventById = new Map((events ?? []).map((e) => [e.id, e]));
   const dict = getDictionary(locale);
@@ -112,8 +115,13 @@ export default async function AccountPage({
               <dt className="text-xs font-semibold uppercase tracking-wide text-muted">
                 {a.referralCode}
               </dt>
-              <dd className="mt-1.5 font-semibold tracking-wider text-brand-ink">
-                {profile.referral_code}
+              <dd className="mt-1.5 flex items-center gap-3">
+                <span className="font-semibold tracking-wider text-brand-ink">
+                  {profile.referral_code}
+                </span>
+                <span className="inline-flex rounded-full bg-brand-orange/10 px-2.5 py-1 text-xs font-semibold text-brand-orange">
+                  {referralUsageCount} of 10 used
+                </span>
               </dd>
               <p className="mt-1 text-xs text-muted">{a.referralHint}</p>
             </div>

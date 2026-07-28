@@ -619,7 +619,7 @@ export const en = {
       role: "Role",
       referralCode: "Your referral code",
       referralHint:
-        "Share this with friends for 10% off. Max 10 uses — they can’t use their own code.",
+        "Share this with friends for 10% off. Max 10 uses.",
       joinEvent: "Join an event",
       admin: "Admin platform",
       signOut: "Sign out",
