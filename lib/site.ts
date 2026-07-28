@@ -423,7 +423,7 @@ export const PRICING = WORKATION_DURATIONS.map((d, i) => ({
 }));
 
 export const PRICING_NOTE =
-  "General, Early bird (first 20), or Referral (member code, max 10 uses). Same inclusions for 1 or 2 weeks. Edit prices in lib/workation-packages.ts.";
+  "Ticket covers the programme, coworking, and included activities (welcome & farewell parties). Accommodation and optional add-ons (day trips, USJ, etc.) are separate. EUR prices are indicative (≈ €1 = ¥186).";
 
 // Set to false once final prices are confirmed. When true, prices show "Coming soon"
 // and every CTA points to the waitlist.
