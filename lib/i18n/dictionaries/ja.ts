@@ -490,6 +490,10 @@ export const ja: Dictionary = {
           title: "連絡先",
           description: "任意——到着のご案内に使います。",
         },
+        schedule: {
+          title: "スケジュール",
+          description: "ワーケーション14日間のスケジュールをご紹介します。",
+        },
       },
       tiers: {
         general: { title: "一般", body: "通常価格のチケット。" },

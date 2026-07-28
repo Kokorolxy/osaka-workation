@@ -488,6 +488,10 @@ export const en = {
           title: "Contact details",
           description: "Optional — helps us reach you about arrival.",
         },
+        schedule: {
+          title: "What to expect",
+          description: "Here's the 14-day schedule for the workation.",
+        },
       },
       tiers: {
         general: { title: "General", body: "Standard ticket price." },

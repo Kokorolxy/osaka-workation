@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import {
   EARLY_BIRD_LIMIT,
@@ -30,7 +31,7 @@ function fail(code: string, error: string): SaveRegistrationResult {
 }
 
 export async function getEarlyBirdRemaining(eventId: string): Promise<number> {
-  const supabase = createClient();
+  const supabase = createAdminClient();
   const { count } = await supabase
     .from("event_registrations")
     .select("id", { count: "exact", head: true })

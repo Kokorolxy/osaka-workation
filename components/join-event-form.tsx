@@ -46,6 +46,7 @@ import { JoinJourneyStepper } from "@/components/join-journey-stepper";
 import { JoinTicketSummary } from "@/components/join-ticket-summary";
 import { FeedbackBanner } from "@/components/feedback-banner";
 import { PayCheckoutButton } from "@/components/pay-checkout-button";
+import { WorkationSchedule } from "@/components/workation-schedule";
 import { friendlyAppError } from "@/lib/errors/user-message";
 import { SITE } from "@/lib/site";
 import { L } from "@/components/locale-link";
@@ -396,6 +397,18 @@ export function JoinEventForm({
                 })}
               </div>
             </section>
+
+            {selectedEvent ? (
+              <section className="rounded-3xl border border-paper-line bg-white p-6 sm:p-8">
+                <SectionHeading
+                  title={j.sections.schedule.title}
+                  description={j.sections.schedule.description}
+                />
+                <div className="mt-6">
+                  <WorkationSchedule />
+                </div>
+              </section>
+            ) : null}
 
             <section
               className={`rounded-3xl border border-paper-line bg-white p-6 sm:p-8 ${isLocked ? "opacity-75" : ""}`}
