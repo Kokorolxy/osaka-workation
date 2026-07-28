@@ -8,7 +8,6 @@ import { Countdown } from "@/components/countdown";
 import { Newsletter } from "@/components/newsletter";
 import { Pricing } from "@/components/pricing";
 import { IncludesGrid } from "@/components/includes-grid";
-import { WorkationTimeline } from "@/components/workation-timeline";
 import { MeetupCard } from "@/components/meetup-card";
 import { PhotoWall } from "@/components/photo-wall";
 import { EventsCalendar } from "@/components/events-calendar";
@@ -173,8 +172,8 @@ export default function EventsPage({
         </div>
       </section>
 
-      {/* PROGRAMME TIMELINE */}
-      <section className="border-y border-paper-line bg-white">
+      {/* THE 14 DAYS — full schedule */}
+      <section id="schedule" className="scroll-mt-24 border-y border-paper-line bg-white">
         <div className="container-page py-16 sm:py-20">
           <SectionHeading
             eyebrow={t.flowEyebrow}
@@ -182,7 +181,7 @@ export default function EventsPage({
             body={t.flowBody}
           />
           <div className="mt-12">
-            <WorkationTimeline />
+            <WorkationSchedule />
           </div>
 
           <div className="mt-10 flex flex-wrap gap-3">
@@ -193,18 +192,6 @@ export default function EventsPage({
               {t.partnerBtn}
             </L>
           </div>
-        </div>
-      </section>
-
-      {/* FULL SCHEDULE */}
-      <section id="schedule" className="container-page scroll-mt-24 py-16 sm:py-20">
-        <SectionHeading
-          eyebrow={t.schedEyebrow}
-          title={t.schedTitle}
-          body={t.schedBody}
-        />
-        <div className="mt-12">
-          <WorkationSchedule />
         </div>
       </section>
 
