@@ -276,6 +276,7 @@ export const en = {
       schedDaytime: "Day",
       schedEvening: "Night",
       schedCohortBadge: "1-Week cohort joins",
+      schedSpecial: "Special",
       kicksOffIn: "Kicks off in",
       globalCrew: "A global crew, one city",
       includesEyebrow: "One ticket, everything in",

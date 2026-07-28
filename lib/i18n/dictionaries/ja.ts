@@ -278,6 +278,7 @@ export const ja: Dictionary = {
       schedDaytime: "日中",
       schedEvening: "夜",
       schedCohortBadge: "1週間グループ合流",
+      schedSpecial: "特別",
       kicksOffIn: "開始まで",
       globalCrew: "世界中の仲間が、ひとつの街に",
       includesEyebrow: "チケット1枚に、すべて",
