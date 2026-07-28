@@ -365,68 +365,33 @@ export const FAQS = [
   },
 ];
 
+// Structural pricing. Text (name/tagline/note/features) comes from the dictionary,
+// merged by index in components/pricing.tsx. Keep this array in the same order.
 export const PRICING = [
   {
-    key: "short",
-    name: "Short Stay",
-    tagline: "Networking Meetup",
-    price: "¥30,000",
-    period: "7 days",
-    note: "A shorter taste of Osaka",
-    // Paste your Stripe Payment Link / Peatix / Gumroad URL here to enable "Buy ticket".
-    checkoutUrl: "",
-    popular: false,
-    features: [
-      "Opening party",
-      "Coworking access",
-      "Japanese class",
-      "Cultural workshops",
-      "Community meetups",
-    ],
-  },
-  {
-    key: "full",
-    name: "Full Program",
-    tagline: "The complete 14 days",
-    price: "¥50,000",
-    earlyBird: "¥42,000",
+    key: "twoweek",
+    price: "¥65,000",
+    earlyBird: "¥58,500", // −10%
     period: "14 days",
-    note: "Early bird ¥42,000 · first 10 · until Sep 30, 2026",
+    // Paste your Stripe Payment Link / Peatix / Luma URL to enable "Buy ticket".
     checkoutUrl: "",
     popular: true,
-    features: [
-      "Everything in Short Stay",
-      "Full two-week programme",
-      "Opening & closing dinners",
-      "Kyoto & Nara day trips",
-      "Priority on all activities",
-    ],
   },
   {
-    key: "community",
-    name: "Community Pass",
-    tagline: "No accommodation",
-    price: "¥35,000",
-    period: "14 days",
-    note: "Programme & coworking only",
+    key: "oneweek",
+    price: "¥38,500",
+    earlyBird: "¥34,650", // −10%
+    period: "7 days",
     checkoutUrl: "",
     popular: false,
-    features: [
-      "14-day coworking access",
-      "All community events",
-      "Cultural workshops",
-      "Japanese class",
-      "Accommodation not included",
-    ],
   },
 ];
 
 export const PRICING_NOTE =
-  "Accommodation from ¥4,500/night, booked separately. Full Program + stay + main add-ons ≈ ¥132,800 (~$880 USD). Prices subject to change.";
+  "Ticket covers the programme, coworking, and included activities (welcome & farewell parties). Accommodation and optional add-ons (day trips, USJ, etc.) are separate. EUR prices are indicative (≈ €1 = ¥186).";
 
-// Set to false once final prices are confirmed. When true, prices show "Coming soon"
-// and every CTA points to the waitlist.
-export const PRICING_TBD = true;
+// Set to true to show "Coming soon" and route CTAs to the waitlist.
+export const PRICING_TBD = false;
 
 export const FOOD = [
   {

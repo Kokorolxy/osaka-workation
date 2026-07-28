@@ -21,7 +21,7 @@ export function Pricing() {
 
   return (
     <div>
-      <div className="grid gap-5 md:grid-cols-3">
+      <div className="mx-auto grid max-w-3xl gap-5 md:grid-cols-2">
         {tiers.map((tier, i) => {
           const isActive = i === selected;
           const early = "earlyBird" in tier ? tier.earlyBird : undefined;

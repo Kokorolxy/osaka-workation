@@ -12,6 +12,7 @@ import { WorkationTimeline } from "@/components/workation-timeline";
 import { MeetupCard } from "@/components/meetup-card";
 import { PhotoWall } from "@/components/photo-wall";
 import { EventsCalendar } from "@/components/events-calendar";
+import { WorkationSchedule } from "@/components/workation-schedule";
 import { JsonLd } from "@/components/json-ld";
 import { L } from "@/components/locale-link";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
@@ -72,7 +73,7 @@ export default function EventsPage({
           },
           offers: {
             "@type": "Offer",
-            price: "30000",
+            price: "34650",
             priceCurrency: "JPY",
             url: "https://osakaworkation.com/events#pricing",
             availability: "https://schema.org/InStock",
@@ -192,6 +193,18 @@ export default function EventsPage({
               {t.partnerBtn}
             </L>
           </div>
+        </div>
+      </section>
+
+      {/* FULL SCHEDULE */}
+      <section id="schedule" className="container-page scroll-mt-24 py-16 sm:py-20">
+        <SectionHeading
+          eyebrow={t.schedEyebrow}
+          title={t.schedTitle}
+          body={t.schedBody}
+        />
+        <div className="mt-12">
+          <WorkationSchedule />
         </div>
       </section>
 
