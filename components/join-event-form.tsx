@@ -511,24 +511,26 @@ export function JoinEventForm({
                       price: durationMeta?.generalPriceJpy,
                       disabled: false,
                     },
-                    {
-                      key: "early_bird" as const,
-                      title: j.tiers.earlyBird.title,
-                      body:
-                        earlyLeft > 0
-                          ? t(j.tiers.earlyBird.bodyAvailable, {
-                              pct: DISCOUNT_PERCENT,
-                              left: earlyLeft,
-                              limit: EARLY_BIRD_LIMIT,
-                            })
-                          : t(j.tiers.earlyBird.bodySoldOut, {
-                              limit: EARLY_BIRD_LIMIT,
-                            }),
-                      price: durationMeta?.discountedPriceJpy,
-                      disabled:
-                        earlyLeft <= 0 &&
-                        !existing?.package_key?.includes("early_bird"),
-                    },
+                    ...(earlyLeft > 0 || existing?.package_key?.includes("early_bird")
+                      ? [
+                          {
+                            key: "early_bird" as const,
+                            title: j.tiers.earlyBird.title,
+                            body:
+                              earlyLeft > 0
+                                ? t(j.tiers.earlyBird.bodyAvailable, {
+                                    pct: DISCOUNT_PERCENT,
+                                    left: earlyLeft,
+                                    limit: EARLY_BIRD_LIMIT,
+                                  })
+                                : t(j.tiers.earlyBird.bodySoldOut, {
+                                    limit: EARLY_BIRD_LIMIT,
+                                  }),
+                            price: durationMeta?.discountedPriceJpy,
+                            disabled: false,
+                          },
+                        ]
+                      : []),
                     {
                       key: "referral" as const,
                       title: j.tiers.referral.title,

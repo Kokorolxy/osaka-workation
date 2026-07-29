@@ -125,7 +125,7 @@ export default async function JoinPage({
               options={options ?? []}
               registrations={registrations ?? []}
               earlyBirdRemainingByEvent={earlyBirdRemainingByEvent}
-              myReferralCode={session.profile.referral_code}
+              myReferralCode={session.profile.role === "admin" ? session.profile.referral_code : null}
             />
           </div>
         </div>

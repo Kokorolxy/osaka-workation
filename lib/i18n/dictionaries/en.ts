@@ -162,7 +162,7 @@ export const en = {
       { q: "How do I join?", a: "Follow @osaka_workation and join the waitlist below. Waitlist members get first access to dates, pricing, and spots." },
     ],
     pricing: {
-      note: "General, Early bird (first 20 tickets), or Referral (member code, max 10 uses). Same inclusions for 1 or 2 weeks. Housing, flights, weekend transport, and random pop-up events are not included.",
+      note: "General, Early bird (first 20 tickets), or Referral (member code, max 50 uses). Same inclusions for 1 or 2 weeks. Housing, flights, weekend transport, and random pop-up events are not included.",
       mostPopular: "Most popular",
       selected: "Selected",
       select: "Select",
@@ -502,7 +502,7 @@ export const en = {
         },
         referral: {
           title: "Referral",
-          body: "{pct}% off with a member’s referral code (max 10 uses each).",
+          body: "{pct}% off with a member's referral code (max 50 uses each)",
         },
       },
       includesHeading: "What’s included",
@@ -619,7 +619,7 @@ export const en = {
       role: "Role",
       referralCode: "Your referral code",
       referralHint:
-        "Share this with friends for 10% off. Max 10 uses.",
+        "Share this with friends for 10% off. Max 50 uses.",
       joinEvent: "Join an event",
       admin: "Admin platform",
       signOut: "Sign out",

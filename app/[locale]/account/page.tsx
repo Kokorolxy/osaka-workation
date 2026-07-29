@@ -61,7 +61,7 @@ export default async function AccountPage({
     .eq("user_id", user.id)
     .order("updated_at", { ascending: false });
 
-  const referralUsageCount = await getReferralUsageCount(user.id);
+  const referralUsageCount = profile.role === "admin" ? await getReferralUsageCount(user.id) : 0;
 
   const { data: events } = await supabase.from("events").select("id, title");
   const eventById = new Map((events ?? []).map((e) => [e.id, e]));
@@ -111,6 +111,7 @@ export default async function AccountPage({
                 </span>
               </dd>
             </div>
+            {profile.role === "admin" ? (
             <div>
               <dt className="text-xs font-semibold uppercase tracking-wide text-muted">
                 {a.referralCode}
@@ -120,11 +121,12 @@ export default async function AccountPage({
                   {profile.referral_code}
                 </span>
                 <span className="inline-flex rounded-full bg-brand-orange/10 px-2.5 py-1 text-xs font-semibold text-brand-orange">
-                  {referralUsageCount} of 10 used
+                  {referralUsageCount} of 50 used
                 </span>
               </dd>
               <p className="mt-1 text-xs text-muted">{a.referralHint}</p>
             </div>
+            ) : null}
           </dl>
 
           <div className="mt-8 flex flex-wrap gap-3">
