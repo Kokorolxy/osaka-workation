@@ -370,10 +370,8 @@ export const FAQS = [
 export const PRICING = [
   {
     key: "twoweek",
-    price: "¥65,000",
-    earlyBird: "¥58,500", // −10%
-    eur: "€349",
-    eurEarly: "€315",
+    price: "€349",
+    earlyBird: "€314", // −10%
     period: "14 days",
     // Paste your Stripe Payment Link / Peatix / Luma URL to enable "Buy ticket".
     checkoutUrl: "",
@@ -381,10 +379,8 @@ export const PRICING = [
   },
   {
     key: "oneweek",
-    price: "¥38,500",
-    earlyBird: "¥34,650", // −10%
-    eur: "€207",
-    eurEarly: "€186",
+    price: "€204",
+    earlyBird: "€184", // −10%
     period: "7 days",
     checkoutUrl: "",
     popular: false,
@@ -392,7 +388,7 @@ export const PRICING = [
 ];
 
 export const PRICING_NOTE =
-  "Ticket covers the programme, coworking, and included activities (welcome & farewell parties). Accommodation and optional add-ons (day trips, USJ, etc.) are separate. EUR prices are indicative (≈ €1 = ¥186).";
+  "Ticket covers the programme, coworking, and included activities (welcome & farewell parties). Accommodation and optional add-ons (day trips, USJ, etc.) are separate. Early-bird and friend-referral pricing both save 10%.";
 
 // Set to true to show "Coming soon" and route CTAs to the waitlist.
 export const PRICING_TBD = false;

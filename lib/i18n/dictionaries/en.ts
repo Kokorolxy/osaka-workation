@@ -129,7 +129,7 @@ export const en = {
       { q: "How do I join?", a: "Follow @osaka_workation and join the waitlist below. Waitlist members get first access to dates, pricing, and spots." },
     ],
     pricing: {
-      note: "Accommodation from ¥4,500/night, booked separately. Full Program + stay + main add-ons ≈ ¥132,800 (~$880 USD). Prices subject to change.",
+      note: "Ticket covers the programme, coworking, and included activities. Accommodation and optional add-ons are booked separately. Early-bird and friend-referral pricing both save 10%. Prices subject to change.",
       mostPopular: "Most popular",
       selected: "Selected",
       select: "Select",
@@ -145,7 +145,7 @@ export const en = {
       perPerson: "per person",
       tiers: [
         { name: "2-Week Workation", tagline: "Nov 1–14 · the full experience", note: "Early bird · save 10% (limited)", features: ["Full 14-day programme (Nov 1–14)", "Coworking access every weekday", "Welcome & farewell parties", "Kyoto day trip + waterfall & fireworks", "All base evening activities"] },
-        { name: "1-Week Workation", tagline: "Nov 8–14 · the second week", note: "Early bird · save 10% (limited)", features: ["7-day programme (Nov 8–14)", "Coworking access every weekday", "Farewell party", "Waterfall & fireworks · landmark sunset", "Nabe night, miso workshop & more"] },
+        { name: "1-Week Workation", tagline: "Nov 8–14 · the second week", note: "Early bird · save 10% (limited)", features: ["7-day programme (Nov 8–14)", "Coworking access every weekday", "Farewell party", "Waterfall & fireworks night", "Cultural workshops & community dinners"] },
       ],
     },
     stays: {

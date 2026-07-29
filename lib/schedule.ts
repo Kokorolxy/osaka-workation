@@ -100,6 +100,72 @@ export const SCHEDULE: ScheduleDay[] = [
   },
 ];
 
+// ── High-level program overview (public-facing, intentionally not day-by-day) ──
+export type ProgramHighlight = { icon: string; label: Bi };
+export type ProgramPhase = {
+  week: Bi;
+  dates: Bi;
+  theme: Bi;
+  body: Bi;
+  highlights: ProgramHighlight[];
+};
+
+export const PROGRAM: {
+  rhythm: { title: Bi; items: { icon: string; label: Bi; note: Bi }[] };
+  phases: ProgramPhase[];
+} = {
+  rhythm: {
+    title: { en: "A day in the rhythm", ja: "1日のリズム" },
+    items: [
+      {
+        icon: "sunrise",
+        label: { en: "Mornings", ja: "朝" },
+        note: { en: "Yoga, calligraphy & Japanese class", ja: "ヨガ・書道・日本語クラス" },
+      },
+      {
+        icon: "laptop",
+        label: { en: "Daytime", ja: "日中" },
+        note: { en: "Coworking, focus time & workshops", ja: "コワーキング・集中・ワークショップ" },
+      },
+      {
+        icon: "users",
+        label: { en: "Evenings", ja: "夜" },
+        note: { en: "Dinners, meetups & community nights", ja: "ディナー・交流会・コミュニティナイト" },
+      },
+    ],
+  },
+  phases: [
+    {
+      week: { en: "Week 1", ja: "1週目" },
+      dates: { en: "Nov 1 – 7", ja: "11/1 – 7" },
+      theme: { en: "Land & Belong", ja: "着いて、なじむ" },
+      body: {
+        en: "Arrive, meet your cohort, and settle into Osaka. Find your rhythm between coworking, culture, and the crew.",
+        ja: "到着して仲間と出会い、大阪に馴染む1週間。コワーキング・文化体験・仲間との時間でリズムをつかみます。",
+      },
+      highlights: [
+        { icon: "party", label: { en: "Welcome Party", ja: "ウェルカムパーティー" } },
+        { icon: "landmark", label: { en: "Kyoto Day Trip", ja: "京都日帰りツアー" } },
+        { icon: "culture", label: { en: "Culture & workshops", ja: "文化＆ワークショップ" } },
+      ],
+    },
+    {
+      week: { en: "Week 2", ja: "2週目" },
+      dates: { en: "Nov 8 – 14", ja: "11/8 – 14" },
+      theme: { en: "Explore & Farewell", ja: "深めて、送り出す" },
+      body: {
+        en: "Go deeper with signature experiences and community dinners, then send the two weeks off together.",
+        ja: "シグネチャー体験やコミュニティディナーで一歩深く。最後はみんなで2週間を締めくくります。",
+      },
+      highlights: [
+        { icon: "waterfall", label: { en: "Waterfall & Fireworks night", ja: "滝行 & 花火の夜" } },
+        { icon: "picnic", label: { en: "Farewell Picnic & Party", ja: "お別れピクニック & パーティー" } },
+        { icon: "culture", label: { en: "Workshops & dinners", ja: "ワークショップ＆ディナー" } },
+      ],
+    },
+  ],
+};
+
 export const SCHEDULE_ADDONS: { title: Bi; items: Bi[] } = {
   title: { en: "Optional add-ons (self-organized, extra)", ja: "追加・任意（別料金・各自手配）" },
   items: [

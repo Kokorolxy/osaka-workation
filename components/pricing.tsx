@@ -66,12 +66,9 @@ export function Pricing() {
                         {tier.price}
                       </span>
                     )}
-                    {"eur" in tier && (tier as { eur?: string }).eur && (
-                      <span className="pb-1 text-sm text-muted">
-                        ≈{" "}
-                        {early
-                          ? (tier as { eurEarly?: string }).eurEarly
-                          : (tier as { eur?: string }).eur}
+                    {early && (
+                      <span className="pb-1 text-xs font-bold uppercase tracking-wide text-brand-orange">
+                        −10%
                       </span>
                     )}
                   </span>
