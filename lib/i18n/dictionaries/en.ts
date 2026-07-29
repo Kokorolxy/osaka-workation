@@ -144,8 +144,8 @@ export const en = {
       waitlistPrompt: "Join the waitlist to lock in your spot.",
       perPerson: "per person",
       tiers: [
-        { name: "2-Week Workation", tagline: "Nov 1–14 · the full experience", note: "Early bird · save 10% (limited)", features: ["Full 14-day programme (Nov 1–14)", "Coworking access every weekday", "Welcome & farewell parties", "Kyoto day trip + waterfall & fireworks", "All base evening activities", "≈ €349 · early bird €315"] },
-        { name: "1-Week Workation", tagline: "Nov 8–14 · the second week", note: "Early bird · save 10% (limited)", features: ["7-day programme (Nov 8–14)", "Coworking access every weekday", "Farewell party", "Waterfall & fireworks · landmark sunset", "Nabe night, miso workshop & more", "≈ €207 · early bird €186"] },
+        { name: "2-Week Workation", tagline: "Nov 1–14 · the full experience", note: "Early bird · save 10% (limited)", features: ["Full 14-day programme (Nov 1–14)", "Coworking access every weekday", "Welcome & farewell parties", "Kyoto day trip + waterfall & fireworks", "All base evening activities"] },
+        { name: "1-Week Workation", tagline: "Nov 8–14 · the second week", note: "Early bird · save 10% (limited)", features: ["7-day programme (Nov 8–14)", "Coworking access every weekday", "Farewell party", "Waterfall & fireworks · landmark sunset", "Nabe night, miso workshop & more"] },
       ],
     },
     stays: {

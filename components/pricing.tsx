@@ -57,13 +57,21 @@ export function Pricing() {
                 </>
               ) : (
                 <>
-                  <span className="mt-3 flex items-end gap-2">
+                  <span className="mt-3 flex flex-wrap items-end gap-x-2 gap-y-1">
                     <span className="text-3xl font-extrabold tracking-tight text-brand-ink">
                       {early ?? tier.price}
                     </span>
                     {early && (
                       <span className="pb-1 text-sm text-muted line-through">
                         {tier.price}
+                      </span>
+                    )}
+                    {"eur" in tier && (tier as { eur?: string }).eur && (
+                      <span className="pb-1 text-sm text-muted">
+                        ≈{" "}
+                        {early
+                          ? (tier as { eurEarly?: string }).eurEarly
+                          : (tier as { eur?: string }).eur}
                       </span>
                     )}
                   </span>

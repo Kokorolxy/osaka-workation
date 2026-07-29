@@ -372,6 +372,8 @@ export const PRICING = [
     key: "twoweek",
     price: "¥65,000",
     earlyBird: "¥58,500", // −10%
+    eur: "€349",
+    eurEarly: "€315",
     period: "14 days",
     // Paste your Stripe Payment Link / Peatix / Luma URL to enable "Buy ticket".
     checkoutUrl: "",
@@ -381,6 +383,8 @@ export const PRICING = [
     key: "oneweek",
     price: "¥38,500",
     earlyBird: "¥34,650", // −10%
+    eur: "€207",
+    eurEarly: "€186",
     period: "7 days",
     checkoutUrl: "",
     popular: false,

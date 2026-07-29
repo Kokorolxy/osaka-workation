@@ -2,14 +2,48 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Sun, Moon, Sparkles, UsersRound } from "lucide-react";
+import {
+  Sparkles, UsersRound, PartyPopper, Beer, Brush, Dices, Clapperboard,
+  Users, Landmark, Droplets, Languages, Sunset, UtensilsCrossed, ChefHat,
+  Trees, Mic, Laptop, type LucideIcon,
+} from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 import { SCHEDULE, SCHEDULE_ADDONS, pick, type ScheduleDay } from "@/lib/schedule";
+
+function iconFor(en: string): LucideIcon {
+  const s = en.toLowerCase();
+  if (s.includes("party")) return PartyPopper;
+  if (s.includes("izakaya")) return Beer;
+  if (s.includes("calligraphy") || s.includes("書道")) return Brush;
+  if (s.includes("board game")) return Dices;
+  if (s.includes("movie")) return Clapperboard;
+  if (s.includes("networking")) return Users;
+  if (s.includes("kyoto")) return Landmark;
+  if (s.includes("waterfall") || s.includes("滝行")) return Droplets;
+  if (s.includes("hanabi") || s.includes("firework")) return Sparkles;
+  if (s.includes("japanese class")) return Languages;
+  if (s.includes("sunset") || s.includes("landmark")) return Sunset;
+  if (s.includes("nabe") || s.includes("oden") || s.includes("hot-pot")) return UtensilsCrossed;
+  if (s.includes("miso")) return ChefHat;
+  if (s.includes("picnic")) return Trees;
+  if (s.includes("karaoke")) return Mic;
+  return Laptop; // coworking / routine
+}
 
 function DayRow({ d }: { d: ScheduleDay }) {
   const { locale, dict } = useI18n();
   const t = dict.pages.events;
   const num = (locale === "ja" ? d.dateJa : d.date).replace(/[^0-9]/g, "");
+
+  // The hook is the evening activity — except day-trip days (Kyoto) where the day is the star.
+  const heroIsNight = d.date !== "Nov 7";
+  const heroBi = heroIsNight ? d.night : d.day;
+  const subBi = heroIsNight ? d.day : d.night;
+  const heroWhen = heroIsNight ? t.schedEvening : t.schedDaytime;
+  const subWhen = heroIsNight ? t.schedDaytime : t.schedEvening;
+  const HeroIcon = iconFor(heroBi.en);
+  const SubIcon = iconFor(subBi.en);
+
   return (
     <div className="relative flex gap-4 pb-4">
       {/* timeline node */}
@@ -38,10 +72,10 @@ function DayRow({ d }: { d: ScheduleDay }) {
             : "border-white/15 bg-white/10"
         }`}
       >
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-1.5">
             {d.highlight && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
                 <Sparkles className="h-2.5 w-2.5 text-brand-orange" />
                 {t.schedSpecial}
               </span>
@@ -58,14 +92,31 @@ function DayRow({ d }: { d: ScheduleDay }) {
           </span>
         </div>
 
-        <div className="mt-2 space-y-1.5 text-sm">
-          <div className="flex gap-2">
-            <Sun className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
-            <span className="text-white/90">{pick(d.day, locale)}</span>
-          </div>
-          <div className="flex gap-2">
-            <Moon className="mt-0.5 h-4 w-4 shrink-0 text-white/55" />
-            <span className="text-white/90">{pick(d.night, locale)}</span>
+        {/* hero activity */}
+        <div className="mt-3 flex items-start gap-3">
+          <span
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+              d.highlight
+                ? "bg-brand-orange text-white"
+                : "bg-brand-orange/20 text-brand-orange"
+            }`}
+          >
+            <HeroIcon className="h-5 w-5" strokeWidth={1.75} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-orange">
+              {heroWhen}
+            </span>
+            <p className="text-[15px] font-bold leading-snug text-white">
+              {pick(heroBi, locale)}
+            </p>
+            <p className="mt-1 flex items-center gap-1.5 text-xs text-white/55">
+              <SubIcon className="h-3 w-3 shrink-0" strokeWidth={1.75} />
+              <span className="font-semibold uppercase tracking-wide">
+                {subWhen}
+              </span>
+              · {pick(subBi, locale)}
+            </p>
           </div>
         </div>
       </div>
@@ -86,13 +137,7 @@ export function WorkationSchedule() {
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-paper-line">
-      <Image
-        src="/img/timeline-bg.jpg"
-        alt=""
-        fill
-        sizes="100vw"
-        className="object-cover"
-      />
+      <Image src="/img/timeline-bg.jpg" alt="" fill sizes="100vw" className="object-cover" />
       <div className="absolute inset-0 bg-gradient-to-br from-brand-ink/90 via-brand-ink/80 to-brand-ink/90" />
 
       <div className="relative p-6 sm:p-10">
@@ -122,9 +167,7 @@ export function WorkationSchedule() {
                   {w.label}
                 </span>
                 <span
-                  className={`h-2.5 w-2.5 rounded-full ${
-                    on ? "bg-brand-orange" : "bg-white/25"
-                  }`}
+                  className={`h-2.5 w-2.5 rounded-full ${on ? "bg-brand-orange" : "bg-white/25"}`}
                 />
               </button>
             );
@@ -134,10 +177,7 @@ export function WorkationSchedule() {
         {/* active week timeline */}
         <div key={week} className="animate-fade-up mt-8">
           <div className="relative mx-auto max-w-2xl">
-            <div
-              className="absolute left-[26px] top-4 bottom-8 w-px bg-white/20"
-              aria-hidden
-            />
+            <div className="absolute left-[26px] top-4 bottom-8 w-px bg-white/20" aria-hidden />
             {active.days.map((d) => (
               <DayRow key={d.date} d={d} />
             ))}
