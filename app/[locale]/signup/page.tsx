@@ -5,6 +5,7 @@ import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { friendlyAuthError } from "@/lib/errors/user-message";
 import { FeedbackBanner } from "@/components/feedback-banner";
+import { AuthSignupForm } from "@/components/auth-signup-form";
 
 export const metadata: Metadata = {
   title: "Sign up",
@@ -41,46 +42,7 @@ export default function SignupPage({
           </h1>
           <p className="mt-2 text-sm text-muted">{auth.signUpBody}</p>
 
-          <form action={signUp} className="mt-8 space-y-4">
-            <input type="hidden" name="locale" value={locale} />
-
-            <label className="block text-sm font-medium text-brand-ink">
-              {auth.displayName}
-              <input
-                type="text"
-                name="display_name"
-                autoComplete="name"
-                className="mt-1.5 w-full rounded-xl border border-paper-line bg-paper-cream/50 px-4 py-3 text-brand-ink outline-none ring-brand-orange transition focus:ring-2"
-              />
-            </label>
-
-            <label className="block text-sm font-medium text-brand-ink">
-              {auth.email}
-              <input
-                type="email"
-                name="email"
-                required
-                autoComplete="email"
-                className="mt-1.5 w-full rounded-xl border border-paper-line bg-paper-cream/50 px-4 py-3 text-brand-ink outline-none ring-brand-orange transition focus:ring-2"
-              />
-            </label>
-
-            <label className="block text-sm font-medium text-brand-ink">
-              {auth.password}
-              <input
-                type="password"
-                name="password"
-                required
-                minLength={6}
-                autoComplete="new-password"
-                className="mt-1.5 w-full rounded-xl border border-paper-line bg-paper-cream/50 px-4 py-3 text-brand-ink outline-none ring-brand-orange transition focus:ring-2"
-              />
-            </label>
-
-            <button type="submit" className="btn-primary w-full">
-              {auth.signUp}
-            </button>
-          </form>
+          <AuthSignupForm locale={locale} auth={auth} action={signUp} />
 
           {errorMessage ? (
             <div className="mt-3">

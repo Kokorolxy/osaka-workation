@@ -639,7 +639,13 @@ export const en = {
       signUpBody:
         "New accounts start as members. Admins are promoted separately.",
       email: "Email",
+      emailInvalid: "Enter a valid email address.",
       password: "Password",
+      confirmPassword: "Confirm password",
+      passwordRules:
+        "Password must be at least 8 characters and include an uppercase letter, a number, and a special character.",
+      passwordMismatch: "Passwords do not match.",
+      togglePassword: "Show or hide password",
       displayName: "Display name",
       signIn: "Sign in",
       signUp: "Sign up",

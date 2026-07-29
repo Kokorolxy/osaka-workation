@@ -10,6 +10,9 @@ import {
   publicAuthErrorMessage,
 } from "@/lib/auth/log";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const STRONG_PASSWORD_RE = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
 function localeFromForm(formData: FormData): string {
   const raw = String(formData.get("locale") ?? defaultLocale);
   return isLocale(raw) ? raw : defaultLocale;
@@ -69,8 +72,24 @@ export async function signIn(formData: FormData) {
 export async function signUp(formData: FormData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
+  const confirmPassword = String(formData.get("confirm_password") ?? "");
   const displayName = String(formData.get("display_name") ?? "").trim();
   const locale = localeFromForm(formData);
+
+  if (!EMAIL_RE.test(email)) {
+    redirectWithError(`/${locale}/signup`, "Please enter a valid email address.");
+  }
+
+  if (!STRONG_PASSWORD_RE.test(password)) {
+    redirectWithError(
+      `/${locale}/signup`,
+      "Password must be at least 8 characters and include an uppercase letter, a number, and a special character.",
+    );
+  }
+
+  if (password !== confirmPassword) {
+    redirectWithError(`/${locale}/signup`, "Passwords do not match.");
+  }
 
   const envError = assertSupabaseEnv();
   if (envError) {

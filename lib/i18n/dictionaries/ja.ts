@@ -641,7 +641,13 @@ export const ja: Dictionary = {
       signUpBody:
         "新規アカウントはメンバーから始まります。管理者は別途昇格します。",
       email: "メール",
+      emailInvalid: "有効なメールアドレスを入力してください。",
       password: "パスワード",
+      confirmPassword: "パスワード（確認）",
+      passwordRules:
+        "パスワードは8文字以上で、大文字1文字・数字1文字・記号1文字を含めてください。",
+      passwordMismatch: "パスワードが一致しません。",
+      togglePassword: "パスワードの表示/非表示を切り替え",
       displayName: "表示名",
       signIn: "サインイン",
       signUp: "登録する",
