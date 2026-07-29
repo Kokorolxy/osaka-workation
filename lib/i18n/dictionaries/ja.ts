@@ -504,7 +504,7 @@ export const ja: Dictionary = {
         },
         referral: {
           title: "紹介",
-          body: "メンバーの紹介コードで{pct}%オフ（1人あたり最大50回）。",
+          body: "管理者の紹介コードで{pct}%オフ。",
         },
       },
       includesHeading: "含まれるもの",
@@ -527,7 +527,7 @@ export const ja: Dictionary = {
         referralCode: "紹介コード",
         referralPlaceholder: "例: A1B2C3D4",
         referralHint:
-          "他のメンバーのアカウントにある紹介コードを入力してください（自分のコードは使えません）。",
+          "管理者のアカウントにある紹介コードを入力してください（自分のコードは使えません）。",
         phone: "電話番号",
         notes: "メモ",
       },
@@ -547,10 +547,9 @@ export const ja: Dictionary = {
         earlyBirdSoldOut: "早割チケットは売り切れです。",
         referralRequired: "紹介チケットには紹介コードの入力が必要です。",
         referralInvalid:
-          "その紹介コードは無効です。友人のアカウントにあるコードを聞いてください。",
+          "その紹介コードは無効です。管理者のアカウントにあるコードを確認してください。",
         referralOwn:
-          "自分の紹介コードは使えません。他のメンバーのコードを入力してください。",
-        referralLimit: "この紹介コードは利用上限（10回）に達しています。",
+          "自分の紹介コードは使えません。他の管理者のコードを入力してください。",
         referralLookupFailed:
           "紹介コードを確認できませんでした。もう一度お試しください。",
         submitted: "申請しました。次は管理者の審査です。",
@@ -619,9 +618,10 @@ export const ja: Dictionary = {
       displayName: "表示名",
       email: "メール",
       role: "ロール",
-      referralCode: "あなたの紹介コード",
+      referralCode: "管理者の紹介コード",
       referralHint:
-        "友人に共有すると10%オフ。最大50回。",
+        "友人に共有すると10%オフになります。",
+      referralUsesLeft: "残り利用回数: {left} / {total}（使用済み: {used}）",
       joinEvent: "イベントに参加",
       admin: "管理画面",
       signOut: "サインアウト",

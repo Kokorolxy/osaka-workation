@@ -37,7 +37,6 @@ export const WORKATION_TICKET_PRICES = {
 
 /** ─── EDIT LIMITS ───────────────────────────────────────────────────────── */
 export const EARLY_BIRD_LIMIT = 20;
-export const REFERRAL_LIMIT_PER_PERSON = 50;
 export const DISCOUNT_PERCENT = 10;
 
 export const TICKET_INCLUDES = [

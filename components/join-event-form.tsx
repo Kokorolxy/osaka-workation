@@ -188,7 +188,6 @@ export function JoinEventForm({
   const [notes, setNotes] = useState(existing?.notes ?? "");
   const [referralValidation, setReferralValidation] = useState<{
     usedCount: number;
-    remainingUses: number;
     valid: boolean;
     exists: boolean;
   } | null>(null);
@@ -204,8 +203,8 @@ export function JoinEventForm({
       const result = await checkReferralUsage(referralCode);
       setReferralValidation({
         usedCount: result.usedCount,
-        remainingUses: result.remainingUses,
         valid: result.valid,
+        exists: result.exists,
       });
     };
 
@@ -273,10 +272,6 @@ export function JoinEventForm({
       setError(j.messages.referralOwn);
       return;
     }
-    if (pricingTier === "referral" && referralValidation && referralValidation.valid && referralValidation.remainingUses === 0) {
-      setError(j.messages.referralLimit);
-      return;
-    }
     if (!phone.trim()) {
       setError("Phone number is required.");
       return;
@@ -299,7 +294,6 @@ export function JoinEventForm({
           referral_required: j.messages.referralRequired,
           referral_invalid: j.messages.referralInvalid,
           referral_own: j.messages.referralOwn,
-          referral_limit: j.messages.referralLimit,
           referral_lookup_failed: j.messages.referralLookupFailed,
           early_bird_sold_out: j.messages.earlyBirdSoldOut,
         };
@@ -612,18 +606,9 @@ export function JoinEventForm({
                           This referral code is invalid.
                         </p>
                       ) : referralValidation.valid ? (
-                        <>
-                          <span className="inline-flex text-xs font-medium text-green-700">
-                            {referralValidation.usedCount} of 10 uses
-                          </span>
-                          {referralValidation.remainingUses <= 2 && (
-                            <p className="mt-1 text-xs text-orange-600">
-                              Only {referralValidation.remainingUses} use
-                              {referralValidation.remainingUses === 1 ? "" : "s"}{" "}
-                              remaining.
-                            </p>
-                          )}
-                        </>
+                        <span className="inline-flex text-xs font-medium text-green-700">
+                          Code verified.
+                        </span>
                       ) : null}
                     </div>
                   ) : null}

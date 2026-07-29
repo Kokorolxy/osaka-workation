@@ -162,7 +162,7 @@ export const en = {
       { q: "How do I join?", a: "Follow @osaka_workation and join the waitlist below. Waitlist members get first access to dates, pricing, and spots." },
     ],
     pricing: {
-      note: "General, Early bird (first 20 tickets), or Referral (member code, max 50 uses). Same inclusions for 1 or 2 weeks. Housing, flights, weekend transport, and random pop-up events are not included.",
+      note: "General, Early bird (first 20 tickets), or Referral (member code). Same inclusions for 1 or 2 weeks. Housing, flights, weekend transport, and random pop-up events are not included.",
       mostPopular: "Most popular",
       selected: "Selected",
       select: "Select",
@@ -502,7 +502,7 @@ export const en = {
         },
         referral: {
           title: "Referral",
-          body: "{pct}% off with a member's referral code (max 50 uses each)",
+          body: "{pct}% off with an admin referral code",
         },
       },
       includesHeading: "What’s included",
@@ -525,7 +525,7 @@ export const en = {
         referralCode: "Referral code",
         referralPlaceholder: "e.g. A1B2C3D4",
         referralHint:
-          "Use another member’s code from their Account page — not your own.",
+          "Use an admin’s code from their Account page — not your own.",
         phone: "Phone",
         notes: "Notes",
       },
@@ -545,10 +545,9 @@ export const en = {
         earlyBirdSoldOut: "Early bird tickets are sold out.",
         referralRequired: "Enter a referral code for the referral ticket.",
         referralInvalid:
-          "That referral code isn’t valid. Ask a friend for their code from Account.",
+          "That referral code isn’t valid. Ask an admin for a code from their Account page.",
         referralOwn:
-          "You can’t use your own referral code. Enter another member’s code.",
-        referralLimit: "This referral code has reached its limit (10 uses).",
+          "You can’t use your own referral code. Enter another admin’s code.",
         referralLookupFailed:
           "We couldn’t verify that referral code. Please try again.",
         submitted: "Submitted — next up is admin review.",
@@ -617,9 +616,10 @@ export const en = {
       displayName: "Display name",
       email: "Email",
       role: "Role",
-      referralCode: "Your referral code",
+      referralCode: "Admin referral code",
       referralHint:
-        "Share this with friends for 10% off. Max 50 uses.",
+        "Share this with friends for 10% off.",
+      referralUsesLeft: "Uses left: {left} / {total} (used: {used})",
       joinEvent: "Join an event",
       admin: "Admin platform",
       signOut: "Sign out",

@@ -3,19 +3,26 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/auth/actions";
-import { getReferralUsageCount } from "@/lib/events/actions";
 import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { t } from "@/lib/i18n/t";
 import { L } from "@/components/locale-link";
 import { RegistrationStatusBadge } from "@/components/registration-status";
 import { PayCheckoutButton } from "@/components/pay-checkout-button";
+import type { RegistrationStatus } from "@/lib/database.types";
 import {
   journeyStepFromStatus,
   journeyStepIndex,
 } from "@/lib/join-journey";
 import { ArrowRight, LogOut, Shield } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n/dictionaries/en";
+
+const ADMIN_REFERRAL_MAX_USES = 50;
+const COUNTABLE_REFERRAL_STATUSES: RegistrationStatus[] = [
+  "pending_approval",
+  "approved",
+  "paid",
+];
 
 function localizedTicketName(
   packageKey: string,
@@ -61,7 +68,20 @@ export default async function AccountPage({
     .eq("user_id", user.id)
     .order("updated_at", { ascending: false });
 
-  const referralUsageCount = profile.role === "admin" ? await getReferralUsageCount(user.id) : 0;
+  const referralUsageCount =
+    profile.role === "admin"
+      ? ((
+          await supabase
+            .from("event_registrations")
+            .select("id", { count: "exact", head: true })
+            .eq("referrer_id", user.id)
+            .in("status", COUNTABLE_REFERRAL_STATUSES)
+        ).count ?? 0)
+      : 0;
+  const referralUsesLeft = Math.max(
+    0,
+    ADMIN_REFERRAL_MAX_USES - referralUsageCount,
+  );
 
   const { data: events } = await supabase.from("events").select("id, title");
   const eventById = new Map((events ?? []).map((e) => [e.id, e]));
@@ -112,20 +132,24 @@ export default async function AccountPage({
               </dd>
             </div>
             {profile.role === "admin" ? (
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-wide text-muted">
-                {a.referralCode}
-              </dt>
-              <dd className="mt-1.5 flex items-center gap-3">
-                <span className="font-semibold tracking-wider text-brand-ink">
-                  {profile.referral_code}
-                </span>
-                <span className="inline-flex rounded-full bg-brand-orange/10 px-2.5 py-1 text-xs font-semibold text-brand-orange">
-                  {referralUsageCount} of 50 used
-                </span>
-              </dd>
-              <p className="mt-1 text-xs text-muted">{a.referralHint}</p>
-            </div>
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-muted">
+                  {a.referralCode}
+                </dt>
+                <dd className="mt-1.5 flex items-center gap-3">
+                  <span className="font-semibold tracking-wider text-brand-ink">
+                    {profile.referral_code}
+                  </span>
+                </dd>
+                <p className="mt-1 text-xs text-muted">{a.referralHint}</p>
+                <p className="mt-1 text-xs font-semibold text-brand-ink/80">
+                  {t(a.referralUsesLeft, {
+                    left: referralUsesLeft,
+                    total: ADMIN_REFERRAL_MAX_USES,
+                    used: referralUsageCount,
+                  })}
+                </p>
+              </div>
             ) : null}
           </dl>
 

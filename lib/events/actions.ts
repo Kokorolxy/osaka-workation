@@ -6,7 +6,6 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import {
   EARLY_BIRD_LIMIT,
-  REFERRAL_LIMIT_PER_PERSON,
   getWorkationPackage,
   resolvePackageKey,
   type PricingTier,
@@ -40,17 +39,6 @@ export async function getEarlyBirdRemaining(eventId: string): Promise<number> {
     .in("status", [...COUNTABLE_STATUSES]);
 
   return Math.max(0, EARLY_BIRD_LIMIT - (count ?? 0));
-}
-
-export async function getReferralUsageCount(userId: string): Promise<number> {
-  const supabase = createAdminClient();
-  const { count } = await supabase
-    .from("event_registrations")
-    .select("id", { count: "exact", head: true })
-    .eq("referrer_id", userId)
-    .in("status", [...COUNTABLE_STATUSES]);
-
-  return count ?? 0;
 }
 
 export async function checkReferralUsage(
@@ -91,12 +79,11 @@ export async function checkReferralUsage(
     .in("status", [...COUNTABLE_STATUSES]);
 
   const used = usedCount ?? 0;
-  const remaining = Math.max(0, REFERRAL_LIMIT_PER_PERSON - used);
 
   return {
-    valid: remaining > 0,
+    valid: true,
     usedCount: used,
-    remainingUses: remaining,
+    remainingUses: Number.MAX_SAFE_INTEGER,
     exists: true,
   };
 }
@@ -195,27 +182,14 @@ export async function saveEventRegistration(
     if (!referrerIdResolved) {
       return fail(
         "referral_invalid",
-        "That referral code isn’t valid. Ask a friend for their code from Account.",
+        "That referral code isn’t valid. Ask an admin for a code from their Account page.",
       );
     }
 
     if (referrerIdResolved === user.id) {
       return fail(
         "referral_own",
-        "You can’t use your own referral code. Enter another member’s code.",
-      );
-    }
-
-    const { count: referralCount } = await supabase
-      .from("event_registrations")
-      .select("id", { count: "exact", head: true })
-      .eq("referrer_id", referrerIdResolved)
-      .in("status", [...COUNTABLE_STATUSES]);
-
-    if ((referralCount ?? 0) >= REFERRAL_LIMIT_PER_PERSON) {
-      return fail(
-        "referral_limit",
-        "This referral code has reached its limit (10 uses).",
+        "You can’t use your own referral code. Enter another admin’s code.",
       );
     }
 
