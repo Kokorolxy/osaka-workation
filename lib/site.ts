@@ -423,7 +423,7 @@ export const PRICING = WORKATION_DURATIONS.map((d, i) => ({
 }));
 
 export const PRICING_NOTE =
-  "Ticket covers the programme, coworking, and included activities (welcome & farewell parties). Accommodation and optional add-ons (day trips, USJ, etc.) are separate. EUR prices are indicative (≈ €1 = ¥186).";
+  "Ticket covers the programme, coworking, and included activities (welcome & farewell parties). Accommodation and optional add-ons (day trips, USJ, etc.) are separate. Early-bird and friend-referral pricing both save 10%.";
 
 // Set to false once final prices are confirmed. When true, prices show "Coming soon"
 // and every CTA points to the waitlist.
