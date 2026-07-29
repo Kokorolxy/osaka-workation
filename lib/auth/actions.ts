@@ -13,6 +13,11 @@ import {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const STRONG_PASSWORD_RE = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
+function isRegistrationOpen(): boolean {
+  const raw = (process.env.REGISTRATION_OPEN ?? "true").toLowerCase();
+  return raw === "1" || raw === "true" || raw === "yes" || raw === "on";
+}
+
 function localeFromForm(formData: FormData): string {
   const raw = String(formData.get("locale") ?? defaultLocale);
   return isLocale(raw) ? raw : defaultLocale;
@@ -75,6 +80,14 @@ export async function signUp(formData: FormData) {
   const confirmPassword = String(formData.get("confirm_password") ?? "");
   const displayName = String(formData.get("display_name") ?? "").trim();
   const locale = localeFromForm(formData);
+
+  if (!isRegistrationOpen()) {
+    const msg =
+      locale === "ja"
+        ? "新規登録は現在停止中です。後でもう一度お試しください。"
+        : "New registrations are currently closed. Please try again later.";
+    redirectWithError(`/${locale}/signup`, msg);
+  }
 
   if (!EMAIL_RE.test(email)) {
     redirectWithError(`/${locale}/signup`, "Please enter a valid email address.");

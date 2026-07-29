@@ -24,6 +24,10 @@ export default function SignupPage({
     : defaultLocale;
   const auth = getDictionary(locale).pages.auth;
   const errors = getDictionary(locale).ui.errors;
+  const signupOpen = ((process.env.REGISTRATION_OPEN ?? "true").toLowerCase() === "1")
+    || ((process.env.REGISTRATION_OPEN ?? "true").toLowerCase() === "true")
+    || ((process.env.REGISTRATION_OPEN ?? "true").toLowerCase() === "yes")
+    || ((process.env.REGISTRATION_OPEN ?? "true").toLowerCase() === "on");
   const errorMessage = searchParams.error
     ? friendlyAuthError(searchParams.error, errors)
     : null;
@@ -42,7 +46,13 @@ export default function SignupPage({
           </h1>
           <p className="mt-2 text-sm text-muted">{auth.signUpBody}</p>
 
-          <AuthSignupForm locale={locale} auth={auth} action={signUp} />
+          {signupOpen ? (
+            <AuthSignupForm locale={locale} auth={auth} action={signUp} />
+          ) : (
+            <div className="mt-8">
+              <FeedbackBanner variant="info">{errors.signupDisabled}</FeedbackBanner>
+            </div>
+          )}
 
           {errorMessage ? (
             <div className="mt-3">
