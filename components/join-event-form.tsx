@@ -33,7 +33,7 @@ import {
   DISCOUNT_PERCENT,
   EARLY_BIRD_LIMIT,
   WORKATION_DURATIONS,
-  formatPackagePriceJpy,
+  formatPackagePrice,
   getWorkationPackage,
   resolvePackageKey,
   type PricingTier,
@@ -326,9 +326,9 @@ export function JoinEventForm({
   }
 
   const priceLabel = selectedOption?.price_jpy
-    ? formatPackagePriceJpy(selectedOption.price_jpy)
+    ? formatPackagePrice(selectedOption.price_jpy, i18nLocale)
     : catalog
-      ? formatPackagePriceJpy(catalog.priceJpy)
+      ? formatPackagePrice(catalog.priceJpy, i18nLocale)
       : null;
 
   return (
@@ -474,11 +474,11 @@ export function JoinEventForm({
                         {j.durations[d.key]}
                       </span>
                       <p className="mt-2 text-2xl font-extrabold text-brand-orange">
-                        {formatPackagePriceJpy(d.generalPriceJpy)}
+                        {formatPackagePrice(d.generalPriceJpy, i18nLocale)}
                       </p>
                       <p className="mt-1 text-xs text-muted">
                         {t(j.durations.discountHint, {
-                          price: formatPackagePriceJpy(d.discountedPriceJpy),
+                          price: formatPackagePrice(d.discountedPriceJpy, i18nLocale),
                           pct: DISCOUNT_PERCENT,
                         })}
                       </p>
@@ -564,7 +564,7 @@ export function JoinEventForm({
                         </div>
                         {tier.price != null ? (
                           <span className="shrink-0 text-lg font-extrabold text-brand-orange">
-                            {formatPackagePriceJpy(tier.price)}
+                            {formatPackagePrice(tier.price, i18nLocale)}
                           </span>
                         ) : null}
                       </div>
@@ -813,7 +813,7 @@ export function JoinEventForm({
                   registrationId={existing.id}
                   priceLabel={
                     summaryPrice != null
-                      ? formatPackagePriceJpy(summaryPrice)
+                      ? formatPackagePrice(summaryPrice, i18nLocale)
                       : null
                   }
                 />

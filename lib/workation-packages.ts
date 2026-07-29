@@ -38,6 +38,8 @@ export const WORKATION_TICKET_PRICES = {
 /** ─── EDIT LIMITS ───────────────────────────────────────────────────────── */
 export const EARLY_BIRD_LIMIT = 20;
 export const DISCOUNT_PERCENT = 10;
+// Fixed display conversion for EN pages (edit as needed).
+export const JPY_PER_EUR = 170;
 
 export const TICKET_INCLUDES = [
   "Coworking space access",
@@ -136,6 +138,18 @@ export function resolvePackageKey(
 
 export function formatPackagePriceJpy(priceJpy: number): string {
   return `¥${priceJpy.toLocaleString("en-US")}`;
+}
+
+export function formatPackagePrice(priceJpy: number, locale: string): string {
+  if (locale === "en") {
+    const eur = Math.round(priceJpy / JPY_PER_EUR);
+    return new Intl.NumberFormat("en-IE", {
+      style: "currency",
+      currency: "EUR",
+      maximumFractionDigits: 0,
+    }).format(eur);
+  }
+  return formatPackagePriceJpy(priceJpy);
 }
 
 /** Marketing / Join duration cards */

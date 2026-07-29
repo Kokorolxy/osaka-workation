@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { Check, X } from "lucide-react";
-import { formatPackagePriceJpy, getWorkationPackage } from "@/lib/workation-packages";
+import { formatPackagePrice, getWorkationPackage } from "@/lib/workation-packages";
 import type { EventRow } from "@/lib/database.types";
 import { useI18n } from "@/components/i18n-provider";
 import { t } from "@/lib/i18n/t";
@@ -43,14 +43,14 @@ export function JoinTicketSummary({
   referralCode,
   compact = false,
 }: Props) {
-  const { dict } = useI18n();
+  const { dict, locale } = useI18n();
   const j = dict.pages.join;
   const catalog = getWorkationPackage(packageKey);
   const price =
     priceJpy != null
-      ? formatPackagePriceJpy(priceJpy)
+      ? formatPackagePrice(priceJpy, locale)
       : catalog
-        ? formatPackagePriceJpy(catalog.priceJpy)
+        ? formatPackagePrice(catalog.priceJpy, locale)
         : null;
   const label =
     ticketLabel ??

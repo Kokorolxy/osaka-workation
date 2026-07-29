@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import { Check, ArrowRight, Clock, X } from "lucide-react";
-import { PRICING, PRICING_TBD } from "@/lib/site";
+import { getPricing, PRICING_TBD } from "@/lib/site";
 import { L } from "@/components/locale-link";
 import { useI18n } from "@/components/i18n-provider";
+import { WaitlistOrJoinLink } from "@/components/waitlist-or-join-link";
 
 export function Pricing() {
-  const { dict } = useI18n();
+  const { dict, locale } = useI18n();
   const p = dict.data.pricing;
+  const pricing = getPricing(locale);
 
-  const tiers = PRICING.map((base, i) => {
+  const tiers = pricing.map((base, i) => {
     const localized = p.tiers[i];
     return {
       key: base.key,
@@ -133,9 +135,9 @@ export function Pricing() {
       {PRICING_TBD ? (
         <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-3xl border border-brand-orange/30 bg-brand-orange/10 p-6 text-center sm:flex-row sm:text-left">
           <p className="text-sm font-medium text-brand-ink">{p.tbdBanner}</p>
-          <L href="/#newsletter" className="btn-primary whitespace-nowrap">
+          <WaitlistOrJoinLink waitlistHref="/#newsletter" className="btn-primary whitespace-nowrap">
             {p.joinWaitlist} <ArrowRight className="h-4 w-4" />
-          </L>
+          </WaitlistOrJoinLink>
         </div>
       ) : (
         <>
@@ -156,9 +158,9 @@ export function Pricing() {
                 {p.buyTicket} <ArrowRight className="h-4 w-4" />
               </a>
             ) : (
-              <L href="/#newsletter" className="btn-primary whitespace-nowrap">
+              <WaitlistOrJoinLink waitlistHref="/#newsletter" className="btn-primary whitespace-nowrap">
                 {p.reserve} <ArrowRight className="h-4 w-4" />
-              </L>
+              </WaitlistOrJoinLink>
             )}
           </div>
           <p className="mx-auto mt-4 max-w-2xl text-center text-xs text-muted-soft">

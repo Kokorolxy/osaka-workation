@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowRight, Clock } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { L } from "@/components/locale-link";
+import { WaitlistOrJoinLink } from "@/components/waitlist-or-join-link";
 import { buildMetadata } from "@/lib/seo";
 import { getPosts } from "@/lib/blog";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
@@ -111,12 +112,12 @@ export default function BlogPage({
         <div className="mt-12 rounded-3xl border border-paper-line bg-paper-sand p-8 text-center">
           <p className="text-muted">
             {t.more}{" "}
-            <L
-              href="/#newsletter"
+            <WaitlistOrJoinLink
+              waitlistHref="/#newsletter"
               className="font-semibold text-brand-orange hover:text-brand-orangeHover"
             >
               {t.getNotified}
-            </L>
+            </WaitlistOrJoinLink>
             .
           </p>
         </div>

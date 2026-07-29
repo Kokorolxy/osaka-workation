@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { X, ArrowRight } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 import { L } from "@/components/locale-link";
-import { PRICING } from "@/lib/site";
+import { getPricing } from "@/lib/site";
+import { createClient } from "@/lib/supabase/client";
 
 const DISMISS_KEY = "owx_popup_dismiss";
 
@@ -38,6 +39,33 @@ export function EntryPopup() {
   const { locale } = useI18n();
   const c = locale === "ja" ? COPY.ja : COPY.en;
   const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
+  const pricing = getPricing(locale);
+
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key) return;
+
+    const supabase = createClient();
+    let mounted = true;
+
+    void supabase.auth.getUser().then(({ data }) => {
+      if (!mounted) return;
+      setSignedIn(!!data.user);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSignedIn(!!session?.user);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     let dismissed = "";
@@ -70,8 +98,8 @@ export function EntryPopup() {
     setOpen(false);
   };
 
-  const two = PRICING[0];
-  const one = PRICING[1];
+  const two = pricing[0];
+  const one = pricing[1];
 
   return (
     <div
@@ -131,7 +159,7 @@ export function EntryPopup() {
           </div>
 
           <L
-            href="/events#pricing"
+            href={signedIn ? "/join" : "/events#pricing"}
             onClick={() => setOpen(false)}
             className="btn-primary mt-6 w-full justify-center"
           >

@@ -2,8 +2,9 @@ import {
   WORKATION_DURATIONS,
   TICKET_INCLUDES,
   TICKET_EXCLUDES,
-  formatPackagePriceJpy,
+  formatPackagePrice,
 } from "@/lib/workation-packages";
+import type { Locale } from "@/lib/i18n/config";
 
 export const SITE = {
   name: "OSAKA Digital Nomads Workation",
@@ -409,18 +410,20 @@ export const FAQS = [
   },
 ];
 
-export const PRICING = WORKATION_DURATIONS.map((d, i) => ({
-  key: d.key,
-  name: d.name,
-  tagline: "Full Workation ticket",
-  price: formatPackagePriceJpy(d.generalPriceJpy),
-  earlyBird: formatPackagePriceJpy(d.discountedPriceJpy),
-  period: d.name,
-  note: `Early bird / referral ${formatPackagePriceJpy(d.discountedPriceJpy)}`,
-  checkoutUrl: "",
-  popular: i === 0,
-  features: [...TICKET_INCLUDES, ...TICKET_EXCLUDES],
-}));
+export function getPricing(locale: Locale) {
+  return WORKATION_DURATIONS.map((d, i) => ({
+    key: d.key,
+    name: d.name,
+    tagline: "Full Workation ticket",
+    price: formatPackagePrice(d.generalPriceJpy, locale),
+    earlyBird: formatPackagePrice(d.discountedPriceJpy, locale),
+    period: d.name,
+    note: `Early bird / referral ${formatPackagePrice(d.discountedPriceJpy, locale)}`,
+    checkoutUrl: "",
+    popular: i === 0,
+    features: [...TICKET_INCLUDES, ...TICKET_EXCLUDES],
+  }));
+}
 
 export const PRICING_NOTE =
   "Ticket covers the programme, coworking, and included activities (welcome & farewell parties). Accommodation and optional add-ons (day trips, USJ, etc.) are separate. Early-bird and friend-referral pricing both save 10%.";
