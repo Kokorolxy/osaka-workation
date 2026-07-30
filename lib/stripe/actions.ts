@@ -2,7 +2,10 @@
 
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect";
-import { createRegistrationCheckout } from "@/lib/stripe/checkout";
+import {
+  createAdminStripeTestCheckout,
+  createRegistrationCheckout,
+} from "@/lib/stripe/checkout";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -42,6 +45,30 @@ export async function startRegistrationCheckout(
       error: friendlyAppError(
         err,
         "We couldn’t start checkout. Please try again.",
+      ),
+    };
+  }
+}
+
+/** Server action: create an admin-only Stripe test session and redirect. */
+export async function startAdminStripeTestCheckout(
+  formData: FormData,
+): Promise<StartCheckoutResult> {
+  const locale = localeFromForm(formData);
+
+  try {
+    const result = await createAdminStripeTestCheckout(locale);
+    if (!result.ok) {
+      return result;
+    }
+    redirect(result.url);
+  } catch (err) {
+    if (isRedirectError(err)) throw err;
+    return {
+      ok: false,
+      error: friendlyAppError(
+        err,
+        "We couldn’t start Stripe test checkout. Please try again.",
       ),
     };
   }

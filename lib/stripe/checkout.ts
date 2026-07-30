@@ -148,3 +148,84 @@ export async function createRegistrationCheckout(
     };
   }
 }
+
+/**
+ * Admin-only Stripe connectivity test.
+ * Creates a standalone 1 EUR session that is not linked to any registration.
+ */
+export async function createAdminStripeTestCheckout(
+  localeRaw: string,
+): Promise<CheckoutResult> {
+  if (!isStripeConfigured()) {
+    return {
+      ok: false,
+      error:
+        "Checkout isn’t set up yet. Add STRIPE_SECRET_KEY to .env.local (Stripe test mode).",
+    };
+  }
+
+  const locale = localeFrom(localeRaw);
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, error: "You must be signed in." };
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profile?.role !== "admin") {
+    return { ok: false, error: "Only admins can run this Stripe test." };
+  }
+
+  const origin = siteOrigin();
+  const email = user.email ?? undefined;
+
+  try {
+    const stripe = getStripe();
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      customer_email: email,
+      line_items: [
+        {
+          quantity: 1,
+          price_data: {
+            currency: "eur",
+            unit_amount: 100,
+            product_data: {
+              name: "Admin Stripe test payment",
+              description: "Connectivity test only.",
+            },
+          },
+        },
+      ],
+      metadata: {
+        checkout_type: "admin_test",
+        admin_user_id: user.id,
+      },
+      success_url: `${origin}/${locale}/admin?stripe_test=success`,
+      cancel_url: `${origin}/${locale}/admin?stripe_test=cancelled`,
+    });
+
+    if (!session.url) {
+      return { ok: false, error: "Stripe did not return a checkout URL." };
+    }
+
+    return { ok: true, url: session.url };
+  } catch (err) {
+    console.error("[stripe] create admin test checkout failed", err);
+    return {
+      ok: false,
+      error: friendlyAppError(
+        err,
+        "We couldn’t start Stripe test checkout. Please try again.",
+      ),
+    };
+  }
+}

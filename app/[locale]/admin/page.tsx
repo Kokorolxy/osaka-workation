@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { L } from "@/components/locale-link";
+import { FeedbackBanner } from "@/components/feedback-banner";
+import { AdminStripeTestButton } from "@/components/admin-stripe-test-button";
 import { ArrowRight, ClipboardList, Users } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -21,7 +23,14 @@ type EventStats = {
   total: number;
 };
 
-export default async function AdminOverviewPage() {
+export default async function AdminOverviewPage({
+  params,
+  searchParams,
+}: {
+  params: { locale: string };
+  searchParams: { stripe_test?: string };
+}) {
+  const locale = params.locale;
   const supabase = createClient();
   const [{ data: profiles }, { data: registrations }, { data: events }] =
     await Promise.all([
@@ -76,6 +85,21 @@ export default async function AdminOverviewPage() {
       <p className="mt-1 text-sm text-muted">
         Snapshot of accounts and Join registrations by event.
       </p>
+
+      {searchParams.stripe_test === "success" ? (
+        <div className="mt-6">
+          <FeedbackBanner variant="success">
+            Stripe test checkout succeeded.
+          </FeedbackBanner>
+        </div>
+      ) : null}
+      {searchParams.stripe_test === "cancelled" ? (
+        <div className="mt-6">
+          <FeedbackBanner variant="info">
+            Stripe test checkout was cancelled.
+          </FeedbackBanner>
+        </div>
+      ) : null}
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {stats.map((stat) => (
@@ -201,6 +225,10 @@ export default async function AdminOverviewPage() {
           </span>
         </L>
       </div>
+
+      <section className="mt-10">
+        <AdminStripeTestButton locale={locale} />
+      </section>
     </div>
   );
 }
