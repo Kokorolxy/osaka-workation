@@ -1,0 +1,2 @@
+-- Optional local seed. Promote your first admin after signing up:
+-- update public.profiles set role = 'admin' where email = 'you@example.com';

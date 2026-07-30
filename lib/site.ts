@@ -1,3 +1,11 @@
+import {
+  WORKATION_DURATIONS,
+  TICKET_INCLUDES,
+  TICKET_EXCLUDES,
+  formatPackagePrice,
+} from "@/lib/workation-packages";
+import type { Locale } from "@/lib/i18n/config";
+
 export const SITE = {
   name: "OSAKA Digital Nomads Workation",
   shortName: "OSAKA Workation",
@@ -16,12 +24,15 @@ export const SITE = {
 };
 
 export const NAV = [
-  { label: "Home", href: "/" },
   { label: "Stays", href: "/stays" },
   { label: "Events", href: "/events" },
   { label: "Community", href: "/community" },
   { label: "Blog", href: "/blog" },
+];
+
+export const NAV_MORE = [
   { label: "About", href: "/about" },
+  { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -84,6 +95,8 @@ export const OCCUPANCY = ["Solo", "Group"] as const;
 export type Occupancy = (typeof OCCUPANCY)[number];
 
 export type Stay = {
+  /** Stable id used in event registrations */
+  key: string;
   name: string;
   area: string;
   type: StayType;
@@ -97,9 +110,40 @@ export type Stay = {
   badge?: string;
 };
 
+/** @deprecated Prefer PACKAGES_WITH_HOUSING from workation-packages — kept for older imports */
+export { PACKAGES_WITH_HOUSING as PACKAGES_WITH_STAY } from "@/lib/workation-packages";
+
+/** Same housing styles as the Stays page “Three ways to stay” section (marketing) */
+export const HOUSING_TYPES = [
+  {
+    key: "hotel",
+    name: "Hotel",
+    tagline: "Private & hassle-free",
+    body: "Your own room, daily service, and a front desk. Ideal when you want privacy and zero setup.",
+    image: "/stays/accom-hotel.jpg",
+  },
+  {
+    key: "coliving",
+    name: "Share house · Coliving",
+    tagline: "Built-in community",
+    body: "A private room in a shared house — communal lounge and kitchen, and instant friends. The easiest way to plug into the community.",
+    image: "/stays/accom-coliving.jpg",
+  },
+  {
+    key: "guesthouse",
+    name: "Guesthouse",
+    tagline: "Local & cosy",
+    body: "Homey tatami rooms with real Osaka character — affordable, authentic, and warm.",
+    image: "/stays/accom-guesthouse.jpg",
+  },
+] as const;
+
+export type HousingTypeKey = (typeof HOUSING_TYPES)[number]["key"];
+
 // PLACEHOLDER listings — swap in your real partner stays (name / area / price / image / url).
 export const STAYS: Stay[] = [
   {
+    key: "tennoji-tatami-studio",
     name: "Tennoji Tatami Studio",
     area: "Tennoji, Osaka",
     type: "Airbnb",
@@ -112,6 +156,7 @@ export const STAYS: Stay[] = [
     badge: "Best value",
   },
   {
+    key: "namba-tea-room-house",
     name: "Namba Tea-Room House",
     area: "Namba, Osaka",
     type: "Airbnb",
@@ -123,6 +168,7 @@ export const STAYS: Stay[] = [
     url: "#",
   },
   {
+    key: "nakazakicho-triple-room",
     name: "Nakazakicho Triple Room",
     area: "Nakazakicho, Osaka",
     type: "Airbnb",
@@ -135,6 +181,7 @@ export const STAYS: Stay[] = [
     badge: "Group friendly",
   },
   {
+    key: "umeda-sky-hotel-room",
     name: "Umeda Sky Hotel Room",
     area: "Umeda, Osaka",
     type: "Hotel",
@@ -147,6 +194,7 @@ export const STAYS: Stay[] = [
     badge: "Skyline view",
   },
   {
+    key: "shinsaibashi-designer-hotel",
     name: "Shinsaibashi Designer Hotel",
     area: "Shinsaibashi, Osaka",
     type: "Hotel",
@@ -159,6 +207,7 @@ export const STAYS: Stay[] = [
     badge: "Central",
   },
   {
+    key: "namba-monthly-apartment",
     name: "Namba Monthly Apartment",
     area: "Namba, Osaka",
     type: "Monthly rent",
@@ -171,6 +220,7 @@ export const STAYS: Stay[] = [
     badge: "Long-stay",
   },
   {
+    key: "tennoji-monthly-flat",
     name: "Tennoji Monthly Flat",
     area: "Tennoji, Osaka",
     type: "Monthly rent",
@@ -182,6 +232,7 @@ export const STAYS: Stay[] = [
     url: "#",
   },
   {
+    key: "osaka-nomad-share-house",
     name: "Osaka Nomad Share House",
     area: "Nakazakicho, Osaka",
     type: "Share house",
@@ -234,78 +285,72 @@ export const WORKATION = {
     "One ticket, the full Osaka life. Work your mornings, live the city your evenings — for two weeks, with a ready-made international community.",
   includes: [
     {
-      icon: "stay",
-      title: "Accommodation help",
-      body: "Curated work-ready stays in central Osaka from ¥4,500/night, booked alongside your ticket.",
-      detail:
-        "We hold a block of vetted, work-ready apartments and guesthouses across Namba, Umeda, and Tennoji. Pick your room when you book — from ¥4,500/night.",
-    },
-    {
       icon: "cowork",
       title: "Coworking access",
-      body: "Daytime desk at a partner coworking space with fast, reliable Wi-Fi.",
+      body: "Desk space with solid Wi-Fi so your mornings stay productive.",
       detail:
-        "A dedicated daytime desk at a partner coworking space — 100+ Mbps Wi-Fi, meeting rooms, phone booths, and unlimited coffee.",
+        "Daytime access to a quiet, well-connected coworking space. Bring your laptop and settle into a real Osaka work rhythm.",
     },
     {
       icon: "culture",
-      title: "Cultural experiences",
-      body: "Miso-making, calligraphy, nabe hot-pot nights, and local craft sessions.",
+      title: "Culture & community",
+      body: "Cultural experiences, community access, and a crew of fellow remote workers.",
       detail:
-        "Hands-on sessions led by locals: miso-making, calligraphy (書道), nabe hot-pot nights, board-game evenings, plus dance and yoga.",
+        "Hands-on cultural experiences plus daily community events — with two guides to help you explore.",
     },
     {
       icon: "daytrip",
-      title: "Kansai day trips",
-      body: "Guided weekend trips to Kyoto and Nara with the group.",
+      title: "Weekend city tours",
+      body: "Guided day-tour plans to nearby cities on weekends (transport not included).",
       detail:
-        "Two guided weekend trips — Kyoto's temples and Nara's deer park — with group transport and a local guide who knows the quiet spots.",
+        "Weekend day tours with a guide plan. Transportation and other expenses are not included in the ticket.",
     },
     {
       icon: "dinner",
-      title: "Opening & closing dinners",
-      body: "Welcome and farewell dinners to kick off and celebrate the two weeks.",
+      title: "Welcome & farewell parties",
+      body: "Welcome and farewell parties with meals to kick off and celebrate the workation.",
       detail:
-        "An opening welcome party on day one and a farewell dinner on the final night — the bookends that turn a group into a community.",
+        "A welcome party with meals on day one and a farewell party with meals on the final night — the bookends that turn a group into a community.",
+    },
+    {
+      icon: "locals",
+      title: "Two tour guides",
+      body: "Guides who recommend, accompany you, and help with travel expenses & cultural experiences.",
+      detail:
+        "Two tour guides support your journey with recommendations, company, travel-expense help, and cultural experiences.",
     },
     {
       icon: "community",
-      title: "Built-in community",
-      body: "A vetted crew of 50–100 nomads — engineers, designers, founders, creators.",
+      title: "Daily events included",
+      body: "1 daytime + 1 nighttime community event per day (random pop-ups not included).",
       detail:
-        "A vetted crew of 50–100 remote workers from around the world. Private Discord, daily meetups, and friendships that outlast the trip.",
+        "Every day includes one daytime and one nighttime community event. Random pop-up events around the city are not included in the ticket price.",
     },
   ],
   schedule: [
     {
       phase: "Days 1–2",
       title: "Arrival & welcome",
-      time: "Day 1 · 16:00 check-in · 19:00 welcome party",
-      body: "Check in, settle into your stay, opening dinner, and a city orientation walk to get your bearings.",
+      time: "Day 1 · welcome party with meals",
+      body: "Check in, settle in, welcome party with meals, and a city orientation walk to get your bearings.",
     },
     {
-      phase: "Week 1",
-      title: "Work & local life",
-      time: "Mon–Fri · 09:00–13:00 cowork · evenings free",
-      body: "Mornings at the coworking space, evenings of miso-making, calligraphy, and nabe nights.",
+      phase: "Weekdays",
+      title: "Work & evening events",
+      time: "Daytime coworking · evening community",
+      body: "Coworking by day, then one included nighttime community event — plus optional pop-ups around the city.",
     },
     {
-      phase: "Weekend",
-      title: "Kyoto & Nara",
-      time: "Sat–Sun · full-day guided trips",
-      body: "Guided Kansai day trips with the group — temples, deer park, and slow travel.",
-    },
-    {
-      phase: "Week 2",
-      title: "Deeper roots",
-      time: "Mon–Fri · cowork + neighborhood meetups",
-      body: "More coworking, neighborhood meetups, and time to live like an Osaka local.",
+      phase: "Weekends",
+      title: "City day tours",
+      time: "Sat–Sun · guided plans",
+      body: "Day tours to other cities with a guide plan. Transportation and extras are not included in the ticket.",
     },
     {
       phase: "Final day",
-      title: "Closing dinner",
-      time: "Final night · 19:00 farewell dinner",
-      body: "Celebrate two weeks together and trade plans for the next stop.",
+      title: "Farewell party",
+      time: "Final night · farewell party with meals",
+      body: "Celebrate together at the farewell party with meals and trade plans for the next stop.",
     },
   ],
 };
@@ -349,7 +394,7 @@ export const FAQS = [
   },
   {
     q: "What does the ticket include?",
-    a: "Accommodation, daytime coworking access, community and cultural experiences (miso-making, calligraphy, nabe nights), Kansai day trips, and the opening and closing dinners. Flights and personal expenses are not included.",
+    a: "Coworking space, a workation t-shirt, community access, welcome and farewell parties with meals, two tour guides for recommendations and cultural experiences, and one daytime plus one nighttime community event each day. Weekend city day tours are guided (plan only); transportation and other tour expenses are not included. Random pop-up events are not included. Housing and flights are not included.",
   },
   {
     q: "When exactly is the November 2026 Workation?",
@@ -365,32 +410,26 @@ export const FAQS = [
   },
 ];
 
-// Structural pricing. Text (name/tagline/note/features) comes from the dictionary,
-// merged by index in components/pricing.tsx. Keep this array in the same order.
-export const PRICING = [
-  {
-    key: "twoweek",
-    price: "€349",
-    earlyBird: "€314", // −10%
-    period: "14 days",
-    // Paste your Stripe Payment Link / Peatix / Luma URL to enable "Buy ticket".
+export function getPricing(locale: Locale) {
+  return WORKATION_DURATIONS.map((d, i) => ({
+    key: d.key,
+    name: d.name,
+    tagline: "Full Workation ticket",
+    price: formatPackagePrice(d.generalPriceJpy, locale),
+    earlyBird: formatPackagePrice(d.discountedPriceJpy, locale),
+    period: d.name,
+    note: `Early bird / referral ${formatPackagePrice(d.discountedPriceJpy, locale)}`,
     checkoutUrl: "",
-    popular: true,
-  },
-  {
-    key: "oneweek",
-    price: "€204",
-    earlyBird: "€184", // −10%
-    period: "7 days",
-    checkoutUrl: "",
-    popular: false,
-  },
-];
+    popular: i === 0,
+    features: [...TICKET_INCLUDES, ...TICKET_EXCLUDES],
+  }));
+}
 
 export const PRICING_NOTE =
   "Ticket covers the programme, coworking, and included activities (welcome & farewell parties). Accommodation and optional add-ons (day trips, USJ, etc.) are separate. Early-bird and friend-referral pricing both save 10%.";
 
-// Set to true to show "Coming soon" and route CTAs to the waitlist.
+// Set to false once final prices are confirmed. When true, prices show "Coming soon"
+// and every CTA points to the waitlist.
 export const PRICING_TBD = false;
 
 export const FOOD = [

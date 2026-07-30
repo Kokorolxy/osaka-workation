@@ -4,10 +4,12 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Globe, Check, ChevronDown } from "lucide-react";
 import { locales, localeNames, localeShort, isLocale } from "@/lib/i18n/config";
-import { useLocale } from "./i18n-provider";
+import { useLocale, useI18n } from "./i18n-provider";
+import { HEADER_CHIP } from "@/components/auth-nav";
 
 export function LanguageSwitcher() {
   const current = useLocale();
+  const { dict } = useI18n();
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -27,12 +29,12 @@ export function LanguageSwitcher() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         onBlur={() => setTimeout(() => setOpen(false), 120)}
-        className="inline-flex items-center gap-1.5 rounded-full border border-paper-line bg-white px-3 py-2 text-sm font-medium text-brand-ink transition-colors hover:border-brand-orange/40"
-        aria-label="Change language"
+        className={HEADER_CHIP}
+        aria-label={dict.ui.common.changeLanguage}
       >
-        <Globe className="h-4 w-4 text-brand-orange" />
+        <Globe className="h-3.5 w-3.5 text-brand-orange" />
         {localeShort[current]}
-        <ChevronDown className="h-3.5 w-3.5 text-muted" />
+        <ChevronDown className="h-3 w-3 text-muted" />
       </button>
 
       {open && (

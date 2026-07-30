@@ -6,13 +6,25 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:up": "docker compose --env-file docker/.env up -d --build",
+    "db:down": "docker compose --env-file docker/.env down",
+    "db:reset": "docker compose --env-file docker/.env down -v && docker compose --env-file docker/.env up -d --build",
+    "db:logs": "docker compose --env-file docker/.env logs -f",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "supabase:reset": "supabase db reset"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.3",
+    "@supabase/supabase-js": "^2.110.8",
+    "eslint": "^10.8.0",
     "lucide-react": "^0.427.0",
     "next": "^14.2.35",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "stripe": "^22.3.2"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -20,6 +32,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.40",
+    "supabase": "^2.109.1",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.5.4"
   }

@@ -1,8 +1,9 @@
 import Image from "next/image";
-import { Instagram, MessageCircle, Mail, Link2 } from "lucide-react";
+import { Instagram, Mail, Link2 } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { L } from "@/components/locale-link";
 import type { Dictionary } from "@/lib/i18n/dictionaries/en";
+import { DiscordIcon } from "@/components/discord-icon";
 
 export function SiteFooter({ dict }: { dict: Dictionary }) {
   const f = dict.footer.links;
@@ -70,7 +71,7 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
                 aria-label="Discord"
                 className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-paper-line text-muted transition-colors hover:border-brand-orange hover:text-brand-orange"
               >
-                <MessageCircle className="h-4 w-4" />
+                <DiscordIcon className="h-4 w-4" />
               </a>
               <a
                 href={`mailto:${SITE.email}`}

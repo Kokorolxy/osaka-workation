@@ -14,6 +14,7 @@ import { EventsCalendar } from "@/components/events-calendar";
 import { WorkationSchedule } from "@/components/workation-schedule";
 import { JsonLd } from "@/components/json-ld";
 import { L } from "@/components/locale-link";
+import { WaitlistOrJoinLink } from "@/components/waitlist-or-join-link";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
@@ -185,9 +186,9 @@ export default function EventsPage({
           </div>
 
           <div className="mt-10 flex flex-wrap gap-3">
-            <L href="/#newsletter" className="btn-primary">
+            <WaitlistOrJoinLink waitlistHref="/#newsletter" className="btn-primary">
               {dict.pages.home.joinWaitlist} <ArrowRight className="h-4 w-4" />
-            </L>
+            </WaitlistOrJoinLink>
             <L href="/contact#partner" className="btn-ghost">
               {t.partnerBtn}
             </L>

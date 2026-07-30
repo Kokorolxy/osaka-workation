@@ -1,69 +1,136 @@
-# OSAKA Digital Nomads Workation — Website
+# OSAKA Digital Nomads Workation
 
-Multi-page marketing site for the Osaka Workation community. Built with **Next.js 14 (App Router)** + **Tailwind CSS**. Dark theme, brand orange `#ea5504`, cream `#f7ede0`.
+Marketing site + member registration for the Osaka Workation community.
+
+**Stack:** Next.js 14 (App Router), TypeScript, Tailwind CSS, Supabase (Auth + Postgres).  
+**Locales:** `en` / `ja` under `/[locale]/…`  
+**Brand:** cream `#f7ede0`, ink `#0f0f0f`, orange `#ea5504`
 
 ## Pages
 
-| Route | Page |
-|-------|------|
-| `/` | Home — real-photo hero, Why Osaka, November Workation feature, districts, community, newsletter |
-| `/stays` | Curated stays grid + what's included |
-| `/events` | November Workation 2026 (programme, countdown, what's included) + weekly meetups |
-| `/community` | Discord stats, photo gallery, testimonials |
-| `/about` | Brand story, what we do, partner with us |
-| `/contact` | Contact form, ways to reach us, FAQ |
+| Route | Access | Purpose |
+|-------|--------|---------|
+| `/` | Public | Home |
+| `/stays` | Public | Housing styles & curated stays |
+| `/events` | Public | Workation programme (marketing) |
+| `/community`, `/blog`, `/about`, `/contact`, `/faq` | Public | Content pages |
+| `/login`, `/signup` | Public | Auth |
+| `/account` | Signed-in | Profile |
+| `/join` | Signed-in | Event registration (package + housing type) |
+| `/admin` | Admin | Overview |
+| `/admin/users` | Admin | Platform users |
+| `/admin/registrations` | Admin | Review & approve Join choices |
+
+## Registration approval flow
+
+1. Member signs up / signs in  
+2. Opens **Join** → picks event and package (coworking ± transport, or housing singular/shared ± transport)  
+3. **Save draft** or **Submit for approval** → status `pending_approval`  
+4. Admin opens **Admin → Registrations** → **Approve** or **Reject**  
+5. After **Approve**, member clicks **Pay now** → Stripe Checkout (test/live)  
+6. Webhook marks registration `paid` (or admin **Mark paid** as local fallback)
+
+Statuses: `draft` → `pending_approval` → `approved` → `paid` (or `cancelled`).
+
+## Stripe checkout (local)
+
+1. Create a [Stripe](https://dashboard.stripe.com) account and turn **Test mode** on  
+2. Copy the **Secret key** (`sk_test_…`) into `.env.local` as `STRIPE_SECRET_KEY`  
+3. Install the [Stripe CLI](https://stripe.com/docs/stripe-cli) and run:
+
+```bash
+stripe login
+stripe listen --forward-to localhost:3000/api/stripe/webhook
+```
+
+4. Paste the CLI webhook signing secret (`whsec_…`) into `.env.local` as `STRIPE_WEBHOOK_SECRET`  
+5. Restart `npm run dev`  
+6. Flow: Join → submit → Admin Approve → **Pay now** → card `4242 4242 4242 4242`  
+7. Status should become **Paid** via the webhook  
+
+If the webhook isn’t running, admins can use **Mark paid** on Admin → Registrations.
+
+Amounts come from `event_options.price_jpy` (JPY, no decimals). No Payment Link setup required for local.
+
+Ticket catalog (1w/2w × general / early bird / referral) lives in `lib/workation-packages.ts` — sync DB via migration `20260727120000_ticket_pricing_referrals.sql`.
+
+Apply migrations after pulling:
+
+```bash
+npm run db:up
+# or wipe + remigrate: npm run db:reset
+```
 
 ## Run locally
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
+cp .env.example .env.local   # local Docker keys already filled in
+
+npm run db:up                # Supabase stack (Docker)
+npm run dev                  # http://localhost:3000
 ```
 
-## Build
+| Service | URL |
+|---------|-----|
+| App | http://localhost:3000 |
+| Supabase API (Kong) | http://127.0.0.1:54321 |
+| Studio | http://127.0.0.1:54323 |
+| Mail (Inbucket) | http://127.0.0.1:54324 |
+| Postgres | localhost:54322 |
+
+```bash
+npm run db:down     # stop
+npm run db:reset    # wipe DB volume + remigrate (destructive)
+npm run db:logs     # follow logs
+```
+
+Promote your first admin after signup (Studio SQL or `psql`):
+
+```sql
+update public.profiles set role = 'admin' where email = 'you@example.com';
+```
+
+## Hosted Supabase (dev/prod)
+
+1. Create a Supabase project  
+2. Apply migrations from `supabase/migrations/` (SQL editor or `npx supabase db push` after linking)  
+3. Set `.env.local` / Vercel env:
+
+| Variable | Source |
+|----------|--------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon public key |
+| `SUPABASE_SERVICE_ROLE_KEY` | service_role (server only) |
+| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` or your deploy URL |
+| `STRIPE_SECRET_KEY` | Stripe secret (`sk_test_…` locally) |
+| `STRIPE_WEBHOOK_SECRET` | From Stripe CLI or Dashboard webhook |
+
+4. Auth → URL config: Site URL + redirect URLs  
+   `…/en/auth/callback`, `…/ja/auth/callback`
+
+You do **not** need Docker/Kong for hosted — only for local.
+
+## Build / deploy
 
 ```bash
 npm run build
 npm start
 ```
 
-## Deploy to Vercel
-
-1. Push this folder to a GitHub repo.
-2. On vercel.com → **New Project** → import the repo. Framework auto-detects as Next.js.
-3. Click **Deploy**. Done — no env vars needed.
-
-(Or run `npx vercel` from this folder for a direct CLI deploy.)
+Vercel: import the repo, set the env vars above, deploy.
 
 ## Look & feel
 
-Light, warm theme — cream `#f7ede0` / white `#ffffff` backgrounds, near-black `#0f0f0f` text, orange `#ea5504` accent. No emoji: all feature icons are `lucide-react` rendered in brand orange (`components/feature-icon.tsx`). Every photo on the site is used exactly once (no duplicates).
+Cream / white backgrounds, near-black text, orange accent. Icons: `lucide-react` only. Shared copy lives in `lib/site.ts` and `lib/i18n/dictionaries/`.
 
 ## Assets
 
-- `public/logo/` — brand logos (orange wordmark + A-tower mark).
-- `public/img/` — Osaka city, food, coworking & day-trip photos (hero, districts, about, contact, events).
-- `public/stays/` — real guesthouse (民宿) interiors for the Stays page.
-- `public/events/` — 6 real community event photos used on the Community page.
+- `public/logo/` — brand marks  
+- `public/img/` — city, food, coworking  
+- `public/stays/` — stay / housing imagery  
+- `public/events/` — community event photos  
 
-## Email capture → Notion (setup)
+## Agent / architecture notes
 
-Newsletter and contact forms POST to `/api/subscribe`, which writes a row into a Notion database. Until you set the two env vars below, forms still work (users see a thank-you) but nothing is stored. To turn capture on:
-
-1. Create a Notion **internal integration** at notion.so/my-integrations → copy the secret (`ntn_…`).
-2. Create a Notion **database** with these properties (names are case-sensitive): `Name` (Title), `Email` (Email), `Source` (Text), `Message` (Text). Copy its **database ID** (the 32-char string in the database URL).
-3. In the database, click `•••` → **Connections** → add your integration so it can write.
-4. In **Vercel → Project → Settings → Environment Variables**, add:
-   - `NOTION_TOKEN` = your integration secret
-   - `NOTION_DB_ID` = your database ID
-5. Redeploy. New signups now appear as rows in your Notion database.
-
-## Things to wire up later
-
-These are stubbed and clearly marked in the code:
-- **Newsletter signup** (`components/newsletter.tsx`) — connect to Mailchimp / Notion / Google Form.
-- **Contact form** (`components/contact-form.tsx`) — connect to your email / form provider.
-- **Stays "View" buttons** — link to real listings when ready.
-- **Discord link** (`lib/site.ts` → `SITE.discord`) — replace with your real invite URL.
-
-Instagram (`@osaka_workation`) and email (`osakaworkation@gmail.com`) are already wired in `lib/site.ts`, where all shared copy lives for easy editing.
+See **`AGENTS.md`** for coding conventions, folder layout, auth rules, and env details.

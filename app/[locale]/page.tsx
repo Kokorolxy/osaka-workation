@@ -8,6 +8,7 @@ import { Newsletter } from "@/components/newsletter";
 import { HeroHighlights } from "@/components/hero-highlights";
 import { FoodCard } from "@/components/food-card";
 import { L } from "@/components/locale-link";
+import { WaitlistOrJoinLink } from "@/components/waitlist-or-join-link";
 import { SITE } from "@/lib/site";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -122,9 +123,9 @@ export default function HomePage({ params }: { params: { locale: string } }) {
               <L href="/events#workation" className="btn-primary">
                 {t.seeProgramme} <ArrowRight className="h-4 w-4" />
               </L>
-              <L href="/#newsletter" className="btn-ghost">
+              <WaitlistOrJoinLink waitlistHref="/#newsletter" className="btn-ghost">
                 {t.joinWaitlist}
-              </L>
+              </WaitlistOrJoinLink>
             </div>
 
             <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-brand-ink/80">

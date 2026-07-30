@@ -1,0 +1,14 @@
+---
+description: Supabase auth, clients, RLS, and role patterns
+globs: lib/supabase/**/*,lib/auth/**/*,supabase/**/*,app/**/login/**/*,app/**/signup/**/*,app/**/account/**/*,app/**/admin/**/*,app/**/auth/**/*,middleware.ts
+alwaysApply: false
+---
+
+# Supabase & auth
+
+- Clients: `lib/supabase/client.ts` (browser), `server.ts` (RSC/actions), `middleware.ts` (session refresh), `admin.ts` (service role only)
+- Roles live on `public.profiles.role`: `user` | `admin`. Default `user` via signup trigger
+- Protect routes in middleware + page-level checks; RLS is the real security boundary
+- Users must not update `role`; admins promote via SQL or service-role tooling
+- New tables: migration + RLS policies in the same PR
+- Env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`; never ship the service role key
