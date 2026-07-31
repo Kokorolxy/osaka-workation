@@ -5,7 +5,7 @@ import { X, ArrowRight } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 import { L } from "@/components/locale-link";
 import { getPricing } from "@/lib/site";
-import { createClient } from "@/lib/supabase/client";
+import { useAuthState } from "@/components/auth-state-provider";
 
 const DISMISS_KEY = "owx_popup_dismiss";
 
@@ -39,33 +39,8 @@ export function EntryPopup() {
   const { locale } = useI18n();
   const c = locale === "ja" ? COPY.ja : COPY.en;
   const [open, setOpen] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
+  const { signedIn } = useAuthState();
   const pricing = getPricing(locale);
-
-  useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) return;
-
-    const supabase = createClient();
-    let mounted = true;
-
-    void supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      setSignedIn(!!data.user);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSignedIn(!!session?.user);
-    });
-
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, []);
 
   useEffect(() => {
     let dismissed = "";
