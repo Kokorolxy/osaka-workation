@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { type ReactNode } from "react";
 import { L } from "@/components/locale-link";
 import { useI18n } from "@/components/i18n-provider";
+import { useAuthState } from "@/components/auth-state-provider";
 
 type WaitlistOrJoinLinkProps = {
   waitlistHref: string;
@@ -21,32 +21,7 @@ export function WaitlistOrJoinLink({
   children,
 }: WaitlistOrJoinLinkProps) {
   const { locale } = useI18n();
-  const [signedIn, setSignedIn] = useState(false);
-
-  useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) return;
-
-    const supabase = createClient();
-    let mounted = true;
-
-    void supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      setSignedIn(!!data.user);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSignedIn(!!session?.user);
-    });
-
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, []);
+  const { signedIn } = useAuthState();
 
   return (
     <L

@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ClipboardList } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { useI18n } from "@/components/i18n-provider";
-import { createClient } from "@/lib/supabase/client";
+import { useAuthState } from "@/components/auth-state-provider";
 
 declare global {
   interface Window {
@@ -15,33 +15,8 @@ declare global {
 
 export function TallyFab() {
   const { dict, locale } = useI18n();
-  const [signedIn, setSignedIn] = useState(false);
+  const { signedIn } = useAuthState();
   const router = useRouter();
-
-  useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) return;
-
-    const supabase = createClient();
-    let mounted = true;
-
-    void supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      setSignedIn(!!data.user);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSignedIn(!!session?.user);
-    });
-
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, []);
 
   function open() {
     if (signedIn) {

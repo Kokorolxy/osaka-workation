@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { Sparkles } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import { L } from "@/components/locale-link";
 import { useI18n } from "@/components/i18n-provider";
+import { useAuthState } from "@/components/auth-state-provider";
 
 /**
  * Charismatic Join CTA for the main header.
@@ -13,42 +11,7 @@ import { useI18n } from "@/components/i18n-provider";
  */
 export function JoinEventCta({ className }: { className?: string }) {
   const { locale, dict } = useI18n();
-  const pathname = usePathname();
-  const [signedIn, setSignedIn] = useState(false);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) {
-      setReady(true);
-      return;
-    }
-
-    const supabase = createClient();
-    let mounted = true;
-
-    const sync = () => {
-      void supabase.auth.getUser().then(({ data }) => {
-        if (!mounted) return;
-        setSignedIn(!!data.user);
-        setReady(true);
-      });
-    };
-
-    sync();
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSignedIn(!!session?.user);
-      setReady(true);
-    });
-
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, [pathname]);
+  const { signedIn, ready } = useAuthState();
 
   const base =
     className ??

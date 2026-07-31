@@ -7,6 +7,7 @@ import { TallyFab } from "@/components/tally-fab";
 import { EntryPopup } from "@/components/entry-popup";
 import { JsonLd } from "@/components/json-ld";
 import { I18nProvider } from "@/components/i18n-provider";
+import { AuthStateProvider } from "@/components/auth-state-provider";
 import { SITE } from "@/lib/site";
 import {
   locales,
@@ -89,26 +90,28 @@ export default function LocaleLayout({
       </head>
       <body className="min-h-screen bg-paper-cream font-sans text-brand-ink">
         <I18nProvider locale={locale} dict={dict}>
-          <JsonLd
-            data={{
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: SITE.name,
-              alternateName: SITE.shortName,
-              url: "https://osakaworkation.com",
-              logo: "https://osakaworkation.com/icon.png",
-              description:
-                "Osaka's first international digital nomad community — stays, meetups, and the 14-day November Workation.",
-              email: SITE.email,
-              areaServed: "Osaka, Japan",
-              sameAs: [SITE.instagram, SITE.linktree],
-            }}
-          />
-          <SiteHeader />
-          <main>{children}</main>
-          <SiteFooter dict={dict} />
-          <TallyFab />
-          <EntryPopup />
+          <AuthStateProvider>
+            <JsonLd
+              data={{
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: SITE.name,
+                alternateName: SITE.shortName,
+                url: "https://osakaworkation.com",
+                logo: "https://osakaworkation.com/icon.png",
+                description:
+                  "Osaka's first international digital nomad community — stays, meetups, and the 14-day November Workation.",
+                email: SITE.email,
+                areaServed: "Osaka, Japan",
+                sameAs: [SITE.instagram, SITE.linktree],
+              }}
+            />
+            <SiteHeader />
+            <main>{children}</main>
+            <SiteFooter dict={dict} />
+            <TallyFab />
+            <EntryPopup />
+          </AuthStateProvider>
         </I18nProvider>
         <Script
           src="https://tally.so/widgets/embed.js"
