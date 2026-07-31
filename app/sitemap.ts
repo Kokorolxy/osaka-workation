@@ -19,8 +19,10 @@ function entry(path: string, changeFrequency: "weekly" | "monthly", priority: nu
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const paths = ["", "/stays", "/events", "/community", "/blog", "/about", "/contact"];
+  const paths = ["", "/events", "/community", "/blog", "/about", "/contact"];
   const routes = paths.flatMap((p) => entry(p, "weekly", p === "" ? 1 : 0.8));
-  const posts = POSTS.flatMap((p) => entry(`/blog/${p.slug}`, "monthly", 0.6));
+  const posts = POSTS.filter((p) => !p.hidden).flatMap((p) =>
+    entry(`/blog/${p.slug}`, "monthly", 0.6),
+  );
   return [...routes, ...posts];
 }

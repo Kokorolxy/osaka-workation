@@ -140,50 +140,6 @@ export default function HomePage({ params }: { params: { locale: string } }) {
         </div>
       </section>
 
-      {/* ---------- DISTRICTS ---------- */}
-      <section className="container-page py-20 sm:py-24">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <SectionHeading
-            eyebrow={t.districtsEyebrow}
-            title={t.districtsTitle}
-            body={t.districtsBody}
-          />
-          <L
-            href="/stays"
-            className="hidden items-center gap-1 text-sm font-semibold text-brand-orange hover:text-brand-orangeHover sm:inline-flex"
-          >
-            {dict.ui.common.browseAllStays} <ArrowRight className="h-4 w-4" />
-          </L>
-        </div>
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {dict.data.districts.map((d) => (
-            <L
-              key={d.name}
-              href="/stays"
-              className="group relative overflow-hidden rounded-3xl border border-paper-line"
-            >
-              <div className="relative aspect-[4/5]">
-                <Image
-                  src={d.image}
-                  alt={d.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-ink/85 via-brand-ink/25 to-transparent" />
-              </div>
-              <div className="absolute inset-x-0 bottom-0 p-6">
-                <div className="text-sm font-semibold text-brand-orange">
-                  {d.kanji}
-                </div>
-                <h3 className="mt-1 text-2xl font-bold text-white">{d.name}</h3>
-                <p className="mt-2 text-sm text-white/85">{d.body}</p>
-              </div>
-            </L>
-          ))}
-        </div>
-      </section>
-
       {/* ---------- TASTE OF OSAKA ---------- */}
       <section className="border-y border-paper-line bg-paper-sand">
         <div className="container-page py-20 sm:py-24">

@@ -16,6 +16,7 @@ export type Post = {
   readingTime: string;
   tags: string[];
   body: Block[];
+  hidden?: boolean; // keep data but delist + 404 the post
 };
 
 export const POSTS: Post[] = [
@@ -155,6 +156,7 @@ export const POSTS: Post[] = [
   },
   {
     slug: "coworking-spaces-osaka-guide",
+    hidden: true,
     title: "Coworking Spaces in Osaka: A Digital Nomad's Guide",
     excerpt:
       "Day passes, monthly plans, and call booths — the Osaka coworking spaces worth your yen, grouped by how you actually work. With rough 2026 prices to plan around.",
@@ -399,7 +401,7 @@ import { POSTS_JA } from "./blog.ja";
 const BY_LOCALE: Record<Locale, Post[]> = { en: POSTS, ja: POSTS_JA };
 
 export function getPosts(locale: Locale): Post[] {
-  return BY_LOCALE[locale] ?? POSTS;
+  return (BY_LOCALE[locale] ?? POSTS).filter((p) => !p.hidden);
 }
 
 export function getPost(locale: Locale, slug: string) {

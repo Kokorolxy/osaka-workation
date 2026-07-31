@@ -84,6 +84,7 @@ export const POSTS_JA: Post[] = [
   },
   {
     slug: "coworking-spaces-osaka-guide",
+    hidden: true,
     title: "大阪のコワーキングスペース:デジタルノマド向けガイド",
     excerpt:
       "ドロップイン、月額、電話ブース——使い方別に選ぶ、お金を払う価値のある大阪のコワーキング。プランの目安になる2026年のおおよその価格付きで。",

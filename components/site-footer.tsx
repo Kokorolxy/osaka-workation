@@ -12,7 +12,6 @@ export function SiteFooter({ dict }: { dict: Dictionary }) {
     {
       title: dict.footer.colExplore,
       links: [
-        { label: f.stays, href: "/stays" },
         { label: f.events, href: "/events" },
         { label: f.community, href: "/community" },
         { label: f.blog, href: "/blog" },
