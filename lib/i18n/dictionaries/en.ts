@@ -177,8 +177,9 @@ export const en = {
       waitlistPrompt: "Join the waitlist to lock in your spot.",
       perPerson: "per person",
       tiers: [
-        { name: "2-Week Workation", tagline: "Nov 1–14 · the full experience", note: "Early bird · save 10% (limited)", features: ["Full 14-day programme (Nov 1–14)", "Coworking access every weekday", "Welcome & farewell parties", "Kyoto day trip + waterfall & fireworks", "All base evening activities"] },
-        { name: "1-Week Workation", tagline: "Nov 8–14 · the second week", note: "Early bird · save 10% (limited)", features: ["7-day programme (Nov 8–14)", "Coworking access every weekday", "Farewell party", "Waterfall & fireworks night", "Cultural workshops & community dinners"] },
+          { name: "2-Week Workation", tagline: "Full workation ticket", note: "Early bird · save 10% (limited)" },
+          { name: "Nov 1–7 Workation", tagline: "1 week workation experience", note: "Early bird · save 10% (limited)" },
+          { name: "Nov 8–14 Workation", tagline: "1 week workation experience", note: "Early bird · save 10% (limited)" },
       ],
     },
     stays: {
