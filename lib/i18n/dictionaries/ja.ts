@@ -468,8 +468,9 @@ export const ja: Dictionary = {
       progressAria: "参加の進捗",
       emptyEvents: "現在オープン中のイベントはありません",
       durations: {
-        week1: "1週間",
         week2: "2週間",
+        week1: "11/1〜7（1週目）",
+        week2_single: "11/8〜14（2週目）",
         discountHint: "早割／紹介 {price}（{pct}%オフ）",
       },
       sections: {
@@ -479,7 +480,7 @@ export const ja: Dictionary = {
         },
         duration: {
           title: "期間",
-          description: "内容は同じです。1週間か2週間かを選んでください。",
+          description: "2週間、11/1〜7（1週目）、11/8〜14（2週目）から選んでください。",
         },
         ticket: {
           title: "チケット種別",

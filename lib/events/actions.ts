@@ -35,7 +35,11 @@ export async function getEarlyBirdRemaining(eventId: string): Promise<number> {
     .from("event_registrations")
     .select("id", { count: "exact", head: true })
     .eq("event_id", eventId)
-    .in("package_key", ["week1_early_bird", "week2_early_bird"])
+    .in("package_key", [
+      "week1_early_bird",
+      "week2_early_bird",
+      "week2_single_early_bird",
+    ])
     .in("status", [...COUNTABLE_STATUSES]);
 
   return Math.max(0, EARLY_BIRD_LIMIT - (count ?? 0));
@@ -106,7 +110,10 @@ export async function saveEventRegistration(
   const status: RegistrationStatus =
     statusRaw === "pending_approval" ? "pending_approval" : "draft";
 
-  if (!eventId || (duration !== "week1" && duration !== "week2")) {
+  if (
+    !eventId ||
+    (duration !== "week1" && duration !== "week2" && duration !== "week2_single")
+  ) {
     return { ok: false, error: "Please choose an event and duration." };
   }
   if (
@@ -146,7 +153,8 @@ export async function saveEventRegistration(
       .maybeSingle();
     const alreadyEarly =
       existingOwn?.package_key === "week1_early_bird" ||
-      existingOwn?.package_key === "week2_early_bird";
+      existingOwn?.package_key === "week2_early_bird" ||
+      existingOwn?.package_key === "week2_single_early_bird";
     if (remaining <= 0 && !alreadyEarly) {
       return {
         ok: false,

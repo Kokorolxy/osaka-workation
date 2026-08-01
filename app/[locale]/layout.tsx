@@ -3,7 +3,6 @@ import Script from "next/script";
 import "@/app/globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { TallyFab } from "@/components/tally-fab";
 import { EntryPopup } from "@/components/entry-popup";
 import { JsonLd } from "@/components/json-ld";
 import { I18nProvider } from "@/components/i18n-provider";
@@ -107,7 +106,6 @@ export default function LocaleLayout({
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter dict={dict} />
-          <TallyFab />
           <EntryPopup />
         </I18nProvider>
         <Script

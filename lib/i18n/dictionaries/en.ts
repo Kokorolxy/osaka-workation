@@ -466,8 +466,9 @@ export const en = {
       progressAria: "Join progress",
       emptyEvents: "No events open yet",
       durations: {
-        week1: "1 week",
         week2: "2 weeks",
+        week1: "Nov 1-7 (Week 1)",
+        week2_single: "Nov 8-14 (Week 2)",
         discountHint: "Early bird / referral {price} ({pct}% off)",
       },
       sections: {
@@ -477,7 +478,7 @@ export const en = {
         },
         duration: {
           title: "Duration",
-          description: "Same experience — choose 1 week or 2 weeks.",
+          description: "Choose 2 weeks, Nov 1-7 (Week 1), or Nov 8-14 (Week 2).",
         },
         ticket: {
           title: "Ticket type",

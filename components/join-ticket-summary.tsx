@@ -19,11 +19,15 @@ type Props = {
 
 function localizedPackageLabel(
   packageKey: string,
-  durations: { week1: string; week2: string },
+  durations: { week1: string; week2: string; week2_single: string },
   tiers: { general: string; earlyBird: string; referral: string },
 ): string {
-  const duration = packageKey.startsWith("week1_") ? "week1" : "week2";
-  const tierKey = packageKey.replace(/^week[12]_/, "");
+  const duration = packageKey.startsWith("week2_single_")
+    ? "week2_single"
+    : packageKey.startsWith("week1_")
+      ? "week1"
+      : "week2";
+  const tierKey = packageKey.replace(/^week2_single_/, "").replace(/^week[12]_/, "");
   const tier =
     tierKey === "early_bird"
       ? tiers.earlyBird
