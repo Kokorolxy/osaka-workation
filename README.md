@@ -109,7 +109,7 @@ update public.profiles set role = 'admin' where email = 'you@example.com';
 4. Auth → URL config: Site URL + redirect URLs  
    `…/en/auth/callback`, `…/ja/auth/callback`
 
-You do **not** need Docker/Kong for hosted — only for local.
+You do **not** need Docker/Kong for hosted — only for local. 
 
 ## Build / deploy
 
