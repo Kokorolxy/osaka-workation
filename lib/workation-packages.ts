@@ -5,7 +5,7 @@
  * Stripe Checkout reads amounts from `event_options`.
  */
 
-export type TicketDuration = "week1" | "week2";
+export type TicketDuration = "week1" | "week2" | "week2_single";
 export type PricingTier = "general" | "early_bird" | "referral";
 
 export type WorkationPackage = {
@@ -30,6 +30,10 @@ export const WORKATION_TICKET_PRICES = {
     discounted: 58_500,
   },
   week1: {
+    general: 38_500,
+    discounted: 34_650,
+  },
+  week2_single: {
     general: 38_500,
     discounted: 34_650,
   },
@@ -71,7 +75,9 @@ function packageKey(duration: TicketDuration, tier: PricingTier): string {
 }
 
 function durationLabel(duration: TicketDuration): string {
-  return duration === "week1" ? "1 week" : "2 weeks";
+  if (duration === "week2") return "2 weeks";
+  if (duration === "week1") return "Nov 1-7 (Week 1)";
+  return "Nov 8-14 (Week 2)";
 }
 
 function tierLabel(tier: PricingTier): string {
@@ -121,6 +127,9 @@ export const WORKATION_PACKAGES: WorkationPackage[] = [
   buildPackage("week1", "general", 4),
   buildPackage("week1", "early_bird", 5),
   buildPackage("week1", "referral", 6),
+  buildPackage("week2_single", "general", 7),
+  buildPackage("week2_single", "early_bird", 8),
+  buildPackage("week2_single", "referral", 9),
 ];
 
 export type WorkationPackageKey = (typeof WORKATION_PACKAGES)[number]["key"];
@@ -167,9 +176,15 @@ export const WORKATION_DURATIONS: {
   },
   {
     key: "week1",
-    name: "1 week",
+    name: "Nov 1-7 (Week 1)",
     generalPriceJpy: WORKATION_TICKET_PRICES.week1.general,
     discountedPriceJpy: WORKATION_TICKET_PRICES.week1.discounted,
+  },
+  {
+    key: "week2_single",
+    name: "Nov 8-14 (Week 2)",
+    generalPriceJpy: WORKATION_TICKET_PRICES.week2_single.general,
+    discountedPriceJpy: WORKATION_TICKET_PRICES.week2_single.discounted,
   },
 ];
 

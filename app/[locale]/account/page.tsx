@@ -28,8 +28,12 @@ function localizedTicketName(
   packageKey: string,
   join: Dictionary["pages"]["join"],
 ): string {
-  const duration = packageKey.startsWith("week1_") ? "week1" : "week2";
-  const tierKey = packageKey.replace(/^week[12]_/, "");
+  const duration = packageKey.startsWith("week2_single_")
+    ? "week2_single"
+    : packageKey.startsWith("week1_")
+      ? "week1"
+      : "week2";
+  const tierKey = packageKey.replace(/^week2_single_/, "").replace(/^week[12]_/, "");
   const tier =
     tierKey === "early_bird"
       ? join.tiers.earlyBird.title

@@ -85,6 +85,10 @@ function parseExisting(packageKey: string | undefined): {
   duration: TicketDuration;
   tier: PricingTier;
 } {
+  if (packageKey?.startsWith("week2_single_")) {
+    const tier = packageKey.replace("week2_single_", "") as PricingTier;
+    return { duration: "week2_single", tier };
+  }
   if (packageKey?.startsWith("week1_")) {
     const tier = packageKey.replace("week1_", "") as PricingTier;
     return { duration: "week1", tier };
