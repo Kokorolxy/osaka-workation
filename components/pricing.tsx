@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ArrowRight, Clock, X } from "lucide-react";
+import { Check, ArrowRight, Clock } from "lucide-react";
 import { getPricing, PRICING_TBD } from "@/lib/site";
 import { L } from "@/components/locale-link";
 import { useI18n } from "@/components/i18n-provider";
@@ -95,17 +95,10 @@ export function Pricing() {
 
               <ul className="mt-5 space-y-2.5 text-sm text-brand-ink/80">
                 {tier.features.map((f) => {
-                  const excluded = /not included|含みません/i.test(f);
                   return (
                     <li key={f} className="flex items-start gap-2">
-                      {excluded ? (
-                        <X className="mt-0.5 h-4 w-4 shrink-0 text-[#8b3a32]" />
-                      ) : (
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
-                      )}
-                      <span className={excluded ? "text-muted" : undefined}>
-                        {f}
-                      </span>
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
+                      <span>{f}</span>
                     </li>
                   );
                 })}

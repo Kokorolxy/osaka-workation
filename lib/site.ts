@@ -421,7 +421,7 @@ export function getPricing(locale: Locale) {
     note: `Early bird / referral ${formatPackagePrice(d.discountedPriceJpy, locale)}`,
     checkoutUrl: "",
     popular: i === 0,
-    features: [...TICKET_INCLUDES, ...TICKET_EXCLUDES],
+    features: [...TICKET_INCLUDES],
   }));
 }
 
