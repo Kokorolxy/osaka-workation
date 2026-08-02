@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Instagram, MessageCircle, Mail, Link2 } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/ui";
-import { TallyEmbed } from "@/components/tally-embed";
 import { buildMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
@@ -85,34 +84,6 @@ export default function ContactPage({
                 {t.partnerBody}
               </p>
             </div>
-          </div>
-
-          <div className="rounded-[2rem] border border-brand-orange/20 bg-gradient-to-b from-brand-orange/10 via-white to-white p-4 shadow-[0_28px_80px_-48px_rgba(15,15,15,0.45)] sm:p-5">
-            <div className="mb-4 rounded-[1.5rem] border border-white/70 bg-white/90 px-5 py-5 backdrop-blur">
-              <span className="eyebrow">{t.reachEyebrow}</span>
-              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-brand-ink sm:text-3xl">
-                {t.formCardTitle}
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-                {t.formCardBody}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {t.formCardMeta.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-brand-orange/15 bg-brand-orange/8 px-3 py-1.5 text-xs font-semibold text-brand-ink"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <TallyEmbed
-              id={SITE.tallyId}
-              title={dict.actions.joinWaitlist}
-              minHeight={1180}
-              cropTop={320}
-            />
           </div>
         </div>
       </section>
