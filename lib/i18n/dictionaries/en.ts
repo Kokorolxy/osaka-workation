@@ -236,7 +236,7 @@ export const en = {
       meetCommunity: "Meet the community",
       wifiNote: "Average 100+ Mbps in Osaka cafes & coworking",
       newsletterEyebrow: "Stay in the loop",
-      newsletterTitle: "Get the waitlist before anyone else",
+      newsletterTitle: "Join the Workation now!",
       newsletterBody: "New stays, upcoming events, and first access to the November Workation. No spam — just Osaka.",
       newsletterCount: "Join 200+ nomads already signed up.",
     },

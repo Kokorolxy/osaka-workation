@@ -238,7 +238,7 @@ export const ja: Dictionary = {
       meetCommunity: "コミュニティを見る",
       wifiNote: "大阪のカフェ・コワーキングは平均100Mbps超",
       newsletterEyebrow: "最新情報を受け取る",
-      newsletterTitle: "誰よりも早くウェイトリストへ",
+      newsletterTitle: "今すぐワーケーションに参加!",
       newsletterBody: "新しい宿、これからのイベント、そして11月ワーケーションの先行案内。スパムなし、大阪の情報だけ。",
       newsletterCount: "すでに200名以上のノマドが登録済み。",
     },
