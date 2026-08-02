@@ -65,7 +65,7 @@ export const ja: Dictionary = {
     countdown: { days: "日", hours: "時間", mins: "分", secs: "秒" },
     newsletter: {
       placeholder: "you@email.com",
-      join: "ウェイトリストに登録",
+      join: "ワーケーションに参加",
       joining: "登録中…",
       thanks: "登録ありがとうございます。近日中にご連絡します。",
     },

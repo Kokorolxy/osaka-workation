@@ -63,7 +63,7 @@ export const en = {
     countdown: { days: "Days", hours: "Hours", mins: "Min", secs: "Sec" },
     newsletter: {
       placeholder: "you@email.com",
-      join: "Join the waitlist",
+      join: "Join the workation",
       joining: "Joining…",
       thanks: "You're on the list — we'll be in touch soon.",
     },
