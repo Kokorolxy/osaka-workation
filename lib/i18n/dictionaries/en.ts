@@ -159,7 +159,7 @@ export const en = {
       { q: "What does the ticket include?", a: "Coworking space, a workation t-shirt, community access, welcome and farewell parties with meals, two tour guides for recommendations and cultural experiences, and one daytime plus one nighttime community event each day. Weekend city day tours are guided (plan only); transportation and other tour expenses are not included. Random pop-up events are not included. Housing and flights are not included." },
       { q: "When exactly is the November 2026 Workation?", a: "It runs for 14 days across the first two weeks of November 2026. Exact dates are confirmed to participants on the waitlist first." },
       { q: "Do I need to speak Japanese?", a: "Not at all. The community runs in English, and our local team helps you navigate everything from SIM cards to the best okonomiyaki." },
-      { q: "How do I join?", a: "Follow @osaka_workation and join the waitlist below. Waitlist members get first access to dates, pricing, and spots." },
+      { q: "How do I join?", a: "It's simple — head to the Events page, pick the ticket that fits you, and check out. The moment your booking is confirmed you're officially in, and we'll be in touch with everything you need ahead of November. Following @osaka_workation is a nice way to stay in the loop too." },
     ],
     pricing: {
       note: "Ticket covers the programme, coworking, and included activities. Accommodation and optional add-ons are booked separately. Early-bird and friend-referral pricing both save 10%. Prices may change.",

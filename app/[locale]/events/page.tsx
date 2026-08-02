@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ArrowRight, Calendar, Users, Clock, Globe2 } from "lucide-react";
+import { Calendar, Users, Clock, Globe2 } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/ui";
 import { Countdown } from "@/components/countdown";
-import { Newsletter } from "@/components/newsletter";
 import { Pricing } from "@/components/pricing";
 import { IncludesGrid } from "@/components/includes-grid";
-import { MeetupCard } from "@/components/meetup-card";
 import { PhotoWall } from "@/components/photo-wall";
 import { EventsCalendar } from "@/components/events-calendar";
-import { WorkationSchedule } from "@/components/workation-schedule";
 import { JsonLd } from "@/components/json-ld";
-import { L } from "@/components/locale-link";
-import { WaitlistOrJoinLink } from "@/components/waitlist-or-join-link";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
@@ -173,29 +168,6 @@ export default function EventsPage({
         </div>
       </section>
 
-      {/* THE 14 DAYS — full schedule */}
-      <section id="schedule" className="scroll-mt-24 border-y border-paper-line bg-white">
-        <div className="container-page py-16 sm:py-20">
-          <SectionHeading
-            eyebrow={t.flowEyebrow}
-            title={t.flowTitle}
-            body={t.flowBody}
-          />
-          <div className="mt-12">
-            <WorkationSchedule />
-          </div>
-
-          <div className="mt-10 flex flex-wrap gap-3">
-            <WaitlistOrJoinLink waitlistHref="/#newsletter" className="btn-primary">
-              {dict.pages.home.joinWaitlist} <ArrowRight className="h-4 w-4" />
-            </WaitlistOrJoinLink>
-            <L href="/contact#partner" className="btn-ghost">
-              {t.partnerBtn}
-            </L>
-          </div>
-        </div>
-      </section>
-
       {/* PRICING */}
       <section id="pricing" className="container-page scroll-mt-24 py-16 sm:py-20">
         <SectionHeading
@@ -208,32 +180,6 @@ export default function EventsPage({
         </div>
       </section>
 
-      {/* WEEKLY MEETUPS */}
-      <section id="meetups" className="container-page scroll-mt-24 py-16 sm:py-20">
-        <SectionHeading
-          eyebrow={t.meetupsEyebrow}
-          title={t.meetupsTitle}
-          body={t.meetupsBody}
-        />
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {dict.data.meetups.map((m) => (
-            <MeetupCard key={m.title} meetup={m} />
-          ))}
-        </div>
-      </section>
-
-      {/* WAITLIST */}
-      <section className="container-page pb-20">
-        <div className="rounded-3xl border border-paper-line bg-paper-sand p-8 text-center sm:p-12">
-          <h2 className="text-2xl font-extrabold tracking-tight text-brand-ink sm:text-3xl">
-            {t.waitlistTitle}
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-muted">{t.waitlistBody}</p>
-          <div className="mx-auto mt-7 max-w-md">
-            <Newsletter />
-          </div>
-        </div>
-      </section>
     </>
   );
 }

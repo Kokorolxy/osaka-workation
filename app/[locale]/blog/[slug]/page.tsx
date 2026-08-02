@@ -10,7 +10,7 @@ import { isLocale, defaultLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export function generateStaticParams() {
-  return POSTS.map((p) => ({ slug: p.slug }));
+  return POSTS.filter((p) => !p.hidden).map((p) => ({ slug: p.slug }));
 }
 
 export function generateMetadata({

@@ -22,7 +22,6 @@ export function SiteHeader() {
   const pages = [
     { href: "/", label: dict.nav.home },
     { href: "/events", label: dict.nav.events },
-    { href: "/community", label: dict.nav.community },
     { href: "/blog", label: dict.nav.blog },
     { href: "/about", label: dict.nav.about },
     { href: "/faq", label: dict.nav.faq },

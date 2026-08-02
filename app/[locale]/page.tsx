@@ -229,9 +229,6 @@ export default function HomePage({ params }: { params: { locale: string } }) {
               >
                 {dict.actions.joinDiscord} <ArrowUpRight className="h-4 w-4" />
               </a>
-              <L href="/community" className="btn-ghost">
-                {t.meetCommunity}
-              </L>
             </div>
             <div className="mt-8 flex items-center gap-2 text-sm text-muted">
               <Wifi className="h-4 w-4 text-brand-orange" /> {t.wifiNote}

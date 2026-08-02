@@ -28,16 +28,22 @@ export function Pricing() {
     };
   });
 
-  const [selected, setSelected] = useState(
-    Math.max(0, tiers.findIndex((t) => t.popular)),
+  // Display order: Nov 1–7 (left) · 2-Week (middle) · Nov 8–14 (right)
+  const ORDER = ["week1", "week2", "week2_single"];
+  const displayTiers = [...tiers].sort(
+    (a, b) => ORDER.indexOf(a.key) - ORDER.indexOf(b.key),
   );
-  const active = tiers[selected];
+
+  const [selected, setSelected] = useState(
+    Math.max(0, displayTiers.findIndex((t) => t.popular)),
+  );
+  const active = displayTiers[selected];
   const activePrice = active.earlyBird ?? active.price;
 
   return (
     <div>
-      <div className="mx-auto grid max-w-3xl gap-5 md:grid-cols-2">
-        {tiers.map((tier, i) => {
+      <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-3">
+        {displayTiers.map((tier, i) => {
           const isActive = i === selected;
           const early = tier.earlyBird;
           return (
