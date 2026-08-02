@@ -149,16 +149,14 @@ export function formatPackagePriceJpy(priceJpy: number): string {
   return `¥${priceJpy.toLocaleString("en-US")}`;
 }
 
-export function formatPackagePrice(priceJpy: number, locale: string): string {
-  if (locale === "en") {
-    const eur = Math.round(priceJpy / JPY_PER_EUR);
-    return new Intl.NumberFormat("en-IE", {
-      style: "currency",
-      currency: "EUR",
-      maximumFractionDigits: 0,
-    }).format(eur);
-  }
-  return formatPackagePriceJpy(priceJpy);
+export function formatPackagePrice(priceJpy: number, _locale?: string): string {
+  // Show EUR on every locale (EN + JA) for a single, consistent price unit.
+  const eur = Math.round(priceJpy / JPY_PER_EUR);
+  return new Intl.NumberFormat("en-IE", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  }).format(eur);
 }
 
 /** Marketing / Join duration cards */
