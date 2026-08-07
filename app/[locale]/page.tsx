@@ -71,6 +71,35 @@ export default function HomePage({ params }: { params: { locale: string } }) {
 
       <Marquee />
 
+      {/* ---------- HOW IT WORKS / WHAT IS IT ---------- */}
+      <section className="container-page py-20 sm:py-24">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="eyebrow">{t.howEyebrow}</span>
+          <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-brand-ink sm:text-5xl">
+            {t.howTitle}
+          </h2>
+          <p className="mt-4 leading-relaxed text-muted">{t.howBody}</p>
+          <p className="mt-6 inline-block rounded-full border border-brand-orange/30 bg-brand-orange/10 px-5 py-2 text-sm font-semibold text-brand-orange">
+            {t.howTagline}
+          </p>
+        </div>
+        <div className="mt-14 grid gap-5 md:grid-cols-3">
+          {t.howSteps.map((step, i) => (
+            <div key={step.title} className="card p-7">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-orange text-base font-extrabold text-white">
+                {i + 1}
+              </span>
+              <h3 className="mt-4 text-lg font-bold text-brand-ink">
+                {step.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                {step.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ---------- WHY OSAKA ---------- */}
       <section className="container-page py-20 sm:py-24">
         <SectionHeading eyebrow={t.whyEyebrow} title={t.whyTitle} body={t.whyBody} />

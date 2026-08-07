@@ -155,6 +155,7 @@ export const en = {
       { quote: "Great Wi-Fi, better food, best people. 10/10 would recommend.", name: "Thomas Hoffmann", role: "Engineer · Germany", initials: "TH", flag: "🇩🇪" },
     ],
     faqs: [
+      { q: "What exactly is the Osaka Workation?", a: "It's a 14-day, community-driven workation — not a coworking office and not a hostel. For the first two weeks of November 2026, a cohort of remote workers lives and works in Osaka together: daytime coworking, cultural experiences, weekend day trips, and welcome & farewell parties, all wrapped around a ready-made international community. You buy one ticket (1 or 2 weeks) and you're in; accommodation is arranged separately." },
       { q: "Who is the Workation for?", a: "Remote workers aged roughly 20–50 — engineers, designers, founders, and creators — who want to live in Osaka rather than just pass through. Most of our community works in English." },
       { q: "What does the ticket include?", a: "Coworking space, a workation t-shirt, community access, welcome and farewell parties with meals, two tour guides for recommendations and cultural experiences, and one daytime plus one nighttime community event each day. Weekend city day tours are guided (plan only); transportation and other tour expenses are not included. Random pop-up events are not included. Housing and flights are not included." },
       { q: "When exactly is the November 2026 Workation?", a: "It runs for 14 days across the first two weeks of November 2026. Exact dates are confirmed to participants on the waitlist first." },
@@ -210,10 +211,19 @@ export const en = {
 
   pages: {
     home: {
-      heroBadge: "Osaka, Japan · Workation 2026",
+      heroBadge: "Osaka, Japan · Nov 1–14, 2026",
       heroTitle: ["Work.", "Explore.", "Connect."],
-      heroSubtitle: "Osaka's first international digital nomad community — real stays, real people, real Japan.",
+      heroSubtitle: "A 14-day workation in Osaka (Nov 1–14, 2026). Work your mornings, explore your evenings, and join a ready-made international community — coworking, culture, and day trips all included.",
       heroJoinWorkation: "Join November Workation",
+      howEyebrow: "How it works",
+      howTitle: "So — what is the Osaka Workation?",
+      howTagline: "Not a coworking office. Not a hostel. A two-week community you join.",
+      howBody: "For the first two weeks of November 2026, a cohort of remote workers lives and works in Osaka together. One ticket covers the whole programme — you just show up.",
+      howSteps: [
+        { title: "Grab your ticket", body: "Choose 1 or 2 weeks in November 2026, and your spot is confirmed the moment you check out." },
+        { title: "We run the programme", body: "Coworking, cultural workshops, weekend day trips, and welcome & farewell parties — all organised for you." },
+        { title: "Show up & belong", body: "Work your mornings, explore your evenings, and meet a ready-made international crew." },
+      ],
       whyEyebrow: "Why Osaka",
       whyTitle: "Japan's best-kept secret",
       whyBody: "Cheaper than Tokyo, warmer than anywhere, and built for people who want to actually live in Japan — not just visit.",
